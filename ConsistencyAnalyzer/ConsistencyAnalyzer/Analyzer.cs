@@ -40,10 +40,7 @@
             {
                 List<DiagnosticDescriptor> RuleDescriptorList = new List<DiagnosticDescriptor>();
                 foreach (KeyValuePair<string, AnalyzerRule> Entry in AnalyzerRule.RuleTable)
-                {
-                    Entry.Value.CreateDescriptor();
                     RuleDescriptorList.Add(Entry.Value.Descriptor);
-                }
 
                 return RuleDescriptorList.ToImmutableArray();
             }

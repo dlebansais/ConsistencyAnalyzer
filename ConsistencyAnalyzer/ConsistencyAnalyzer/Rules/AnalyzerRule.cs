@@ -7,23 +7,7 @@
 
     public abstract class AnalyzerRule
     {
-        public abstract string Id { get; }
-        public abstract LocalizableString Title { get; }
-        public abstract LocalizableString MessageFormat { get; }
-        public abstract LocalizableString Description { get; }
-        public abstract string Category { get; }
-
-        public virtual void CreateDescriptor()
-        {
-            if (Descriptor == null)
-                Descriptor = new DiagnosticDescriptor(Id, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
-        }
-
-        public virtual DiagnosticDescriptor Descriptor { get; private set; }
-
-        public abstract SyntaxKind SyntaxKind { get; }
-        public abstract void AnalyzeNode(SyntaxNodeAnalysisContext context);
-
+        #region Init
         static AnalyzerRule()
         {
             List<AnalyzerRule> RuleList = new List<AnalyzerRule>()
@@ -39,5 +23,30 @@
         }
 
         public static IReadOnlyDictionary<string, AnalyzerRule> RuleTable { get; }
+        #endregion
+
+        #region Properties
+        public virtual DiagnosticDescriptor Descriptor 
+        { 
+            get
+            {
+                if (DescriptorInternal == null)
+                    DescriptorInternal = new DiagnosticDescriptor(Id, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+
+                return DescriptorInternal;
+            }
+        }
+        private DiagnosticDescriptor? DescriptorInternal;
+        #endregion
+
+        #region Descendants Interface
+        public abstract string Id { get; }
+        public abstract LocalizableString Title { get; }
+        public abstract LocalizableString MessageFormat { get; }
+        public abstract LocalizableString Description { get; }
+        public abstract string Category { get; }
+        public abstract SyntaxKind SyntaxKind { get; }
+        public abstract void AnalyzeNode(SyntaxNodeAnalysisContext context);
+        #endregion
     }
 }
