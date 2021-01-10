@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CodeFixes\CodeFixConA0001.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="CodeFixResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="CodeFixResources.resx" />
     <EmbeddedResource Update="CodeFixResources.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

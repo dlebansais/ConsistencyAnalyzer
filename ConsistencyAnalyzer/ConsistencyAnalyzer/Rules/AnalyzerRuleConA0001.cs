@@ -1,38 +1,21 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
-
-namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ConsistencyAnalyzerAnalyzer : DiagnosticAnalyzer
+    using System.Linq;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.Diagnostics;
+
+    public class AnalyzerRuleConA0001 : AnalyzerRule
     {
-        public const string DiagnosticId = "ConsistencyAnalyzer";
+        public override string Id { get; } = nameof(AnalyzerRuleConA0001);
+        public override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        public override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        public override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        public override string Category { get; } = "Usage";
 
-        private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        private const string Category = "Usage";
-
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
-
-        public override void Initialize(AnalysisContext context)
-        {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.None);
-            context.EnableConcurrentExecution();
-            context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.LocalDeclarationStatement);
-        }
-
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        public override SyntaxKind SyntaxKind { get; } = SyntaxKind.LocalDeclarationStatement;
+        public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
 
@@ -101,9 +84,13 @@ namespace ConsistencyAnalyzer
                 }
             }
 
+            Analyzer.Trace("Error found...");
+
             foreach (var variable in localDeclaration.Declaration.Variables)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), variable.Identifier.ValueText));
+                Analyzer.Trace($"Reporting for {variable.Identifier.ValueText}");
+
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
             }
         }
     }
