@@ -6,15 +6,50 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// Represents a rule of the analyzer.
+    /// </summary>
     public class AnalyzerRuleConA0001 : AnalyzerRule
     {
+        #region Properties
+        /// <summary>
+        /// Gets the rule id.
+        /// </summary>
         public override string Id { get; } = nameof(AnalyzerRuleConA0001);
-        public override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-        public override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-        public override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
-        public override string Category { get; } = "Usage";
 
+        /// <summary>
+        /// Gets the kind of syntax this rule analyzes.
+        /// </summary>
         public override SyntaxKind SyntaxKind { get; } = SyntaxKind.LocalDeclarationStatement;
+        #endregion
+
+        #region Ancestor Interface
+        /// <summary>
+        /// Gets the rule title.
+        /// </summary>
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+
+        /// <summary>
+        /// Gets the rule message format.
+        /// </summary>
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+
+        /// <summary>
+        /// Gets the rule description.
+        /// </summary>
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+
+        /// <summary>
+        /// Gets the rule category.
+        /// </summary>
+        protected override string Category { get; } = "Usage";
+        #endregion
+
+        #region Client Interface
+        /// <summary>
+        /// Analyzes a source code node.
+        /// </summary>
+        /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
@@ -93,5 +128,6 @@
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
             }
         }
+        #endregion
     }
 }

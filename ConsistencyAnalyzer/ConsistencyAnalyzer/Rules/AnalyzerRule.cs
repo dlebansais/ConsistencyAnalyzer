@@ -5,6 +5,9 @@
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
 
+    /// <summary>
+    /// Represents a rule of the analyzer.
+    /// </summary>
     public abstract class AnalyzerRule
     {
         #region Init
@@ -22,12 +25,28 @@
             RuleTable = Table;
         }
 
+        /// <summary>
+        /// Gets the table of supported rules, by their id.
+        /// </summary>
         public static IReadOnlyDictionary<string, AnalyzerRule> RuleTable { get; }
         #endregion
 
         #region Properties
-        public virtual DiagnosticDescriptor Descriptor 
-        { 
+        /// <summary>
+        /// Gets the rule id.
+        /// </summary>
+        public abstract string Id { get; }
+
+        /// <summary>
+        /// Gets the kind of syntax this rule analyzes.
+        /// </summary>
+        public abstract SyntaxKind SyntaxKind { get; }
+
+        /// <summary>
+        /// Gets the descriptor of a rule.
+        /// </summary>
+        public virtual DiagnosticDescriptor Descriptor
+        {
             get
             {
                 if (DescriptorInternal == null)
@@ -40,12 +59,32 @@
         #endregion
 
         #region Descendants Interface
-        public abstract string Id { get; }
-        public abstract LocalizableString Title { get; }
-        public abstract LocalizableString MessageFormat { get; }
-        public abstract LocalizableString Description { get; }
-        public abstract string Category { get; }
-        public abstract SyntaxKind SyntaxKind { get; }
+        /// <summary>
+        /// Gets the rule title.
+        /// </summary>
+        protected abstract LocalizableString Title { get; }
+
+        /// <summary>
+        /// Gets the rule message format.
+        /// </summary>
+        protected abstract LocalizableString MessageFormat { get; }
+
+        /// <summary>
+        /// Gets the rule description.
+        /// </summary>
+        protected abstract LocalizableString Description { get; }
+
+        /// <summary>
+        /// Gets the rule category.
+        /// </summary>
+        protected abstract string Category { get; }
+        #endregion
+
+        #region Client Interface
+        /// <summary>
+        /// Analyzes a source code node.
+        /// </summary>
+        /// <param name="context">The source code.</param>
         public abstract void AnalyzeNode(SyntaxNodeAnalysisContext context);
         #endregion
     }

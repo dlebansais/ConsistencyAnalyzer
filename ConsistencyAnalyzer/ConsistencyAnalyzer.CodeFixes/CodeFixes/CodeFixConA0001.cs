@@ -1,21 +1,33 @@
 ﻿namespace ConsistencyAnalyzer
 {
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Formatting;
     using Microsoft.CodeAnalysis.Simplification;
+    using Microsoft.CodeAnalysis.Text;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Linq;
+    using Microsoft.CodeAnalysis.CodeFixes;
 
+    /// <summary>
+    /// Represents a code fix for a rule of the analyzer.
+    /// </summary>
     public class CodeFixConA0001 : CodeFix
     {
+        /// <summary>
+        /// Creates an instance of the <see cref="CodeFix"/> class.
+        /// </summary>
+        /// <param name="rule">The associated rule.</param>
         public CodeFixConA0001(AnalyzerRule rule)
             : base(rule)
         {
         }
 
-        public override async Task<Document> AsyncHandler(Document document, LocalDeclarationStatementSyntax localDeclaration, CancellationToken cancellationToken)
+        private async Task<Document> AsyncHandler(Document document, LocalDeclarationStatementSyntax localDeclaration, CancellationToken cancellationToken)
         {
             // Remove the leading trivia from the local declaration.
             var firstToken = localDeclaration.GetFirstToken();
@@ -79,6 +91,22 @@
 
             // Return document with transformed tree.
             return document.WithSyntaxRoot(newRoot);
+        }
+
+        /// <summary>
+        /// Creates the action to perform to fix a document.
+        /// </summary>
+        /// <returns></returns>
+        public override CodeAction CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan)
+        {
+            IEnumerable<SyntaxNode> Nodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
+            var declaration = Nodes.OfType<LocalDeclarationStatementSyntax>().First();
+
+            var Action = CodeAction.Create(title: CodeFixResources.CodeFixTitle,
+                    createChangedDocument: c => AsyncHandler(context.Document, declaration, c),
+                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle));
+
+            return Action;
         }
     }
 }
