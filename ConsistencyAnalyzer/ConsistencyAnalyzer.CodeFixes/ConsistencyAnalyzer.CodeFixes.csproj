@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsistencyAnalyzer\ConsistencyAnalyzer.csproj" />
+    <ProjectReference Include="..\ConsistencyAnalyzer.Analyzer\ConsistencyAnalyzer.Analyzer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

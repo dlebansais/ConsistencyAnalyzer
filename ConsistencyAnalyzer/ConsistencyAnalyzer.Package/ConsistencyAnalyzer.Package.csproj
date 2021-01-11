@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConsistencyAnalyzer.CodeFixes\ConsistencyAnalyzer.CodeFixes.csproj" />
-    <ProjectReference Include="..\ConsistencyAnalyzer\ConsistencyAnalyzer.csproj" />
+    <ProjectReference Include="..\ConsistencyAnalyzer.Analyzer\ConsistencyAnalyzer.Analyzer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +36,7 @@
 
   <Target Name="_AddAnalyzersToOutput">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="$(OutputPath)\ConsistencyAnalyzer.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\ConsistencyAnalyzer.Analyzer.dll" PackagePath="analyzers/dotnet/cs" />
       <TfmSpecificPackageFile Include="$(OutputPath)\ConsistencyAnalyzer.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>

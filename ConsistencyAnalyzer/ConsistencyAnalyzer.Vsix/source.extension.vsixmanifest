@@ -12,8 +12,8 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ConsistencyAnalyzer" Path="|ConsistencyAnalyzer|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="ConsistencyAnalyzer" Path="|ConsistencyAnalyzer|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ConsistencyAnalyzer.Analyzer" Path="|ConsistencyAnalyzer.Analyzer|"/>
+    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="ConsistencyAnalyzer.Analyzer" Path="|ConsistencyAnalyzer.Analyzer|"/>
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ConsistencyAnalyzer.CodeFixes" Path="|ConsistencyAnalyzer.CodeFixes|"/>
     <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="ConsistencyAnalyzer.CodeFixes" Path="|ConsistencyAnalyzer.CodeFixes|"/>
   </Assets>
