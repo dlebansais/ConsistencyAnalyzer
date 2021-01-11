@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsistencyAnalyzer.CodeFixes\ConsistencyAnalyzer.CodeFixes.csproj" />
-    <ProjectReference Include="..\ConsistencyAnalyzer.Analyzer\ConsistencyAnalyzer.Analyzer.csproj" />
+    <ProjectReference Include="..\CodeFixes\CodeFixes.csproj" />
+    <ProjectReference Include="..\Analyzer\Analyzer.csproj" />
   </ItemGroup>
 
 </Project>
