@@ -62,6 +62,10 @@
 
             var variableTypeName = localDeclaration.Declaration.Type;
             var variableType = context.SemanticModel.GetTypeInfo(variableTypeName).ConvertedType;
+            if (variableType == null)
+            {
+                return;
+            }
 
             // Ensure that all variables in the local declaration have initializers that
             // are assigned with constant values.
@@ -107,13 +111,17 @@
 
             // Perform data flow analysis on the local declaration.
             var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
+            if (dataFlowAnalysis == null)
+            {
+                return;
+            }
 
             foreach (var variable in localDeclaration.Declaration.Variables)
             {
                 // Retrieve the local symbol for each variable in the local declaration
                 // and ensure that it is not written outside of the data flow analysis region.
                 var variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable);
-                if (dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+                if (variableSymbol != null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
                 {
                     return;
                 }

@@ -54,14 +54,14 @@
 
                 // Special case: Ensure that 'var' isn't actually an alias to another type
                 // (e.g. using var = System.String).
-                var aliasInfo = semanticModel.GetAliasInfo(variableTypeName);
+                var aliasInfo = semanticModel?.GetAliasInfo(variableTypeName);
                 if (aliasInfo == null)
                 {
                     // Retrieve the type inferred for var.
                     var type = semanticModel.GetTypeInfo(variableTypeName).ConvertedType;
 
                     // Special case: Ensure that 'var' isn't actually a type named 'var'.
-                    if (type.Name != "var")
+                    if (type != null && type.Name != "var")
                     {
                         // Create a new TypeSyntax for the inferred type. Be careful
                         // to keep any leading and trailing trivia from the var keyword.
@@ -87,19 +87,32 @@
 
             // Replace the old local declaration with the new local declaration.
             var oldRoot = await document.GetSyntaxRootAsync(cancellationToken);
-            var newRoot = oldRoot.ReplaceNode(localDeclaration, formattedLocal);
+            if (oldRoot != null)
+            {
+                var newRoot = oldRoot.ReplaceNode(localDeclaration, formattedLocal);
 
-            // Return document with transformed tree.
-            return document.WithSyntaxRoot(newRoot);
+                // Return document with transformed tree.
+                return document.WithSyntaxRoot(newRoot);
+            }
+            else
+                return document;
         }
 
         /// <summary>
         /// Creates the action to perform to fix a document.
         /// </summary>
         /// <returns></returns>
-        public override CodeAction CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan)
+        public override CodeAction? CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan)
         {
-            IEnumerable<SyntaxNode> Nodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
+            if (root == null)
+                return null;
+
+            SyntaxToken DiagnosticToken = root.FindToken(diagnosticSpan.Start);
+            if (DiagnosticToken.Parent == null)
+                return null;
+
+            IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
+
             var declaration = Nodes.OfType<LocalDeclarationStatementSyntax>().First();
 
             var Action = CodeAction.Create(title: CodeFixResources.CodeFixTitle,

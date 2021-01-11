@@ -50,16 +50,19 @@
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            if (root == null)
+                return;
 
             foreach (Diagnostic diagnostic in context.Diagnostics)
             {
                 CodeFix CodeFix = CodeFix.CodeFixTable[diagnostic.Id];
                 var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-                CodeAction Action = CodeFix.CreateDocumentHandler(context, root, diagnosticSpan);
+                CodeAction? Action = CodeFix.CreateDocumentHandler(context, root, diagnosticSpan);
 
                 // Register a code action that will invoke the fix.
-                context.RegisterCodeFix(Action, diagnostic);
+                if (Action != null)
+                    context.RegisterCodeFix(Action, diagnostic);
             }
         }
     }

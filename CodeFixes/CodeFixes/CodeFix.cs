@@ -56,7 +56,7 @@
         /// <param name="root">The source code root.</param>
         /// <param name="diagnosticSpan">The location of source code to fix.</param>
         /// <returns>A code action that will invoke the fix.</returns>
-        public abstract CodeAction CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan);
+        public abstract CodeAction? CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan);
         #endregion
     }
 }
