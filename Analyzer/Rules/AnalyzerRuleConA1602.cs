@@ -16,7 +16,7 @@
         /// <summary>
         /// Gets the rule id.
         /// </summary>
-        public override string Id { get; } = nameof(AnalyzerRuleConA1602);
+        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1602));
 
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.

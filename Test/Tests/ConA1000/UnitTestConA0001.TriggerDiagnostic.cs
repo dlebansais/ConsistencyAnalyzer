@@ -138,7 +138,7 @@ namespace ConsistencyAnalyzerTest
             string FormatedMessage = string.Format(AnalyzerMessageFormat, "i");
 
             var descriptor = new DiagnosticDescriptor(
-                nameof(AnalyzerRuleConA0001),
+                AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA0001)),
                 "title",
                 FormatedMessage,
                 "description",

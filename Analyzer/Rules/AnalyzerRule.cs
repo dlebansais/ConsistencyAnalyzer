@@ -1,6 +1,7 @@
 ﻿namespace ConsistencyAnalyzer
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Diagnostics;
@@ -82,11 +83,25 @@
         #endregion
 
         #region Client Interface
+
         /// <summary>
         /// Analyzes a source code node.
         /// </summary>
         /// <param name="context">The source code.</param>
         public abstract void AnalyzeNode(SyntaxNodeAnalysisContext context);
+
+        /// <summary>
+        /// Gets a rule id from a rule name.
+        /// </summary>
+        /// <param name="ruleClassName"></param>
+        /// <returns></returns>
+        public static string ToRuleId(string ruleClassName)
+        {
+            string Pattern = nameof(AnalyzerRule);
+
+            Debug.Assert(ruleClassName.StartsWith(Pattern));
+            return ruleClassName.Substring(Pattern.Length);
+        }
         #endregion
     }
 }

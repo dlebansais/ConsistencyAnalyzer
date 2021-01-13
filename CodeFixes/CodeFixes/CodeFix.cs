@@ -17,8 +17,8 @@
         {
             List<CodeFix> CodeFixList = new List<CodeFix>()
             {
-                new CodeFixConA1602(AnalyzerRule.RuleTable[nameof(AnalyzerRuleConA1602)]),
-                new CodeFixConA0001(AnalyzerRule.RuleTable[nameof(AnalyzerRuleConA0001)]),
+                new CodeFixConA0001(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA0001))]),
+                new CodeFixConA1602(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1602))]),
             };
 
             Debug.Assert(CodeFixList.Count == AnalyzerRule.RuleTable.Count);
