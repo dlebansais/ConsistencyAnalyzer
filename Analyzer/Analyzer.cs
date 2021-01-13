@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.IO;
+    using System.Threading;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -26,7 +27,7 @@
             List<DiagnosticDescriptor> RuleDescriptorList = new List<DiagnosticDescriptor>();
             foreach (KeyValuePair<string, AnalyzerRule> Entry in AnalyzerRule.RuleTable)
             {
-                context.RegisterSyntaxNodeAction(Entry.Value.AnalyzeNode, Entry.Value.SyntaxKind);
+                context.RegisterSyntaxNodeAction(Entry.Value.AnalyzeNode, Entry.Value.RuleSyntaxKind);
             }
         }
         #endregion
@@ -52,15 +53,22 @@
         /// <summary>
         /// Displays traces.
         /// </summary>
-        /// <param name="msg"></param>
-        public static void Trace(string msg)
+        /// <param name="msg">Message to display.</param>
+        /// <param name="traceId">An id to use to distinguish parallel code.</param>
+        public static void Trace(string msg, ref int traceId)
         {
-            System.Diagnostics.Debug.WriteLine(msg);
-            //FileTrace(msg);
+            if (traceId == 0)
+                traceId = Interlocked.Increment(ref lastTraceId);
+
+            string Line = $"{traceId}.  {msg}";
+
+            //System.Diagnostics.Debug.WriteLine(Line);
+            //FileTrace(Line);
             if (TestTrace != null)
-                TestTrace(msg);
+                TestTrace(Line);
         }
 
+        private static int lastTraceId;
         private static bool Started = false;
         private static void FileTrace(string msg)
         {

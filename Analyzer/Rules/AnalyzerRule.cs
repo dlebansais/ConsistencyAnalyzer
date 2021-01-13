@@ -16,6 +16,7 @@
             List<AnalyzerRule> RuleList = new List<AnalyzerRule>()
             {
                 new AnalyzerRuleConA0001(),
+                new AnalyzerRuleConA1602(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();
@@ -40,7 +41,7 @@
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
         /// </summary>
-        public abstract SyntaxKind SyntaxKind { get; }
+        public abstract SyntaxKind RuleSyntaxKind { get; }
 
         /// <summary>
         /// Gets the descriptor of a rule.

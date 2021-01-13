@@ -122,17 +122,19 @@ namespace ConsistencyAnalyzerTest
 }";
 
         [DataTestMethod]
-        [DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13),
-         DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13),
-         DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13),
-         DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13)]
-        public void WhenDiagosticIsRaisedFixUpdatesCode(
+        [
+        DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13),
+        DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13),
+        DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13),
+        DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13)
+        ]
+        public void WhenDiagnosticIsRaisedFixUpdatesCode(
                     string test,
             string fixTest,
             int line,
             int column)
         {
-            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
+            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
             string FormatedMessage = string.Format(AnalyzerMessageFormat, "i");
 
             var descriptor = new DiagnosticDescriptor(

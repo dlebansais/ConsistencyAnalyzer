@@ -63,27 +63,54 @@ namespace ConsistencyAnalyzer {
         /// <summary>
         ///   Looks up a localized string similar to Inconsistent const-ness of unmodified variable.
         /// </summary>
-        public static string AnalyzerDescription {
+        public static string ConA1000Description {
             get {
-                return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
+                return ResourceManager.GetString("ConA1000Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; can be made constant.
         /// </summary>
-        public static string AnalyzerMessageFormat {
+        public static string ConA1000MessageFormat {
             get {
-                return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
+                return ResourceManager.GetString("ConA1000MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Variable can be made constant.
         /// </summary>
-        public static string AnalyzerTitle {
+        public static string ConA1000Title {
             get {
-                return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("ConA1000Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
+        /// </summary>
+        public static string ConA1602Description {
+            get {
+                return ResourceManager.GetString("ConA1602Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; can be documented.
+        /// </summary>
+        public static string ConA1602MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1602MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enumeration element can be documented.
+        /// </summary>
+        public static string ConA1602Title {
+            get {
+                return ResourceManager.GetString("ConA1602Title", resourceCulture);
             }
         }
     }

@@ -34,10 +34,17 @@
     <Compile Update="Rules\AnalyzerRule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Rules\AnalyzerRuleConA1602.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <EmbeddedResource Update="Resources.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx" Generator="PublicResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

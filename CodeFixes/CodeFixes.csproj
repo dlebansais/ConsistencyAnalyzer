@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CodeFixes\CodeFixConA1602.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="CodeFixes\CodeFixConA0001.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CodeActions;
     using Microsoft.CodeAnalysis.Text;
     using Microsoft.CodeAnalysis.CodeFixes;
+    using System.Diagnostics;
 
     /// <summary>
     /// Represents a code fix for source code that triggered a rule in the analyzer.
@@ -16,8 +17,11 @@
         {
             List<CodeFix> CodeFixList = new List<CodeFix>()
             {
+                new CodeFixConA1602(AnalyzerRule.RuleTable[nameof(AnalyzerRuleConA1602)]),
                 new CodeFixConA0001(AnalyzerRule.RuleTable[nameof(AnalyzerRuleConA0001)]),
             };
+
+            Debug.Assert(CodeFixList.Count == AnalyzerRule.RuleTable.Count);
 
             Dictionary<string, CodeFix> Table = new Dictionary<string, CodeFix>();
             foreach (CodeFix CodeFix in CodeFixList)

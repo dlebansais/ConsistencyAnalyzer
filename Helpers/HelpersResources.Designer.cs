@@ -8,8 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConsistencyAnalyzer {
+namespace StyleCop.Analyzers.Helpers {
     using System;
+    using System.Reflection;
     
     
     /// <summary>
@@ -19,17 +20,17 @@ namespace ConsistencyAnalyzer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CodeFixResources {
+    internal class HelpersResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CodeFixResources() {
+        internal HelpersResources() {
         }
         
         /// <summary>
@@ -39,7 +40,7 @@ namespace ConsistencyAnalyzer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConsistencyAnalyzer.CodeFixResources", typeof(CodeFixResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StyleCop.Analyzers.Helpers.HelpersResources", typeof(HelpersResources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +62,29 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make constant.
+        ///   Looks up a localized string similar to Fix all &apos;{0}&apos;.
         /// </summary>
-        internal static string ConA1000FixTitle {
+        internal static string FixAllOccurrencesOfDiagnostic {
             get {
-                return ResourceManager.GetString("ConA1000FixTitle", resourceCulture);
+                return ResourceManager.GetString("FixAllOccurrencesOfDiagnostic", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add documentation.
+        ///   Looks up a localized string similar to Fix all &apos;{0}&apos; in &apos;{1}&apos;.
         /// </summary>
-        internal static string ConA1602FixTitle {
+        internal static string FixAllOccurrencesOfDiagnosticInScope {
             get {
-                return ResourceManager.GetString("ConA1602FixTitle", resourceCulture);
+                return ResourceManager.GetString("FixAllOccurrencesOfDiagnosticInScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix all &apos;{0}&apos; in Solution.
+        /// </summary>
+        internal static string FixAllOccurrencesOfDiagnosticInSolution {
+            get {
+                return ResourceManager.GetString("FixAllOccurrencesOfDiagnosticInSolution", resourceCulture);
             }
         }
     }

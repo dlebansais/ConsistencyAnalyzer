@@ -20,24 +20,24 @@
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
         /// </summary>
-        public override SyntaxKind SyntaxKind { get; } = SyntaxKind.LocalDeclarationStatement;
+        public override SyntaxKind RuleSyntaxKind { get; } = SyntaxKind.LocalDeclarationStatement;
         #endregion
 
         #region Ancestor Interface
         /// <summary>
         /// Gets the rule title.
         /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1000Title), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule message format.
         /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule description.
         /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1000Description), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule category.
@@ -127,14 +127,8 @@
                 }
             }
 
-            Analyzer.Trace("Error found...");
-
             foreach (var variable in localDeclaration.Declaration.Variables)
-            {
-                Analyzer.Trace($"Reporting for {variable.Identifier.ValueText}");
-
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
-            }
         }
         #endregion
     }

@@ -36,8 +36,6 @@
                 firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
             string identifier = trimmedLocal.Declaration.Variables.First().Identifier.ToString();
 
-            Analyzer.Trace($"Fixing {identifier}");
-
             // Create a const token with the leading trivia.
             var constToken = SyntaxFactory.Token(leadingTrivia, SyntaxKind.ConstKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
 
@@ -115,9 +113,9 @@
 
             var declaration = Nodes.OfType<LocalDeclarationStatementSyntax>().First();
 
-            var Action = CodeAction.Create(title: CodeFixResources.CodeFixTitle,
+            var Action = CodeAction.Create(title: CodeFixResources.ConA1000FixTitle,
                     createChangedDocument: c => AsyncHandler(context.Document, declaration, c),
-                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle));
+                    equivalenceKey: nameof(CodeFixResources.ConA1000FixTitle));
 
             return Action;
         }

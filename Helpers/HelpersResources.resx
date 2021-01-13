@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,11 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConA1000FixTitle" xml:space="preserve">
-    <value>Make constant</value>
-    <comment>The title of the code fix.</comment>
+  <data name="FixAllOccurrencesOfDiagnostic" xml:space="preserve">
+    <value>Fix all '{0}'</value>
   </data>
-  <data name="ConA1602FixTitle" xml:space="preserve">
-    <value>Add documentation</value>
+  <data name="FixAllOccurrencesOfDiagnosticInScope" xml:space="preserve">
+    <value>Fix all '{0}' in '{1}'</value>
+  </data>
+  <data name="FixAllOccurrencesOfDiagnosticInSolution" xml:space="preserve">
+    <value>Fix all '{0}' in Solution</value>
   </data>
 </root>
