@@ -38,7 +38,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
 
         // Storage for the pool objects. The first item is stored in a dedicated field because we
         // expect to be able to satisfy most requests from it.
-        private T firstItem;
+        private T? firstItem;
 
         internal ObjectPool(Func<T> factory)
             : this(factory, Environment.ProcessorCount * 2)
@@ -67,7 +67,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
             // Note that the initial read is optimistically not synchronized. That is intentional.
             // We will interlock only when we have a candidate. in a worst case we may miss some
             // recently returned objects. Not a big deal.
-            T inst = this.firstItem;
+            T? inst = this.firstItem;
             if (inst == null || inst != Interlocked.CompareExchange(ref this.firstItem, null, inst))
             {
                 inst = this.AllocateSlow();
@@ -115,7 +115,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
                 // Note that the initial read is optimistically not synchronized. That is intentional.
                 // We will interlock only when we have a candidate. in a worst case we may miss some
                 // recently returned objects. Not a big deal.
-                T inst = items[i].Value;
+                T? inst = items[i].Value;
                 if (inst != null)
                 {
                     if (inst == Interlocked.CompareExchange(ref items[i].Value, null, inst))
@@ -147,7 +147,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
         [DebuggerDisplay("{Value,nq}")]
         private struct Element
         {
-            internal T Value;
+            internal T? Value;
         }
     }
 }

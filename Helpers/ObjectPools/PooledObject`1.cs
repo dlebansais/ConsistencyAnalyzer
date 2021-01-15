@@ -17,7 +17,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
     {
         private readonly Action<ObjectPool<T>, T> releaser;
         private readonly ObjectPool<T> pool;
-        private T pooledObject;
+        private T? pooledObject;
 
         public PooledObject(ObjectPool<T> pool, Func<ObjectPool<T>, T> allocator, Action<ObjectPool<T>, T> releaser)
             : this()
@@ -27,7 +27,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
             this.releaser = releaser;
         }
 
-        public T Object
+        public T? Object
         {
             get
             {

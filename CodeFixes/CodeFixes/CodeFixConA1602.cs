@@ -41,7 +41,7 @@
             if (Parent == null)
                 return document;
 
-            DocumentationCommentTriviaSyntax existingDocumentationComment = syntaxNode.GetDocumentationCommentTriviaSyntax();
+            DocumentationCommentTriviaSyntax? existingDocumentationComment = syntaxNode.GetDocumentationCommentTriviaSyntax();
             if (existingDocumentationComment != null)
             {
                 return document;

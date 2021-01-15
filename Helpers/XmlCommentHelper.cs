@@ -166,7 +166,7 @@ namespace StyleCop.Analyzers.Helpers
         /// <param name="node">The XML content to search.</param>
         /// <returns>The first <see cref="XmlTextSyntax"/> which is not simply empty or whitespace, or
         /// <see langword="null"/> if no such element exists.</returns>
-        internal static XmlTextSyntax TryGetFirstTextElementWithContent(XmlNodeSyntax node)
+        internal static XmlTextSyntax? TryGetFirstTextElementWithContent(XmlNodeSyntax node)
         {
             if (node is XmlEmptyElementSyntax)
             {
@@ -227,7 +227,7 @@ namespace StyleCop.Analyzers.Helpers
             return commentTrivia != null && !IsMissingOrEmpty(commentTrivia.ParentTrivia);
         }
 
-        internal static string GetText(XmlNodeSyntax nodeSyntax, bool normalizeWhitespace = false)
+        internal static string? GetText(XmlNodeSyntax nodeSyntax, bool normalizeWhitespace = false)
         {
             if (nodeSyntax is XmlTextSyntax xmlTextSyntax)
             {
@@ -254,12 +254,12 @@ namespace StyleCop.Analyzers.Helpers
             return null;
         }
 
-        internal static string GetText(XmlTextSyntax textElement)
+        internal static string? GetText(XmlTextSyntax textElement)
         {
             return GetText(textElement, false);
         }
 
-        internal static string GetText(XmlTextSyntax textElement, bool normalizeWhitespace)
+        internal static string? GetText(XmlTextSyntax textElement, bool normalizeWhitespace)
         {
             if (textElement == null)
             {
@@ -282,7 +282,7 @@ namespace StyleCop.Analyzers.Helpers
             return result;
         }
 
-        internal static T GetFirstAttributeOrDefault<T>(XmlNodeSyntax nodeSyntax)
+        internal static T? GetFirstAttributeOrDefault<T>(XmlNodeSyntax nodeSyntax)
             where T : XmlAttributeSyntax
         {
             if (nodeSyntax is XmlEmptyElementSyntax emptyElementSyntax)
@@ -323,7 +323,7 @@ namespace StyleCop.Analyzers.Helpers
             return false;
         }
 
-        private static bool IsInlineElement(string localName)
+        private static bool IsInlineElement(string? localName)
         {
             switch (localName)
             {
@@ -338,7 +338,7 @@ namespace StyleCop.Analyzers.Helpers
             }
         }
 
-        private static bool IsBlockElement(string localName)
+        private static bool IsBlockElement(string? localName)
         {
             switch (localName)
             {

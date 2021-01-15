@@ -12,7 +12,7 @@ namespace StyleCop.Analyzers.Helpers
 
     internal static class DocumentationCommentExtensions
     {
-        public static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode node)
+        public static DocumentationCommentTriviaSyntax? GetDocumentationCommentTriviaSyntax(this SyntaxNode node)
         {
             if (node == null)
             {
@@ -237,10 +237,9 @@ namespace StyleCop.Analyzers.Helpers
             return node.ReplaceTokens(replacements.Keys, (originalToken, rewrittenToken) => replacements[originalToken]);
         }
 
-        public static XmlNameSyntax GetName(this XmlNodeSyntax element)
+        public static XmlNameSyntax? GetName(this XmlNodeSyntax element)
         {
-            return (element as XmlElementSyntax)?.StartTag?.Name
-                ?? (element as XmlEmptyElementSyntax)?.Name;
+            return (element as XmlElementSyntax)?.StartTag?.Name ?? (element as XmlEmptyElementSyntax)?.Name;
         }
 
         private static SyntaxTrivia SelectExteriorTrivia(SyntaxTrivia rewrittenTrivia, SyntaxTrivia trivia, SyntaxTrivia triviaWithSpace)
