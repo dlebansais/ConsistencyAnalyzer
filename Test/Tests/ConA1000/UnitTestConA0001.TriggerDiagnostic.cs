@@ -17,8 +17,8 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            int i = 0;
-            Console.WriteLine(i);
+            int n = 0;
+            Console.WriteLine(n);
         }
     }
 }";
@@ -32,8 +32,8 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            const int i = 0;
-            Console.WriteLine(i);
+            const int n = 0;
+            Console.WriteLine(n);
         }
     }
 }";
@@ -47,7 +47,7 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            string i = ""abc"";
+            string s = ""abc"";
         }
     }
 }";
@@ -61,7 +61,7 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            const string i = ""abc"";
+            const string s = ""abc"";
         }
     }
 }";
@@ -75,7 +75,7 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            var i = 4;
+            var v = 4;
         }
     }
 }";
@@ -89,7 +89,7 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            const int i = 4;
+            const int v = 4;
         }
     }
 }";
@@ -103,7 +103,7 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            var i = ""abc"";
+            var v = ""abc"";
         }
     }
 }";
@@ -116,26 +116,22 @@ namespace ConsistencyAnalyzerTest
     {
         static void Main(string[] args)
         {
-            const string i = ""abc"";
+            const string v = ""abc"";
         }
     }
 }";
 
         [DataTestMethod]
         [
-        DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13),
-        DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13),
-        DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13),
-        DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13)
+        DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13, "n"),
+        DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13, "s"),
+        DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13, "v"),
+        DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13, "v")
         ]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(
-                    string test,
-            string fixTest,
-            int line,
-            int column)
+        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column, string variableName)
         {
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
-            string FormatedMessage = string.Format(AnalyzerMessageFormat, "i");
+            string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
 
             var descriptor = new DiagnosticDescriptor(
                 AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA0001)),

@@ -56,12 +56,16 @@
 
             string newLineText = document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp);
 
-            SyntaxTrivia newLineTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, newLineText);
             var documentationComment = XmlSyntaxFactory.DocumentationComment(newLineText, XmlSyntaxFactory.MultiLineElement(XmlCommentHelper.SummaryXmlTag, newLineText, XmlSyntaxFactory.List(XmlSyntaxFactory.Text(XmlSyntaxFactory.TextNewLine("TODO: Insert documentation here.", false)))));
             SyntaxTrivia docTrivia = SyntaxFactory.Trivia(documentationComment);
 
             SyntaxTriviaList newLeadingTrivia = leadingTrivia.Insert(insertionIndex, docTrivia);
-            newLeadingTrivia = newLeadingTrivia.Insert(insertionIndex, newLineTrivia);
+
+            if (Parent.Members.IndexOf(syntaxNode) > 0)
+            {
+                SyntaxTrivia newLineTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, newLineText);
+                newLeadingTrivia = newLeadingTrivia.Insert(insertionIndex, newLineTrivia);
+            }
 
             SyntaxNode newElement = syntaxNode.WithLeadingTrivia(newLeadingTrivia);
             Document Result =  document.WithSyntaxRoot(root.ReplaceNode(syntaxNode, newElement));

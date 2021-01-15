@@ -42,12 +42,50 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
+        private const string SecondEnumDocumentedOnly = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        Test1,
+
+        /// <summary>
+        /// Test2 doc
+        /// </summary>
+        Test2
+    }
+}";
+
+        private const string SecondEnumDocumentedOnlyFixed = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        /// <summary>
+        /// TODO: Insert documentation here.
+        /// </summary>
+        Test1,
+
+        /// <summary>
+        /// Test2 doc
+        /// </summary>
+        Test2
+    }
+}";
+
         [DataTestMethod]
-        [DataRow(FirstEnumDocumentedOnly, FirstEnumDocumentedOnlyFixed, 12, 9)]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column)
+        [
+        DataRow(FirstEnumDocumentedOnly, FirstEnumDocumentedOnlyFixed, 12, 9, "Test2"),
+        DataRow(SecondEnumDocumentedOnly, SecondEnumDocumentedOnlyFixed, 8, 9, "Test1")
+        ]
+        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column, string variableName)
         {
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1602MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
-            string FormatedMessage = string.Format(AnalyzerMessageFormat, "Test2");
+            string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
 
             var descriptor = new DiagnosticDescriptor(
                 AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1602)),

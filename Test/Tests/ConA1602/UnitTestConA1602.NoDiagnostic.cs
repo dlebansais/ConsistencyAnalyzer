@@ -6,6 +6,43 @@
 
     public partial class UnitTestConA1602
     {
+        private const string OneEnumNotDocumented = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        Test1
+    }
+}";
+
+        private const string OneEnumDocumented = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        /// <summary>
+        /// Test1 doc
+        /// </summary>
+        Test1
+    }
+}";
+
+        private const string TwoEnumsNotDocumented = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        Test1,
+        Test2
+    }
+}";
+
         private const string TwoEnumsDocumented = @"
 using System;
 
@@ -25,10 +62,52 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
+        private const string ThreeEnumsNotDocumented = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        Test1,
+        Test2,
+        Test3
+    }
+}";
+
+        private const string ThreeEnumsDocumented = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    enum Test
+    {
+        /// <summary>
+        /// Test1 doc
+        /// </summary>
+        Test1,
+
+        /// <summary>
+        /// Test2 doc
+        /// </summary>
+        Test2,
+
+        /// <summary>
+        /// Test3 doc
+        /// </summary>
+        Test3
+    }
+}";
+
+
         [DataTestMethod]
         [
-        //DataRow(""),
-        DataRow(TwoEnumsDocumented)
+        DataRow(OneEnumDocumented),
+        DataRow(OneEnumNotDocumented),
+        DataRow(TwoEnumsNotDocumented),
+        DataRow(TwoEnumsDocumented),
+        DataRow(ThreeEnumsDocumented),
+        DataRow(ThreeEnumsNotDocumented)
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {

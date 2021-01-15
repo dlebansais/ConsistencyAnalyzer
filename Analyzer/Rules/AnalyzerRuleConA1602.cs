@@ -67,21 +67,28 @@
 
             Analyzer.Trace($"{Declaration.Identifier}: {IsDocumented}", ref traceId);
 
+            bool IsDocumentedDifferently = false;
             foreach (EnumMemberDeclarationSyntax OtherEnum in OtherEnumList)
             {
+                if (OtherEnum == Declaration)
+                    continue;
+
                 bool IsOtherDocumented = XmlCommentHelper.HasDocumentation(OtherEnum);
 
                 Analyzer.Trace($"{Declaration.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", ref traceId);
 
-                if (OtherEnum == Declaration)
-                    break;
-
                 if (IsOtherDocumented != IsDocumented)
                 {
-                    string EnumName = Declaration.Identifier.ValueText;
-                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), EnumName));
+                    IsDocumentedDifferently = true;
                     break;
                 }
+            }
+
+            // Report for undocumented enums, so they can be fixed by adding doc.
+            if (IsDocumentedDifferently && !IsDocumented)
+            {
+                string EnumName = Declaration.Identifier.ValueText;
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), EnumName));
             }
         }
         #endregion
