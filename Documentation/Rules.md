@@ -13,3 +13,5 @@
 **[Documentation Rules](Documentation/DocumentationRules.md)**
 
 **[Alternative Rules](Documentation/AlternativeRules.md)**
+
+**[Region Rules](Region/RegionRules.md)**

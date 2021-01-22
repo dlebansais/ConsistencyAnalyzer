@@ -52,15 +52,15 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
+            LocalDeclarationStatementSyntax Node = (LocalDeclarationStatementSyntax)context.Node;
 
             // make sure the declaration isn't already const:
-            if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
+            if (Node.Modifiers.Any(SyntaxKind.ConstKeyword))
             {
                 return;
             }
 
-            var variableTypeName = localDeclaration.Declaration.Type;
+            var variableTypeName = Node.Declaration.Type;
             var variableType = context.SemanticModel.GetTypeInfo(variableTypeName).ConvertedType;
             if (variableType == null)
             {
@@ -69,7 +69,7 @@
 
             // Ensure that all variables in the local declaration have initializers that
             // are assigned with constant values.
-            foreach (var variable in localDeclaration.Declaration.Variables)
+            foreach (var variable in Node.Declaration.Variables)
             {
                 var initializer = variable.Initializer;
                 if (initializer == null)
@@ -110,13 +110,13 @@
             }
 
             // Perform data flow analysis on the local declaration.
-            var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
+            var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(Node);
             if (dataFlowAnalysis == null)
             {
                 return;
             }
 
-            foreach (var variable in localDeclaration.Declaration.Variables)
+            foreach (var variable in Node.Declaration.Variables)
             {
                 // Retrieve the local symbol for each variable in the local declaration
                 // and ensure that it is not written outside of the data flow analysis region.
@@ -127,7 +127,7 @@
                 }
             }
 
-            foreach (var variable in localDeclaration.Declaration.Variables)
+            foreach (var variable in Node.Declaration.Variables)
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
         }
         #endregion

@@ -56,26 +56,26 @@
             int traceId = 0;
             Analyzer.Trace("AnalyzerRuleConA1602", ref traceId);
 
-            EnumMemberDeclarationSyntax Declaration = (EnumMemberDeclarationSyntax)context.Node;
+            EnumMemberDeclarationSyntax Node = (EnumMemberDeclarationSyntax)context.Node;
 
-            EnumDeclarationSyntax? Parent = Declaration.Parent as EnumDeclarationSyntax;
+            EnumDeclarationSyntax? Parent = Node.Parent as EnumDeclarationSyntax;
             if (Parent == null)
                 return;
 
-            bool IsDocumented = XmlCommentHelper.HasDocumentation(Declaration);
+            bool IsDocumented = XmlCommentHelper.HasDocumentation(Node);
             List<EnumMemberDeclarationSyntax> OtherEnumList = new List<EnumMemberDeclarationSyntax>(Parent.Members);
 
-            Analyzer.Trace($"{Declaration.Identifier}: {IsDocumented}", ref traceId);
+            Analyzer.Trace($"{Node.Identifier}: {IsDocumented}", ref traceId);
 
             bool IsDocumentedDifferently = false;
             foreach (EnumMemberDeclarationSyntax OtherEnum in OtherEnumList)
             {
-                if (OtherEnum == Declaration)
+                if (OtherEnum == Node)
                     continue;
 
                 bool IsOtherDocumented = XmlCommentHelper.HasDocumentation(OtherEnum);
 
-                Analyzer.Trace($"{Declaration.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", ref traceId);
+                Analyzer.Trace($"{Node.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", ref traceId);
 
                 if (IsOtherDocumented != IsDocumented)
                 {
@@ -87,8 +87,8 @@
             // Report for undocumented enums, so they can be fixed by adding doc.
             if (IsDocumentedDifferently && !IsDocumented)
             {
-                string EnumName = Declaration.Identifier.ValueText;
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), EnumName));
+                string EnumName = Node.Identifier.ValueText;
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), EnumName));
             }
         }
         #endregion

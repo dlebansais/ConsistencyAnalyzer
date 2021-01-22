@@ -38,6 +38,9 @@
     <Compile Update="Rules\AnalyzerRule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Rules\AnalyzerRuleConA1700.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Rules\AnalyzerRuleConA1602.cs">
       <SubType>Code</SubType>
     </Compile>

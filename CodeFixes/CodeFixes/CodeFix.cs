@@ -21,8 +21,6 @@
                 new CodeFixConA1602(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1602))]),
             };
 
-            Debug.Assert(CodeFixList.Count == AnalyzerRule.RuleTable.Count);
-
             Dictionary<string, CodeFix> Table = new Dictionary<string, CodeFix>();
             foreach (CodeFix CodeFix in CodeFixList)
                 Table.Add(CodeFix.Rule.Id, CodeFix);

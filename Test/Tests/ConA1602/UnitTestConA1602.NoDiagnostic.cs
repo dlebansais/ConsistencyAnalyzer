@@ -99,7 +99,6 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-
         [DataTestMethod]
         [
         DataRow(OneEnumDocumented),

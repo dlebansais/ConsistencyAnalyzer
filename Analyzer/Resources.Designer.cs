@@ -113,5 +113,32 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1602Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use regions for all class code or not at all.
+        /// </summary>
+        public static string ConA1700Description {
+            get {
+                return ResourceManager.GetString("ConA1700Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is missing regions.
+        /// </summary>
+        public static string ConA1700MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1700MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class is missing regions.
+        /// </summary>
+        public static string ConA1700Title {
+            get {
+                return ResourceManager.GetString("ConA1700Title", resourceCulture);
+            }
+        }
     }
 }
