@@ -42,10 +42,10 @@ after_build:
   - ps: |-
         $xml = [xml](Get-Content .\Analyzer\Analyzer.csproj)
   - ps: $version = $xml.Project.PropertyGroup.Version
-  - ps: set version_tag v$version
+  - ps: set version_tag $version
   - ps: $env:VERSION_TAG=$version_tag
-  - echo "Version is %VERSION_TAG%"
-  - nuget pack Package\bin\Debug\ConsistencyAnalyzer.$(VERSION_TAG).nupkg
+  - echo "Version is v%VERSION_TAG%"
+  - nuget pack Package\bin\Debug\ConsistencyAnalyzer.%VERSION_TAG%.nupkg
 
 test: off
 
