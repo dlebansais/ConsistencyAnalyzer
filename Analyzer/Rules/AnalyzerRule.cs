@@ -16,7 +16,7 @@
         {
             List<AnalyzerRule> RuleList = new List<AnalyzerRule>()
             {
-                new AnalyzerRuleConA0001(),
+                //new AnalyzerRuleConA0001(),
                 new AnalyzerRuleConA1602(),
             };
 
