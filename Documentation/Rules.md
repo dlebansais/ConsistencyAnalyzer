@@ -1,17 +1,17 @@
 **[Spacing Rules](SpacingRules.md)**
 
-**[Readability Rules](Documentation/ReadabilityRules.md)**
+**[Readability Rules](ReadabilityRules.md)**
 
-**[Ordering Rules](Documentation/OrderingRules.md)**
+**[Ordering Rules](OrderingRules.md)**
 
-**[Naming Rules](Documentation/NamingRules.md)**
+**[Naming Rules](NamingRules.md)**
 
-**[Maintainability Rules](Documentation/MaintainabilityRules.md)**
+**[Maintainability Rules](MaintainabilityRules.md)**
 
-**[Layout Rules](Documentation/LayoutRules.md)**
+**[Layout Rules](LayoutRules.md)**
 
-**[Documentation Rules](Documentation/DocumentationRules.md)**
+**[Documentation Rules](DocumentationRules.md)**
 
-**[Alternative Rules](Documentation/AlternativeRules.md)**
+**[Alternative Rules](AlternativeRules.md)**
 
-**[Region Rules](Documentation/RegionRules.md)**
+**[Region Rules](RegionRules.md)**
