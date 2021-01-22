@@ -1,4 +1,4 @@
-**[Spacing Rules](Documentation/SpacingRules.md)**
+**[Spacing Rules](SpacingRules.md)**
 
 **[Readability Rules](Documentation/ReadabilityRules.md)**
 
@@ -14,4 +14,4 @@
 
 **[Alternative Rules](Documentation/AlternativeRules.md)**
 
-**[Region Rules](Region/RegionRules.md)**
+**[Region Rules](Documentation/RegionRules.md)**
