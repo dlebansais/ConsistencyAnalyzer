@@ -45,7 +45,6 @@ after_build:
   - ps: set version_tag $version
   - ps: $env:VERSION_TAG=$version_tag
   - echo "Version is v%VERSION_TAG%"
-  - nuget pack Package\bin\Debug\ConsistencyAnalyzer.%VERSION_TAG%.nupkg
 
 test: off
 
