@@ -119,9 +119,11 @@
   </resheader>
   <data name="ConA1000FixTitle" xml:space="preserve">
     <value>Make constant</value>
-    <comment>The title of the code fix.</comment>
   </data>
   <data name="ConA1602FixTitle" xml:space="preserve">
     <value>Add documentation</value>
+  </data>
+  <data name="ConA1701FixTitle" xml:space="preserve">
+    <value>Remove region</value>
   </data>
 </root>

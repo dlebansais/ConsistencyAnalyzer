@@ -110,11 +110,10 @@
                 return null;
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
-
-            var declaration = Nodes.OfType<LocalDeclarationStatementSyntax>().First();
+            LocalDeclarationStatementSyntax Node = Nodes.OfType<LocalDeclarationStatementSyntax>().First();
 
             var Action = CodeAction.Create(title: CodeFixResources.ConA1000FixTitle,
-                    createChangedDocument: c => AsyncHandler(context.Document, declaration, c),
+                    createChangedDocument: c => AsyncHandler(context.Document, Node, c),
                     equivalenceKey: nameof(CodeFixResources.ConA1000FixTitle));
 
             return Action;

@@ -89,11 +89,10 @@
                 return null;
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
-
-            var declaration = Nodes.OfType<EnumMemberDeclarationSyntax>().First();
+            EnumMemberDeclarationSyntax Node = Nodes.OfType<EnumMemberDeclarationSyntax>().First();
 
             var Action = CodeAction.Create(title: CodeFixResources.ConA1602FixTitle,
-                    createChangedDocument: c => AsyncHandler(context.Document, declaration, c),
+                    createChangedDocument: c => AsyncHandler(context.Document, Node, c),
                     equivalenceKey: nameof(CodeFixResources.ConA1602FixTitle));
 
             return Action;

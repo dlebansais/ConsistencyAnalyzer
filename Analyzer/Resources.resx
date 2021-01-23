@@ -144,4 +144,13 @@
   <data name="ConA1700Title" xml:space="preserve">
     <value>Class is missing regions</value>
   </data>
+  <data name="ConA1701Description" xml:space="preserve">
+    <value>Avoid nested regions and refactor the code or use partial classes instead</value>
+  </data>
+  <data name="ConA1701MessageFormat" xml:space="preserve">
+    <value>Region '{0}' is nested within region '{1}'</value>
+  </data>
+  <data name="ConA1701Title" xml:space="preserve">
+    <value>Do not use nested regions</value>
+  </data>
 </root>

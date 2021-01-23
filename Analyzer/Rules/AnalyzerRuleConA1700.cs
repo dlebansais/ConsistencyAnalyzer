@@ -59,11 +59,9 @@
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
             
             var CurrentToken = Node.OpenBraceToken;
-            int RegionDepth = 0;
+            int RegionNestedLevel = 0;
             bool HasRegion = false;
             bool HasMembersOutsideRegion = false;
-
-            Analyzer.Trace("Starting class analysis", ref traceId);
 
             for (;;)
             {
@@ -72,40 +70,28 @@
                 if (CurrentToken == Node.CloseBraceToken)
                     break;
 
-                Analyzer.Trace($"Token: {CurrentToken}", ref traceId);
-                Analyzer.Trace($"Parent: {CurrentToken.Parent?.GetType()}", ref traceId);
-
                 if (CurrentToken.Parent is RegionDirectiveTriviaSyntax AsRegionDirective)
                 {
                     if (AsRegionDirective.HashToken == CurrentToken)
                     {
                         HasRegion = true;
-                        RegionDepth++;
-                        Analyzer.Trace("Enter Region", ref traceId);
+                        RegionNestedLevel++;
                     }
                 }
                 else if (CurrentToken.Parent is EndRegionDirectiveTriviaSyntax AsEndRegionDirective)
                 {
                     if (AsEndRegionDirective.HashToken == CurrentToken)
-                    {
-                        RegionDepth--;
-                        Analyzer.Trace("Exit Region", ref traceId);
-                    }
+                        RegionNestedLevel--;
                 }
                 else if (CurrentToken.Parent is MemberDeclarationSyntax)
                 {
-                    if (RegionDepth == 0)
+                    if (RegionNestedLevel == 0)
                     {
                         if (!HasMembersOutsideRegion)
-                        {
                             HasMembersOutsideRegion = true;
-                            Analyzer.Trace($"First token outside region: {CurrentToken.Parent.GetType()}", ref traceId);
-                        }
                     }
                 }
             }
-
-            Analyzer.Trace($"Completed class analysis, HasRegion: {HasRegion}, HasMembersOutsideRegion: {HasMembersOutsideRegion}", ref traceId);
 
             if (HasRegion)
             {

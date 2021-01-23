@@ -140,5 +140,32 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1700Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid nested regions and refactor the code or use partial classes instead.
+        /// </summary>
+        public static string ConA1701Description {
+            get {
+                return ResourceManager.GetString("ConA1701Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region &apos;{0}&apos; is nested within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1701MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1701MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use nested regions.
+        /// </summary>
+        public static string ConA1701Title {
+            get {
+                return ResourceManager.GetString("ConA1701Title", resourceCulture);
+            }
+        }
     }
 }

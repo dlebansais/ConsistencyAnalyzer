@@ -77,5 +77,14 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1602FixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove region.
+        /// </summary>
+        internal static string ConA1701FixTitle {
+            get {
+                return ResourceManager.GetString("ConA1701FixTitle", resourceCulture);
+            }
+        }
     }
 }
