@@ -17,13 +17,13 @@ In addition, the public interface can be split in additional categories:
 + Events
 + Methods
 
-Figuring out if this mode is used in a class is fairly easy, since each member falls into one category directly when it's declared. The simple grouping (with 3 categories) is compatible with the more complicated one (with 6) when a class only has public properties, or only public methods (typically static).
+Figuring out if this mode is used in a class is fairly easy, since each member falls into one category directly when declared. The simple grouping (with 3 categories) is compatible with the more complicated one (with 6) when a class only has public properties, or only public methods (typically static).
 
 ## By topic
 
 In this mode, regions surround code specific to features the class implements. Since constructors are always needed regardless of how the object is used later, this mode recogne the following groups:
 
-+ Constructors (public or private)
++ Constructors (public or not)
 + Topic #1
 + Topic #2
 + And so on...
@@ -32,17 +32,19 @@ This mode requires topics to be consistent within a hierarchy of classes. For ex
 
 ## By interface implementation
 
-If a class inherits from one or more interface, it can group code as follow:
+If a class inherits from one or more interfaces, it can group code as follow:
 
 + Code belonging to the class itself
 + Implementation of interface Ixxx
 + Implementation of interface Iyyy
 + And so on...
 
-A requirement will then be that all regions (except the first one) follow the same text pattern, with only the name of the interface changing. For instance:
+A requirement will then be that all regions (except the first one) follow the same text pattern, with only the name of the interface allowed to change. For instance:
 
 ````csharp
 #region Implementation of IEnumerable
+#region Implementation of IList
+#region Implementation of IEquatable
 ````
 
 ## Mixed mode
