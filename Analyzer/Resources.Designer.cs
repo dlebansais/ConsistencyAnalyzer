@@ -167,5 +167,32 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1701Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A public member of a class is not the same region as other public members.
+        /// </summary>
+        public static string ConA1702Description {
+            get {
+                return ResourceManager.GetString("ConA1702Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class member &apos;{0}&apos; is not within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1702MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1702MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public member outside the expected region.
+        /// </summary>
+        public static string ConA1702Title {
+            get {
+                return ResourceManager.GetString("ConA1702Title", resourceCulture);
+            }
+        }
     }
 }

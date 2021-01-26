@@ -20,6 +20,7 @@
                 new AnalyzerRuleConA1602(),
                 new AnalyzerRuleConA1700(),
                 new AnalyzerRuleConA1701(),
+                new AnalyzerRuleConA1702(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();
@@ -40,11 +41,6 @@
         /// Gets the rule id.
         /// </summary>
         public abstract string Id { get; }
-
-        /// <summary>
-        /// Gets the kind of syntax this rule analyzes.
-        /// </summary>
-        public abstract SyntaxKind RuleSyntaxKind { get; }
 
         /// <summary>
         /// Gets the descriptor of a rule.
@@ -85,6 +81,10 @@
         #endregion
 
         #region Client Interface
+        /// <summary>
+        /// Gets the kind of syntax this rule analyzes.
+        /// </summary>
+        public abstract SyntaxKind[] GetRuleSyntaxKinds();
 
         /// <summary>
         /// Analyzes a source code node.

@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1602 : AnalyzerRule
+    public class AnalyzerRuleConA1602 : SingleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>

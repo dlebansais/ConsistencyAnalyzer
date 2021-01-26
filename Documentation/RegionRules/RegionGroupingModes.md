@@ -49,5 +49,5 @@ A requirement will then be that all regions (except the first one) follow the sa
 
 ## Mixed mode
 
-Finally, the analyzer recognizes a mixed mode where regions are used by interface category, or by topic (but not both at the same time), and also by interface implementation. This is typically used when the class inherits from `IDisposable`, a fairly common requirement when one of its field or property is also disposable. In this case, the class implementation of IDisposable can have its own region.
+Finally, the analyzer recognizes a mixed mode where regions are used by interface category, or by topic (but not both at the same time), and also by interface implementation. This is typically used when the class inherits from `IDisposable`, a fairly common requirement when one of its fieldd or properties is also disposable. In this case, the class implementation of `IDisposable` can have its own region.
  

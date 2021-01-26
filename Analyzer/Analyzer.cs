@@ -27,7 +27,7 @@
             List<DiagnosticDescriptor> RuleDescriptorList = new List<DiagnosticDescriptor>();
             foreach (KeyValuePair<string, AnalyzerRule> Entry in AnalyzerRule.RuleTable)
             {
-                context.RegisterSyntaxNodeAction(Entry.Value.AnalyzeNode, Entry.Value.RuleSyntaxKind);
+                context.RegisterSyntaxNodeAction(Entry.Value.AnalyzeNode, Entry.Value.GetRuleSyntaxKinds());
             }
         }
         #endregion

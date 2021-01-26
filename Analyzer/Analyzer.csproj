@@ -35,7 +35,16 @@
 
   <ItemGroup>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Update="Rules\MultipleSyntaxAnalyzerRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Rules\SingleSyntaxAnalyzerRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Rules\AnalyzerRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Rules\AnalyzerRuleConA1702.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Rules\AnalyzerRuleConA1701.cs">

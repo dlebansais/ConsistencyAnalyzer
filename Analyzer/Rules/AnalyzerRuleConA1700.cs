@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1700 : AnalyzerRule
+    public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>
@@ -99,13 +99,13 @@
                 {
                     ProgramHasMembersOutsideRegion.Update(HasMembersOutsideRegion);
                 }
-            }
 
-            // Report for classes with members outside region only.
-            if (ProgramHasMembersOutsideRegion.IsDifferent && HasMembersOutsideRegion)
-            {
-                string ClassName = Node.Identifier.ValueText;
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
+                // Report for classes with members outside region only.
+                if (ProgramHasMembersOutsideRegion.IsDifferent && HasMembersOutsideRegion)
+                {
+                    string ClassName = Node.Identifier.ValueText;
+                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
+                }
             }
         }
 
