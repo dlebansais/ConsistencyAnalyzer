@@ -8,53 +8,32 @@
 
     public partial class UnitTestConA1702
     {
-        private const string FirstClassWithRegionOnly = @"
+
+        private const string OneClassTwoRegions = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
-    public class Test1
+    public class Test
     {
-#region Init
+#region Init1
+        public void Test1() {}
 #endregion
-    }
 
-    public class Test2
-    {
-        private int x;
-#region Init
-#endregion
-    }
-}";
-
-        private const string SecondClassWithRegionOnly = @"
-using System;
-
-namespace ConsistencyAnalyzerTest
-{
-    public class Test1
-    {
-        private int x;
-#region Init
-#endregion
-    }
-
-    public class Test2
-    {
-#region Init
+#region Init2
+        public void Test2() {}
 #endregion
     }
 }";
 
         [DataTestMethod]
         [
-        DataRow(FirstClassWithRegionOnly, 12, 5, "Test2"),
-        DataRow(SecondClassWithRegionOnly, 6, 5, "Test1")
+        DataRow(OneClassTwoRegions, 13, 9, "Test2", "Init1")
         ]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, int line, int column, string variableName)
+        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, int line, int column, string memberName, string regionName)
         {
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1702MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
-            string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
+            string FormatedMessage = string.Format(AnalyzerMessageFormat, memberName, regionName);
 
             var descriptor = new DiagnosticDescriptor(
                 AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1702)),

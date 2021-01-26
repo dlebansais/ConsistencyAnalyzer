@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,56 +57,36 @@
             int traceId = 0;
             Analyzer.Trace("AnalyzerRuleConA1700", ref traceId);
 
-            ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
-            
-            var CurrentToken = Node.OpenBraceToken;
-            int RegionNestedLevel = 0;
-            bool HasRegion = false;
-            bool HasMembersOutsideRegion = false;
-
-            for (;;)
+            try
             {
-                CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
+                ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
 
-                if (CurrentToken == Node.CloseBraceToken)
-                    break;
+                lock (ClassExplorer.Current)
+                    ClassExplorer.Current.AddClass(Node);
 
-                if (CurrentToken.Parent is RegionDirectiveTriviaSyntax AsRegionDirective)
+                RegionExplorer Explorer;
+
+                lock (ClassExplorer.Current)
+                    Explorer = ClassExplorer.Current.RegionExplorerTable[Node];
+
+                if (Explorer.HasRegion)
                 {
-                    if (AsRegionDirective.HashToken == CurrentToken)
+                    lock (ProgramHasMembersOutsideRegion)
                     {
-                        HasRegion = true;
-                        RegionNestedLevel++;
+                        ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
                     }
-                }
-                else if (CurrentToken.Parent is EndRegionDirectiveTriviaSyntax AsEndRegionDirective)
-                {
-                    if (AsEndRegionDirective.HashToken == CurrentToken)
-                        RegionNestedLevel--;
-                }
-                else if (CurrentToken.Parent is MemberDeclarationSyntax)
-                {
-                    if (RegionNestedLevel == 0)
+
+                    // Report for classes with members outside region only.
+                    if (ProgramHasMembersOutsideRegion.IsDifferent && Explorer.HasMembersOutsideRegion)
                     {
-                        if (!HasMembersOutsideRegion)
-                            HasMembersOutsideRegion = true;
+                        string ClassName = Node.Identifier.ValueText;
+                        context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
                     }
                 }
             }
-
-            if (HasRegion)
+            catch (Exception e)
             {
-                lock (ProgramHasMembersOutsideRegion)
-                {
-                    ProgramHasMembersOutsideRegion.Update(HasMembersOutsideRegion);
-                }
-
-                // Report for classes with members outside region only.
-                if (ProgramHasMembersOutsideRegion.IsDifferent && HasMembersOutsideRegion)
-                {
-                    string ClassName = Node.Identifier.ValueText;
-                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
-                }
+                Analyzer.Trace(e.Message, ref traceId);
             }
         }
 

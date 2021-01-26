@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -64,16 +65,95 @@
             int TraceId = 0;
             Analyzer.Trace("AnalyzerRuleConA1702", ref TraceId);
 
-            MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
-
-            bool IsPublic = AccessLevelHelper.GetAccessLevel(Node.Modifiers) == AccessLevel.Public;
-            if (!IsPublic)
+            try
             {
-                Analyzer.Trace("Member is not public", ref TraceId);
-                return;
-            }
+                MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            Analyzer.Trace("Member is public", ref TraceId);
+                bool IsPublic = AccessLevelHelper.GetAccessLevel(Node.Modifiers) == AccessLevel.Public;
+                if (!IsPublic)
+                {
+                    Analyzer.Trace("Member is not public", ref TraceId);
+                    return;
+                }
+
+                Analyzer.Trace("Member is public", ref TraceId);
+
+                Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax> MemberToClassTable;
+                Dictionary<ClassDeclarationSyntax, RegionExplorer> RegionExplorerTable;
+
+                lock (ClassExplorer.Current)
+                    MemberToClassTable = ClassExplorer.Current.MemberToClassTable;
+
+                if (!MemberToClassTable.ContainsKey(Node))
+                {
+                    Analyzer.Trace("Unknown Member", ref TraceId);
+                    return;
+                }
+
+                ClassDeclarationSyntax ClassDeclaration = MemberToClassTable[Node];
+                Analyzer.Trace($"Member of class {ClassDeclaration.Identifier}", ref TraceId);
+
+                lock (ClassExplorer.Current)
+                    RegionExplorerTable = ClassExplorer.Current.RegionExplorerTable;
+
+                RegionExplorer Explorer;
+
+                lock (ClassExplorer.Current)
+                {
+                    Explorer = RegionExplorerTable[ClassDeclaration];
+                    Analyzer.Trace($"Explorer obtained", ref TraceId);
+                }
+
+                if (!Explorer.RegionsByAccelLevel.ContainsKey(AccessLevel.Public))
+                {
+                    Analyzer.Trace("Class has no region with public members", ref TraceId);
+                    return;
+                }
+                Analyzer.Trace("Class has region with public members", ref TraceId);
+
+                List<RegionDirectiveTriviaSyntax> RegionList = Explorer.RegionsByAccelLevel[AccessLevel.Public];
+                if (RegionList.Count <= 1)
+                {
+                    Analyzer.Trace("Class has at most one region with public members", ref TraceId);
+                    return;
+                }
+                Analyzer.Trace("Class has more than one region with public members", ref TraceId);
+
+                RegionDirectiveTriviaSyntax FirstRegion = RegionList[0];
+                RegionDirectiveTriviaSyntax MemberRegion = Explorer.MemberRegionTable[Node];
+
+                if (MemberRegion == FirstRegion)
+                {
+                    Analyzer.Trace("Ignoring members of the first region", ref TraceId);
+                    return;
+                }
+
+                string FirstRegionText = RegionExplorer.GetRegionText(FirstRegion);
+                string MemberText = "<Unknown>";
+
+                switch (Node)
+                {
+                    case ConstructorDeclarationSyntax AsConstructorDeclaration:
+                        MemberText = AsConstructorDeclaration.Identifier.ToString();
+                        break;
+                    case FieldDeclarationSyntax AsFieldDeclaration:
+                        MemberText = AsFieldDeclaration.Declaration.Variables[0].Identifier.ToString();
+                        break;
+                    case MethodDeclarationSyntax AsMethodDeclaration:
+                        MemberText = AsMethodDeclaration.Identifier.ToString();
+                        break;
+                    case PropertyDeclarationSyntax AsPropertyDeclaration:
+                        MemberText = AsPropertyDeclaration.Identifier.ToString();
+                        break;
+                }
+
+                Analyzer.Trace($"Member {MemberText} shoudd be inside {FirstRegionText}", ref TraceId);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, FirstRegionText));
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, ref TraceId);
+            }
         }
         #endregion
     }

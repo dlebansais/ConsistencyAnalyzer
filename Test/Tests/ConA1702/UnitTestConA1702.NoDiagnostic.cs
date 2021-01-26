@@ -27,10 +27,24 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
+        private const string OneClassOneConstructorOneRegion = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    public class Test
+    {
+#region Init
+        public Test() {}
+#endregion
+    }
+}";
+
         [DataTestMethod]
         [
         DataRow(OneClassNoMember),
-        DataRow(OneClassOneConstructor)
+        DataRow(OneClassOneConstructor),
+        DataRow(OneClassOneConstructorOneRegion)
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {

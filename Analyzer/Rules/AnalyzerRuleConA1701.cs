@@ -80,23 +80,12 @@
             // Report nested regions.
             if (RegionOwner != null)
             {
-                string RegionText = GetRegionText(node, traceId);
-                string RegionOwnerText = GetRegionText(RegionOwner, traceId);
+                string RegionText = RegionExplorer.GetRegionText(node);
+                string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
 
                 Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}", ref traceId);
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, node.GetLocation(), RegionText, RegionOwnerText));
             }
-        }
-
-        private string GetRegionText(RegionDirectiveTriviaSyntax regionDirective, int traceId)
-        {
-            string Result = regionDirective.ToString();
-            string RegionPattern = "#region ";
-
-            if (Result.StartsWith(RegionPattern))
-                Result = Result.Substring(RegionPattern.Length);
-
-            return Result;
         }
 
         private RegionDirectiveTriviaSyntax? GetRegionDirectiveOwner(ClassDeclarationSyntax classDeclaration, RegionDirectiveTriviaSyntax regionDirective, int traceId)
