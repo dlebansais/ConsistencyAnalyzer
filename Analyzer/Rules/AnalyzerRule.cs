@@ -21,6 +21,7 @@
                 new AnalyzerRuleConA1700(),
                 new AnalyzerRuleConA1701(),
                 new AnalyzerRuleConA1702(),
+                new AnalyzerRuleConA1703(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();

@@ -104,13 +104,16 @@
                     }
                     else if (!MemberRegionTable.ContainsKey(AsMemberDeclaration))
                     {
-                        AccessLevel AccessLevel = AccessLevelHelper.GetAccessLevel(AsMemberDeclaration.Modifiers);
+                        AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(AsMemberDeclaration.Modifiers);
+                        if (MemberAccessLevel == AccessLevel.ProtectedInternal)
+                            MemberAccessLevel = AccessLevel.Protected;
+
                         RegionDirectiveTriviaSyntax MemberRegion = LastRegionDirective!;
 
-                        if (!RegionsByAccelLevel.ContainsKey(AccessLevel))
-                            RegionsByAccelLevel.Add(AccessLevel, new List<RegionDirectiveTriviaSyntax>());
+                        if (!RegionsByAccelLevel.ContainsKey(MemberAccessLevel))
+                            RegionsByAccelLevel.Add(MemberAccessLevel, new List<RegionDirectiveTriviaSyntax>());
 
-                        List<RegionDirectiveTriviaSyntax> RegionList = RegionsByAccelLevel[AccessLevel];
+                        List<RegionDirectiveTriviaSyntax> RegionList = RegionsByAccelLevel[MemberAccessLevel];
                         if (!RegionList.Contains(MemberRegion))
                             RegionList.Add(MemberRegion);
 

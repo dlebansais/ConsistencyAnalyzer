@@ -11,13 +11,13 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1702 : MultipleSyntaxAnalyzerRule
+    public class AnalyzerRuleConA1703 : MultipleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>
         /// Gets the rule id.
         /// </summary>
-        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1702));
+        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1703));
 
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
@@ -37,17 +37,17 @@
         /// <summary>
         /// Gets the rule title.
         /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1702Title), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1703Title), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule message format.
         /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1702MessageFormat), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1703MessageFormat), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule description.
         /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1702Description), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1703Description), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule category.
@@ -63,11 +63,11 @@
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             int TraceId = 0;
-            Analyzer.Trace("AnalyzerRuleConA1702", ref TraceId);
+            Analyzer.Trace("AnalyzerRuleConA1703", ref TraceId);
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            AccessLevel ExpectedAccessLevel = AccessLevel.Public;
+            AccessLevel ExpectedAccessLevel = AccessLevel.Protected;
 
             AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(Node.Modifiers);
             if (MemberAccessLevel == AccessLevel.ProtectedInternal)
