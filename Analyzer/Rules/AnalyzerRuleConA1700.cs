@@ -57,36 +57,29 @@
             int traceId = 0;
             Analyzer.Trace("AnalyzerRuleConA1700", ref traceId);
 
-            try
+            ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
+
+            lock (ClassExplorer.Current)
+                ClassExplorer.Current.AddClass(Node);
+
+            RegionExplorer Explorer;
+
+            lock (ClassExplorer.Current)
+                Explorer = ClassExplorer.Current.RegionExplorerTable[Node];
+
+            if (Explorer.HasRegion)
             {
-                ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
-
-                lock (ClassExplorer.Current)
-                    ClassExplorer.Current.AddClass(Node);
-
-                RegionExplorer Explorer;
-
-                lock (ClassExplorer.Current)
-                    Explorer = ClassExplorer.Current.RegionExplorerTable[Node];
-
-                if (Explorer.HasRegion)
+                lock (ProgramHasMembersOutsideRegion)
                 {
-                    lock (ProgramHasMembersOutsideRegion)
-                    {
-                        ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
-                    }
-
-                    // Report for classes with members outside region only.
-                    if (ProgramHasMembersOutsideRegion.IsDifferent && Explorer.HasMembersOutsideRegion)
-                    {
-                        string ClassName = Node.Identifier.ValueText;
-                        context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
-                    }
+                    ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
                 }
-            }
-            catch (Exception e)
-            {
-                Analyzer.Trace(e.Message, ref traceId);
+
+                // Report for classes with members outside region only.
+                if (ProgramHasMembersOutsideRegion.IsDifferent && Explorer.HasMembersOutsideRegion)
+                {
+                    string ClassName = Node.Identifier.ValueText;
+                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
+                }
             }
         }
 
