@@ -4,4 +4,4 @@
 
 **[ConA1702](RegionRules/ConA1702.md)**
 
-**[ConA1702](RegionRules/ConA1703.md)**
+**[ConA1703](RegionRules/ConA1703.md)**
