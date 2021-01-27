@@ -8,8 +8,41 @@
 
     public partial class UnitTestConA1702
     {
+        private const string OneClassTwoRegionsConstructor = @"
+using System;
 
-        private const string OneClassTwoRegions = @"
+namespace ConsistencyAnalyzerTest
+{
+    public class Test
+    {
+#region Init1
+        public void Test1() {}
+#endregion
+
+#region Init2
+        public Test() {}
+#endregion
+    }
+}";
+
+        private const string OneClassTwoRegionsField = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    public class Test
+    {
+#region Init1
+        public void Test1() {}
+#endregion
+
+#region Init2
+        public int Test2;
+#endregion
+    }
+}";
+
+        private const string OneClassTwoRegionsMethod = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -26,11 +59,31 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
+        private const string OneClassTwoRegionsProperty = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    public class Test
+    {
+#region Init1
+        public void Test1() {}
+#endregion
+
+#region Init2
+        public int Test2 { get; set; }
+#endregion
+    }
+}";
+
         [DataTestMethod]
         [
-        DataRow(OneClassTwoRegions, 13, 9, "Test2", "Init1")
+        DataRow(OneClassTwoRegionsConstructor, 13, 9, "Test", "Init1"),
+        DataRow(OneClassTwoRegionsField, 13, 9, "Test2", "Init1"),
+        DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
+        DataRow(OneClassTwoRegionsProperty, 13, 9, "Test2", "Init1"),
         ]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, int line, int column, string memberName, string regionName)
+        public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
         {
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1702MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
             string FormatedMessage = string.Format(AnalyzerMessageFormat, memberName, regionName);

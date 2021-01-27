@@ -51,7 +51,7 @@ namespace ConsistencyAnalyzerTest
         DataRow(FirstClassWithRegionOnly, 12, 5, "Test2"),
         DataRow(SecondClassWithRegionOnly, 6, 5, "Test1")
         ]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, int line, int column, string variableName)
+        public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string variableName)
         {
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1700MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
             string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
