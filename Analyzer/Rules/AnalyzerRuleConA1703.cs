@@ -67,70 +67,20 @@
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            AccessLevel ExpectedAccessLevel = AccessLevel.Protected;
-
-            AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(Node.Modifiers);
-            if (MemberAccessLevel == AccessLevel.ProtectedInternal)
-                MemberAccessLevel = AccessLevel.Protected;
-
-            if (MemberAccessLevel != ExpectedAccessLevel)
+            if (!RegionExplorer.IsRegionMismatch(Node, AccessLevel.Protected, out string ExpectedRegionText, out string MemberText))
                 return;
 
-            Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax> MemberToClassTable;
-            Dictionary<ClassDeclarationSyntax, RegionExplorer> RegionExplorerTable;
+            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", ref TraceId);
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
+        }
 
-            lock (ClassExplorer.Current)
-                MemberToClassTable = ClassExplorer.Current.MemberToClassTable;
+        private bool HasSameMemberType(MemberDeclarationSyntax memberDeclaration, List<MemberDeclarationSyntax> memberList)
+        {
+            foreach (MemberDeclarationSyntax Member in memberList)
+                if (Member.GetType() != memberDeclaration.GetType())
+                    return false;
 
-            if (!MemberToClassTable.ContainsKey(Node))
-                return;
-
-            ClassDeclarationSyntax ClassDeclaration = MemberToClassTable[Node];
-
-            lock (ClassExplorer.Current)
-                RegionExplorerTable = ClassExplorer.Current.RegionExplorerTable;
-
-            RegionExplorer Explorer;
-
-            lock (ClassExplorer.Current)
-            {
-                Explorer = RegionExplorerTable[ClassDeclaration];
-            }
-
-            if (!Explorer.RegionsByAccelLevel.ContainsKey(ExpectedAccessLevel))
-                return;
-
-            List<RegionDirectiveTriviaSyntax> RegionList = Explorer.RegionsByAccelLevel[ExpectedAccessLevel];
-            if (RegionList.Count <= 1)
-                return;
-
-            RegionDirectiveTriviaSyntax FirstRegion = RegionList[0];
-            RegionDirectiveTriviaSyntax MemberRegion = Explorer.MemberRegionTable[Node];
-
-            if (MemberRegion == FirstRegion)
-                return;
-
-            string FirstRegionText = RegionExplorer.GetRegionText(FirstRegion);
-            string MemberText = "<Unknown>";
-
-            switch (Node)
-            {
-                case ConstructorDeclarationSyntax AsConstructorDeclaration:
-                    MemberText = AsConstructorDeclaration.Identifier.ToString();
-                    break;
-                case FieldDeclarationSyntax AsFieldDeclaration:
-                    MemberText = AsFieldDeclaration.Declaration.Variables[0].Identifier.ToString();
-                    break;
-                case MethodDeclarationSyntax AsMethodDeclaration:
-                    MemberText = AsMethodDeclaration.Identifier.ToString();
-                    break;
-                case PropertyDeclarationSyntax AsPropertyDeclaration:
-                    MemberText = AsPropertyDeclaration.Identifier.ToString();
-                    break;
-            }
-
-            Analyzer.Trace($"Member {MemberText} shoudd be inside {FirstRegionText}", ref TraceId);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, FirstRegionText));
+            return true;
         }
         #endregion
     }
