@@ -14,6 +14,7 @@ In addition, the public interface can be split in additional categories:
 
 + Constructors
 + Properties
++ Fields
 + Events
 + Methods
 
