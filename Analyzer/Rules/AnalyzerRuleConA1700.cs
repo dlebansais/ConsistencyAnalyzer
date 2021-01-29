@@ -54,25 +54,16 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            int traceId = 0;
-            Analyzer.Trace("AnalyzerRuleConA1700", ref traceId);
+            Analyzer.Trace("AnalyzerRuleConA1700");
 
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
 
-            lock (ClassExplorer.Current)
-                ClassExplorer.Current.AddClass(Node);
+            ClassExplorer.AddClass(Node);
 
-            RegionExplorer Explorer;
-
-            lock (ClassExplorer.Current)
-                Explorer = ClassExplorer.Current.RegionExplorerTable[Node];
-
+            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(Node);
             if (Explorer.HasRegion)
             {
-                lock (ProgramHasMembersOutsideRegion)
-                {
-                    ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
-                }
+                ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
 
                 // Report for classes with members outside region only.
                 if (ProgramHasMembersOutsideRegion.IsDifferent && Explorer.HasMembersOutsideRegion)

@@ -91,26 +91,8 @@
             if (MemberAccessLevel != expectedAccessLevel)
                 return false;
 
-            Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax> MemberToClassTable;
-            Dictionary<ClassDeclarationSyntax, RegionExplorer> RegionExplorerTable;
-
-            lock (ClassExplorer.Current)
-                MemberToClassTable = ClassExplorer.Current.MemberToClassTable;
-
-            if (!MemberToClassTable.ContainsKey(memberDeclaration))
-                return false;
-
-            ClassDeclarationSyntax ClassDeclaration = MemberToClassTable[memberDeclaration];
-
-            lock (ClassExplorer.Current)
-                RegionExplorerTable = ClassExplorer.Current.RegionExplorerTable;
-
-            RegionExplorer Explorer;
-
-            lock (ClassExplorer.Current)
-            {
-                Explorer = RegionExplorerTable[ClassDeclaration];
-            }
+            ClassDeclarationSyntax ClassDeclaration = ClassExplorer.GetClass(memberDeclaration);
+            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(ClassDeclaration);
 
             if (!Explorer.RegionsByAccelLevel.ContainsKey(expectedAccessLevel))
                 return false;

@@ -130,6 +130,9 @@ namespace ConsistencyAnalyzerTest
         ]
         public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column, string variableName)
         {
+            UnifyCarriageReturn(ref test);
+            UnifyCarriageReturn(ref fixTest);
+
             string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
             string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
 

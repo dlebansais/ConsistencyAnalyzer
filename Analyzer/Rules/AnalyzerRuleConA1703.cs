@@ -62,15 +62,14 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            int TraceId = 0;
-            Analyzer.Trace("AnalyzerRuleConA1703", ref TraceId);
+            Analyzer.Trace("AnalyzerRuleConA1703");
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
             if (!RegionExplorer.IsRegionMismatch(Node, AccessLevel.Protected, out string ExpectedRegionText, out string MemberText))
                 return;
 
-            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", ref TraceId);
+            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}");
             context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
         }
 

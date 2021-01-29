@@ -22,13 +22,18 @@
         /// <param name="newState">The new state.</param>
         public void Update(TState newState)
         {
-            if (CurrentState == null)
-                CurrentState = newState;
-            else if (!IsDifferent)
+            lock (InternalLock)
             {
-                if (!CurrentState.Equals(newState))
-                    IsDifferent = true;
+                if (CurrentState == null)
+                    CurrentState = newState;
+                else if (!IsDifferent)
+                {
+                    if (!CurrentState.Equals(newState))
+                        IsDifferent = true;
+                }
             }
         }
+
+        private int[] InternalLock = new int[0];
     }
 }

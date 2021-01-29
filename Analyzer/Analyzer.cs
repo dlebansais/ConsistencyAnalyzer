@@ -54,13 +54,12 @@
         /// Displays traces.
         /// </summary>
         /// <param name="msg">Message to display.</param>
-        /// <param name="traceId">An id to use to distinguish parallel code.</param>
-        public static void Trace(string msg, ref int traceId)
+        public static void Trace(string msg)
         {
-            if (traceId == 0)
-                traceId = Interlocked.Increment(ref lastTraceId);
+            if (!TraceId.IsValueCreated)
+                TraceId.Value = Interlocked.Increment(ref lastTraceId);
 
-            string Line = $"{traceId}.  {msg}";
+            string Line = $"{TraceId.Value}.  {msg}";
 
             //System.Diagnostics.Debug.WriteLine(Line);
             //FileTrace(Line);
@@ -87,6 +86,8 @@
         /// Gets or sets the method that display traces during a unit test.
         /// </summary>
         public static Action<string> TestTrace { get; set; } = (string msg) => { };
+
+        private static ThreadLocal<int> TraceId = new ThreadLocal<int>();
         #endregion
     }
 }

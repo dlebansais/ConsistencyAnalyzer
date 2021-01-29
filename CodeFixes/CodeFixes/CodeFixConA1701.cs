@@ -26,8 +26,7 @@
 
         private async Task<Document> AsyncHandler(Document document, RegionDirectiveTriviaSyntax syntaxNode, CancellationToken cancellationToken)
         {
-            int traceId = 0;
-            Analyzer.Trace("CodeFixConA1701", ref traceId);
+            Analyzer.Trace("CodeFixConA1701");
 
             SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             if (root == null)
@@ -37,7 +36,7 @@
             SyntaxNode? UpdatedRoot = Remover.Visit(root);
             Document Result = document.WithSyntaxRoot(UpdatedRoot);
 
-            Analyzer.Trace("Fixed", ref traceId);
+            Analyzer.Trace("Fixed");
 
             return Result;
         }

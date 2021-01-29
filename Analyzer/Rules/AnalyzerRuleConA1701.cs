@@ -53,8 +53,7 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            int TraceId = 0;
-            Analyzer.Trace("AnalyzerRuleConA1701", ref TraceId);
+            Analyzer.Trace("AnalyzerRuleConA1701");
 
             RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
 
@@ -66,16 +65,16 @@
 
                 if (CurrentToken.Parent is ClassDeclarationSyntax AsClassDeclaration)
                 {
-                    AnalyzeNode(Node, context, AsClassDeclaration, TraceId);
+                    AnalyzeNode(Node, context, AsClassDeclaration);
                     break;
                 }
             }
             while (CurrentToken != null);
         }
 
-        private void AnalyzeNode(RegionDirectiveTriviaSyntax node, SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, int traceId)
+        private void AnalyzeNode(RegionDirectiveTriviaSyntax node, SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
         {
-            RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(classDeclaration, node, traceId);
+            RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(classDeclaration, node);
 
             // Report nested regions.
             if (RegionOwner != null)
@@ -83,12 +82,12 @@
                 string RegionText = RegionExplorer.GetRegionText(node);
                 string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
 
-                Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}", ref traceId);
+                Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}");
                 context.ReportDiagnostic(Diagnostic.Create(Descriptor, node.GetLocation(), RegionText, RegionOwnerText));
             }
         }
 
-        private RegionDirectiveTriviaSyntax? GetRegionDirectiveOwner(ClassDeclarationSyntax classDeclaration, RegionDirectiveTriviaSyntax regionDirective, int traceId)
+        private RegionDirectiveTriviaSyntax? GetRegionDirectiveOwner(ClassDeclarationSyntax classDeclaration, RegionDirectiveTriviaSyntax regionDirective)
         {
             var CurrentToken = classDeclaration.OpenBraceToken;
             RegionDirectiveTriviaSyntax? RegionOwner = null;

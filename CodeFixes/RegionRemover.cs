@@ -84,7 +84,7 @@
         /// <param name="endRegionDirective">The directive to remove.</param>
         public override SyntaxNode? VisitEndRegionDirectiveTrivia(EndRegionDirectiveTriviaSyntax endRegionDirective)
         {
-            Analyzer.Trace($"Visiting {endRegionDirective}", ref TraceId);
+            Analyzer.Trace($"Visiting {endRegionDirective}");
 
             if (RemovedEndRegionDirective == endRegionDirective)
                 return SyntaxFactory.SkippedTokensTrivia();
@@ -92,7 +92,6 @@
             return base.VisitEndRegionDirectiveTrivia(endRegionDirective);
         }
 
-        private int TraceId;
         private EndRegionDirectiveTriviaSyntax? RemovedEndRegionDirective;
     }
 }
