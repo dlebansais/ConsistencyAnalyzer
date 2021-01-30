@@ -11,14 +11,19 @@
         Undecided,
 
         /// <summary>
-        /// Interface Category, public/protected.
+        /// Free grouping.
         /// </summary>
-        InterfaceCategorySimple,
+        Free,
 
         /// <summary>
-        /// Interface Category, public/protected, and constructor/property/field/event/method in public.
+        /// Accessibility, public/protected.
         /// </summary>
-        InterfaceCategoryFull,
+        AccessibilitySimple,
+
+        /// <summary>
+        /// Accessibility, public/protected, and constructor/property/field/event/method in public.
+        /// </summary>
+        AccessibilityFull,
 
         /// <summary>
         /// By topic.
@@ -31,13 +36,13 @@
         InterfaceImplementation,
 
         /// <summary>
-        /// InterfaceCategorySimple + interface implementation.
+        /// AccessibilitySimple + interface implementation.
         /// </summary>
-        MixedInterfaceCategorySimple,
+        MixedInterfaceAccessibilitySimple,
 
         /// <summary>
-        /// InterfaceCategoryFull + interface implementation.
+        /// AccessibilityFull + interface implementation.
         /// </summary>
-        MixedInterfaceCategoryFull,
+        MixedInterfaceAccessibilityFull,
     }
 }

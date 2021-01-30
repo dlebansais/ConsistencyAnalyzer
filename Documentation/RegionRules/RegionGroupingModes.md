@@ -2,15 +2,15 @@
 
 Regions in C# are free tags used to expand or collapse code. However, within a class they can also be used to organize the code in groups ('regions'). This analyzer recognize different ways of grouping code.
 
-## By interface category
+## By accessibility
 
 In this mode, regions surround code belonging to the following categories:
 
-+ Public interface (with the `public` keyword)
-+ Descendant interface (with the `protected` keyword)
++ Public accessibility (with the `public` keyword)
++ Descendant accessibility (with the `protected` keyword)
 + Everything else (private code)
 
-In addition, the public interface can be split in additional categories:
+In addition, the public accessibility can be split in additional categories:
 
 + Constructors
 + Properties
@@ -50,5 +50,4 @@ A requirement will then be that all regions (except the first one) follow the sa
 
 ## Mixed mode
 
-Finally, the analyzer recognizes a mixed mode where regions are used by interface category, or by topic (but not both at the same time), and also by interface implementation. This is typically used when the class inherits from `IDisposable`, a fairly common requirement when one of its fieldd or properties is also disposable. In this case, the class implementation of `IDisposable` can have its own region.
- 
+Finally, the analyzer recognizes a mixed mode where regions are used by accessibility category, or by topic (but not both at the same time), and also by interface implementation. This is typically used when the class inherits from `IDisposable`, a fairly common requirement when one of its fieldd or properties is also disposable. In this case, the class implementation of `IDisposable` can have its own region.

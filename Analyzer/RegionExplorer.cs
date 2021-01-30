@@ -50,7 +50,7 @@
         /// <summary>
         /// The detected region mode.
         /// </summary>
-        public static RegionModes RegionMode { get; private set; } = RegionModes.InterfaceCategorySimple;
+        public static RegionModes RegionMode { get; private set; } = RegionModes.Undecided;
 
         /// <summary>
         /// Gets regions by access level.
@@ -97,7 +97,7 @@
             ClassDeclarationSyntax ClassDeclaration = (ClassDeclarationSyntax)memberDeclaration.Parent!;
             ClassExplorer.AddClass(context, ClassDeclaration);
 
-            if (RegionMode != RegionModes.InterfaceCategorySimple && RegionMode != RegionModes.InterfaceCategoryFull)
+            if (RegionMode != RegionModes.AccessibilitySimple && RegionMode != RegionModes.AccessibilityFull)
             {
                 Analyzer.Trace($"Region mode is {RegionMode}, exit");
                 return false;
@@ -207,7 +207,7 @@
             if (ClassWithContentCount < 3)
             {
                 Analyzer.Trace("Not enough classes with content to set region mode");
-                RegionMode = RegionModes.Undecided;
+                RegionMode = RegionModes.Free;
             }
             else
             {
@@ -294,9 +294,9 @@
             int MinConsistencyCount = (classWithContentCount + 1) / 2;
 
             if (MaxDispersedCount < classWithContentCount - MinConsistencyCount)
-                RegionMode = RegionModes.InterfaceCategoryFull;
+                RegionMode = RegionModes.AccessibilityFull;
             else
-                RegionMode = RegionModes.Undecided;
+                RegionMode = RegionModes.Free;
         }
         #endregion
     }
