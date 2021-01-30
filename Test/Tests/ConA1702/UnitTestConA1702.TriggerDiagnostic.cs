@@ -23,6 +23,20 @@ namespace ConsistencyAnalyzerTest
         public Test() {}
 #endregion
     }
+
+    public class EnableInterfaceCategoryFull1
+    {
+#region Init
+        public EnableInterfaceCategoryFull1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategoryFull2
+    {
+#region Init
+        public EnableInterfaceCategoryFull2() {}
+#endregion
+    }
 }";
 
         private const string OneClassTwoRegionsField = @"

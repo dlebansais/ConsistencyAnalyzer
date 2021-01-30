@@ -58,20 +58,33 @@
 
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
 
-            ClassExplorer.AddClass(Node);
+            ClassExplorer.AddClass(context, Node);
 
-            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(Node);
-            if (Explorer.HasRegion)
+            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(context, Node);
+
+            if (!Explorer.HasRegion)
             {
-                ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
-
-                // Report for classes with members outside region only.
-                if (ProgramHasMembersOutsideRegion.IsDifferent && Explorer.HasMembersOutsideRegion)
-                {
-                    string ClassName = Node.Identifier.ValueText;
-                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
-                }
+                Analyzer.Trace("No region to analyze, exit");
+                return;
             }
+
+            ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
+
+            // Report for classes with members outside region only.
+            if (!Explorer.HasMembersOutsideRegion)
+            {
+                Analyzer.Trace("No member outside region, exit");
+                return;
+            }
+
+            if (!ProgramHasMembersOutsideRegion.IsDifferent)
+            {
+                Analyzer.Trace("No difference with other classes, exit");
+                return;
+            }
+
+            string ClassName = Node.Identifier.ValueText;
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
         }
 
         private GlobalState<bool> ProgramHasMembersOutsideRegion = new GlobalState<bool>();

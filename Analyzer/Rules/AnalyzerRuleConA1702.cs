@@ -66,7 +66,7 @@
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            if (!RegionExplorer.IsRegionMismatch(Node, AccessLevel.Public, out string ExpectedRegionText, out string MemberText))
+            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, out string ExpectedRegionText, out string MemberText))
                 return;
 
             Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}");

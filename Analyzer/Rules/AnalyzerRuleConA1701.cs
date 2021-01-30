@@ -57,7 +57,33 @@
 
             RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
 
-            var CurrentToken = Node.HashToken;
+            if (!GetOwnerClass(Node, out ClassDeclarationSyntax ClassDeclaration))
+            {
+                Analyzer.Trace("Region outside class, exit");
+                return;
+            }
+
+            RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(ClassDeclaration, Node);
+
+            // Report nested regions.
+            if (RegionOwner == null)
+            {
+                Analyzer.Trace("Region not nested, exit");
+                return;
+            }
+
+            string RegionText = RegionExplorer.GetRegionText(Node);
+            string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
+
+            Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}");
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText, RegionOwnerText));
+        }
+
+        private bool GetOwnerClass(RegionDirectiveTriviaSyntax node, out ClassDeclarationSyntax classDeclaration)
+        {
+            classDeclaration = null!;
+
+            var CurrentToken = node.HashToken;
 
             do
             {
@@ -65,26 +91,13 @@
 
                 if (CurrentToken.Parent is ClassDeclarationSyntax AsClassDeclaration)
                 {
-                    AnalyzeNode(Node, context, AsClassDeclaration);
-                    break;
+                    classDeclaration = AsClassDeclaration;
+                    return true;
                 }
             }
             while (CurrentToken != null);
-        }
 
-        private void AnalyzeNode(RegionDirectiveTriviaSyntax node, SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
-        {
-            RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(classDeclaration, node);
-
-            // Report nested regions.
-            if (RegionOwner != null)
-            {
-                string RegionText = RegionExplorer.GetRegionText(node);
-                string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
-
-                Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}");
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, node.GetLocation(), RegionText, RegionOwnerText));
-            }
+            return false;
         }
 
         private RegionDirectiveTriviaSyntax? GetRegionDirectiveOwner(ClassDeclarationSyntax classDeclaration, RegionDirectiveTriviaSyntax regionDirective)

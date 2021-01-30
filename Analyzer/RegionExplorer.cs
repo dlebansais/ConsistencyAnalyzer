@@ -2,6 +2,7 @@
 {
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
     using System.Collections.Generic;
 
@@ -14,9 +15,11 @@
         /// <summary>
         /// Creates an instance of RegionExplorer.
         /// </summary>
+        /// <param name="context">The source code.</param>
         /// <param name="classDeclaration">The class with regions.</param>
-        public RegionExplorer(ClassDeclarationSyntax classDeclaration)
+        public RegionExplorer(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
         {
+            Context = context;
             ClassDeclaration = classDeclaration;
 
             Explore();
@@ -24,6 +27,11 @@
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the source code.
+        /// </summary>
+        public SyntaxNodeAnalysisContext Context { get; init; }
+
         /// <summary>
         /// Gets the class with regions.
         /// </summary>
@@ -58,6 +66,11 @@
         /// Gets members by region.
         /// </summary>
         internal Dictionary<RegionDirectiveTriviaSyntax, List<MemberDeclarationSyntax>> RegionMemberTable { get; } = new Dictionary<RegionDirectiveTriviaSyntax, List<MemberDeclarationSyntax>>();
+
+        /// <summary>
+        /// Gets members types in classes.
+        /// </summary>
+        internal static Dictionary<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> SortedRegionTable { get; } = new Dictionary<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>>();
         #endregion
 
         #region Client Interface
@@ -76,36 +89,53 @@
             return Result;
         }
 
-        internal static bool IsRegionMismatch(MemberDeclarationSyntax memberDeclaration, AccessLevel expectedAccessLevel, out string expectedRegionText, out string memberText)
+        internal static bool IsRegionMismatch(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, AccessLevel expectedAccessLevel, out string expectedRegionText, out string memberText)
         {
             expectedRegionText = string.Empty;
             memberText = string.Empty;
 
-            if (RegionMode != RegionModes.InterfaceCategorySimple)
+            ClassDeclarationSyntax ClassDeclaration = (ClassDeclarationSyntax)memberDeclaration.Parent!;
+            ClassExplorer.AddClass(context, ClassDeclaration);
+
+            if (RegionMode != RegionModes.InterfaceCategorySimple && RegionMode != RegionModes.InterfaceCategoryFull)
+            {
+                Analyzer.Trace($"Region mode is {RegionMode}, exit");
                 return false;
+            }
 
             AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(memberDeclaration.Modifiers);
             if (MemberAccessLevel == AccessLevel.ProtectedInternal)
                 MemberAccessLevel = AccessLevel.Protected;
 
             if (MemberAccessLevel != expectedAccessLevel)
+            {
+                Analyzer.Trace($"Member Access Level is {MemberAccessLevel}, exit");
                 return false;
+            }
 
-            ClassDeclarationSyntax ClassDeclaration = ClassExplorer.GetClass(memberDeclaration);
-            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(ClassDeclaration);
+            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(context, ClassDeclaration);
 
             if (!Explorer.RegionsByAccelLevel.ContainsKey(expectedAccessLevel))
+            {
+                Analyzer.Trace($"No other member with the same access level, exit");
                 return false;
+            }
 
             List<RegionDirectiveTriviaSyntax> RegionList = Explorer.RegionsByAccelLevel[expectedAccessLevel];
             if (RegionList.Count <= 1)
+            {
+                Analyzer.Trace($"Only one region with the members with same access level, exit");
                 return false;
+            }
 
             RegionDirectiveTriviaSyntax FirstRegion = RegionList[0];
             RegionDirectiveTriviaSyntax MemberRegion = Explorer.MemberRegionTable[memberDeclaration];
 
             if (MemberRegion == FirstRegion)
+            {
+                Analyzer.Trace($"Analyzing the first region, exit");
                 return false;
+            }
 
             expectedRegionText = RegionExplorer.GetRegionText(FirstRegion);
             memberText = "<Unknown>";
@@ -118,11 +148,11 @@
                 case FieldDeclarationSyntax AsFieldDeclaration:
                     memberText = AsFieldDeclaration.Declaration.Variables[0].Identifier.ToString();
                     break;
-                case MethodDeclarationSyntax AsMethodDeclaration:
-                    memberText = AsMethodDeclaration.Identifier.ToString();
-                    break;
                 case PropertyDeclarationSyntax AsPropertyDeclaration:
                     memberText = AsPropertyDeclaration.Identifier.ToString();
+                    break;
+                case MethodDeclarationSyntax AsMethodDeclaration:
+                    memberText = AsMethodDeclaration.Identifier.ToString();
                     break;
             }
 
@@ -167,29 +197,106 @@
                     }
                     else if (!MemberRegionTable.ContainsKey(AsMemberDeclaration))
                     {
-                        AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(AsMemberDeclaration.Modifiers);
-                        if (MemberAccessLevel == AccessLevel.ProtectedInternal)
-                            MemberAccessLevel = AccessLevel.Protected;
-
-                        RegionDirectiveTriviaSyntax MemberRegion = LastRegionDirective!;
-
-                        if (!RegionsByAccelLevel.ContainsKey(MemberAccessLevel))
-                            RegionsByAccelLevel.Add(MemberAccessLevel, new List<RegionDirectiveTriviaSyntax>());
-
-                        List<RegionDirectiveTriviaSyntax> RegionList = RegionsByAccelLevel[MemberAccessLevel];
-                        if (!RegionList.Contains(MemberRegion))
-                            RegionList.Add(MemberRegion);
-
-                        MemberRegionTable.Add(AsMemberDeclaration, MemberRegion);
-
-                        if (!RegionMemberTable.ContainsKey(MemberRegion))
-                            RegionMemberTable.Add(MemberRegion, new List<MemberDeclarationSyntax>());
-
-                        List<MemberDeclarationSyntax> MemberList = RegionMemberTable[MemberRegion];
-                        MemberList.Add(AsMemberDeclaration);
+                        MemberClassification(AsMemberDeclaration, LastRegionDirective!);
                     }
                 }
             }
+
+            int ClassWithContentCount = GetCountOfClassWithContent();
+
+            if (ClassWithContentCount < 3)
+            {
+                Analyzer.Trace("Not enough classes with content to set region mode");
+                RegionMode = RegionModes.Undecided;
+            }
+            else
+            {
+                CheckInterfaceCategoryRegionMode(ClassWithContentCount);
+
+                Analyzer.Trace($"Region mode: {RegionMode}");
+            }
+        }
+
+        private void MemberClassification(MemberDeclarationSyntax memberDeclaration, RegionDirectiveTriviaSyntax memberRegion)
+        {
+            AccessLevel MemberAccessLevel = AccessLevelHelper.GetAccessLevel(memberDeclaration.Modifiers);
+            if (MemberAccessLevel == AccessLevel.ProtectedInternal)
+                MemberAccessLevel = AccessLevel.Protected;
+
+            if (!RegionsByAccelLevel.ContainsKey(MemberAccessLevel))
+                RegionsByAccelLevel.Add(MemberAccessLevel, new List<RegionDirectiveTriviaSyntax>());
+
+            List<RegionDirectiveTriviaSyntax> RegionList = RegionsByAccelLevel[MemberAccessLevel];
+            if (!RegionList.Contains(memberRegion))
+                RegionList.Add(memberRegion);
+
+            MemberRegionTable.Add(memberDeclaration, memberRegion);
+
+            if (!RegionMemberTable.ContainsKey(memberRegion))
+                RegionMemberTable.Add(memberRegion, new List<MemberDeclarationSyntax>());
+
+            List<MemberDeclarationSyntax> MemberList = RegionMemberTable[memberRegion];
+            MemberList.Add(memberDeclaration);
+
+            ClassDeclarationSyntax OwnerClass = ClassExplorer.GetClass(Context, memberDeclaration);
+            if (!SortedRegionTable.ContainsKey(OwnerClass))
+                SortedRegionTable.Add(OwnerClass, new Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>());
+
+            Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>> RegionByMemberType = SortedRegionTable[OwnerClass];
+            MemberTypes MemberType = ClassExplorer.GetMemberType(memberDeclaration);
+
+            if (!RegionByMemberType.ContainsKey(MemberType))
+                RegionByMemberType.Add(MemberType, new List<RegionDirectiveTriviaSyntax>());
+
+            List<RegionDirectiveTriviaSyntax> RegionListForThisType = RegionByMemberType[MemberType];
+            if (!RegionListForThisType.Contains(memberRegion))
+                RegionListForThisType.Add(memberRegion);
+        }
+
+        private int GetCountOfClassWithContent()
+        {
+            int Count = 0;
+
+            foreach (KeyValuePair<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> ClassEntry in SortedRegionTable)
+            {
+                if (ClassEntry.Value.Count > 0)
+                    Count++;
+            }
+
+            return Count;
+        }
+
+        private void CheckInterfaceCategoryRegionMode(int classWithContentCount)
+        {
+            Dictionary<MemberTypes, int> DispersedTypeTable = new Dictionary<MemberTypes, int>();
+            foreach (MemberTypes Value in typeof(MemberTypes).GetEnumValues())
+                DispersedTypeTable.Add(Value, 0);
+
+            foreach (KeyValuePair<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> ClassEntry in SortedRegionTable)
+            {
+                foreach (KeyValuePair<MemberTypes, List<RegionDirectiveTriviaSyntax>> TypeEntry in ClassEntry.Value)
+                {
+                    MemberTypes MemberType = TypeEntry.Key;
+                    List<RegionDirectiveTriviaSyntax> RegionList = TypeEntry.Value;
+
+                    if (RegionList.Count > 1)
+                    {
+                        DispersedTypeTable[MemberType]++;
+                    }
+                }
+            }
+
+            int MaxDispersedCount = 0;
+            foreach (KeyValuePair<MemberTypes, int> Entry in DispersedTypeTable)
+                if (MaxDispersedCount < Entry.Value)
+                    MaxDispersedCount = Entry.Value;
+
+            int MinConsistencyCount = (classWithContentCount + 1) / 2;
+
+            if (MaxDispersedCount < classWithContentCount - MinConsistencyCount)
+                RegionMode = RegionModes.InterfaceCategoryFull;
+            else
+                RegionMode = RegionModes.Undecided;
         }
         #endregion
     }
