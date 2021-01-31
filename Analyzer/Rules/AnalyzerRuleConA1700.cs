@@ -54,17 +54,15 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            Analyzer.Trace("AnalyzerRuleConA1700");
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA1700", TraceLevel);
 
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
-
-            ClassExplorer.AddClass(context, Node);
-
-            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(context, Node);
+            RegionExplorer Explorer = ContextExplorer.Get(context, TraceLevel).GetRegionExplorer(Node);
 
             if (!Explorer.HasRegion)
             {
-                Analyzer.Trace("No region to analyze, exit");
+                Analyzer.Trace("No region to analyze, exit", TraceLevel);
                 return;
             }
 
@@ -73,13 +71,13 @@
             // Report for classes with members outside region only.
             if (!Explorer.HasMembersOutsideRegion)
             {
-                Analyzer.Trace("No member outside region, exit");
+                Analyzer.Trace("No member outside region, exit", TraceLevel);
                 return;
             }
 
             if (!ProgramHasMembersOutsideRegion.IsDifferent)
             {
-                Analyzer.Trace("No difference with other classes, exit");
+                Analyzer.Trace("No difference with other classes, exit", TraceLevel);
                 return;
             }
 

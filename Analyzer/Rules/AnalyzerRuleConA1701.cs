@@ -53,13 +53,14 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            Analyzer.Trace("AnalyzerRuleConA1701");
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA1701", TraceLevel);
 
             RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
 
             if (!GetOwnerClass(Node, out ClassDeclarationSyntax ClassDeclaration))
             {
-                Analyzer.Trace("Region outside class, exit");
+                Analyzer.Trace("Region outside class, exit", TraceLevel);
                 return;
             }
 
@@ -68,14 +69,14 @@
             // Report nested regions.
             if (RegionOwner == null)
             {
-                Analyzer.Trace("Region not nested, exit");
+                Analyzer.Trace("Region not nested, exit", TraceLevel);
                 return;
             }
 
             string RegionText = RegionExplorer.GetRegionText(Node);
             string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
 
-            Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}");
+            Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}", TraceLevel);
             context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText, RegionOwnerText));
         }
 

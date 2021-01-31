@@ -30,7 +30,8 @@
 
         private async Task<Document> AsyncHandler(Document document, EnumMemberDeclarationSyntax syntaxNode, CancellationToken cancellationToken)
         {
-            Analyzer.Trace("CodeFixConA1602");
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("CodeFixConA1602", TraceLevel);
 
             SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             if (root == null)
@@ -69,7 +70,7 @@
             SyntaxNode newElement = syntaxNode.WithLeadingTrivia(newLeadingTrivia);
             Document Result =  document.WithSyntaxRoot(root.ReplaceNode(syntaxNode, newElement));
 
-            Analyzer.Trace("Fixed");
+            Analyzer.Trace("Fixed", TraceLevel);
 
             return Result;
         }

@@ -221,5 +221,32 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1703Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A public constructor of a class is not the same region as other public constructors.
+        /// </summary>
+        public static string ConA1704Description {
+            get {
+                return ResourceManager.GetString("ConA1704Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class constructor &apos;{0}&apos; is not within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1704MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1704MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public constructor outside the expected region.
+        /// </summary>
+        public static string ConA1704Title {
+            get {
+                return ResourceManager.GetString("ConA1704Title", resourceCulture);
+            }
+        }
     }
 }

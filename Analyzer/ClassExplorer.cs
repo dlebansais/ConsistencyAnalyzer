@@ -17,44 +17,48 @@
         /// Creates a ClassExplorer.
         /// </summary>
         /// <param name="context">The source code.</param>
-        public ClassExplorer(SyntaxNodeAnalysisContext context)
+        /// <param name="traceLevel">The trace level.</param>
+        public ClassExplorer(SyntaxNodeAnalysisContext context, TraceLevel traceLevel)
         {
             Context = context;
+
+            CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)context.SemanticModel.SyntaxTree.GetRoot();
+
+            List<ClassDeclarationSyntax> ClassDeclarationList = new List<ClassDeclarationSyntax>();
+            AddClassMembers(CompilationUnit.Members, ClassDeclarationList);
+
+            foreach (ClassDeclarationSyntax ClassDeclaration in ClassDeclarationList)
+                AddClass(ClassDeclaration, traceLevel);
         }
 
+        private void AddClassMembers(SyntaxList<MemberDeclarationSyntax> members, List<ClassDeclarationSyntax> classDeclarationList)
+        {
+            foreach (MemberDeclarationSyntax Member in members)
+            {
+                switch (Member)
+                {
+                    case NamespaceDeclarationSyntax AsNamespaceDeclaration:
+                        AddClassMembers(AsNamespaceDeclaration.Members, classDeclarationList);
+                        break;
+                    case ClassDeclarationSyntax AsClassDeclaration:
+                        classDeclarationList.Add(AsClassDeclaration);
+                        break;
+                }
+            }
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets the source code.
         /// </summary>
         public SyntaxNodeAnalysisContext Context { get; init; }
-
-        private static Dictionary<SyntaxNodeAnalysisContext, ClassExplorer> ExplorerTable = new Dictionary<SyntaxNodeAnalysisContext, ClassExplorer>();
         #endregion
 
         #region Client Interface
-        /// <summary>
-        /// Adds a class to the known list of classes.
-        /// </summary>
-        /// <param name="context">The source code.</param>
-        /// <param name="classDeclaration">The class to add.</param>
-        public static void AddClass(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
-        {
-            lock (InternalLock)
-            {
-                if (!ExplorerTable.ContainsKey(context))
-                    ExplorerTable.Add(context, new ClassExplorer(context));
-
-                ExplorerTable[context].AddClass(classDeclaration);
-            }
-
-            ClassAdded.Set();
-        }
-
-        private void AddClass(ClassDeclarationSyntax classDeclaration)
+        private void AddClass(ClassDeclarationSyntax classDeclaration, TraceLevel traceLevel)
         {
             List<MemberDeclarationSyntax> MemberList;
-
-            if (ClassToMemberTable.ContainsKey(classDeclaration))
-                return;
 
             MemberList = new List<MemberDeclarationSyntax>();
             ClassToMemberTable.Add(classDeclaration, MemberList);
@@ -78,41 +82,34 @@
                 }
             }
 
-            Analyzer.Trace($"Class {classDeclaration.Identifier} has {MemberList.Count} members");
+            Analyzer.Trace($"Class {classDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
+        }
 
-            RegionExplorer Explorer = new RegionExplorer(Context, classDeclaration);
-            RegionExplorerTable.Add(classDeclaration, Explorer);
+        /// <summary>
+        /// Gets the list of classes.
+        /// </summary>
+        public List<ClassDeclarationSyntax> GetClassList()
+        {
+            return new List<ClassDeclarationSyntax>(ClassToMemberTable.Keys);
+        }
+
+        /// <summary>
+        /// Gets members of a class.
+        /// </summary>
+        /// <param name="classDeclaration"></param>
+        /// <returns></returns>
+        public List<MemberDeclarationSyntax> GetMemberList(ClassDeclarationSyntax classDeclaration)
+        {
+            return ClassToMemberTable[classDeclaration];
         }
 
         /// <summary>
         /// Gets the class owning a member.
         /// </summary>
-        /// <param name="context">The source code.</param>
         /// <param name="memberDeclaration">The member.</param>
-        public static ClassDeclarationSyntax GetClass(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration)
+        public ClassDeclarationSyntax GetMemberOwner(MemberDeclarationSyntax memberDeclaration)
         {
-            while (!ExplorerTable.ContainsKey(context))
-                ClassAdded.WaitOne(TimeSpan.Zero);
-
-            return ExplorerTable[context].GetClass(memberDeclaration);
-        }
-
-        private ClassDeclarationSyntax GetClass(MemberDeclarationSyntax memberDeclaration)
-        {
-            while (!MemberToClassTable.ContainsKey(memberDeclaration))
-                ClassAdded.WaitOne(TimeSpan.Zero);
-
             return MemberToClassTable[memberDeclaration];
-        }
-
-        /// <summary>
-        /// Gets the region epxlorer of a class.
-        /// </summary>
-        /// <param name="context">The source code.</param>
-        /// <param name="classDeclaration">The class.</param>
-        public static RegionExplorer GetRegionExplorer(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
-        {
-            return ExplorerTable[context].RegionExplorerTable[classDeclaration];
         }
 
         /// <summary>
@@ -138,11 +135,8 @@
             }
         }
 
-        private static int[] InternalLock = new int[0];
-        private static AutoResetEvent ClassAdded = new AutoResetEvent(false);
         private Dictionary<ClassDeclarationSyntax, List<MemberDeclarationSyntax>> ClassToMemberTable { get; } = new Dictionary<ClassDeclarationSyntax, List<MemberDeclarationSyntax>>();
         private Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax> MemberToClassTable { get; } = new Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax>();
-        private Dictionary<ClassDeclarationSyntax, RegionExplorer> RegionExplorerTable { get; } = new Dictionary<ClassDeclarationSyntax, RegionExplorer>();
         #endregion
     }
 }

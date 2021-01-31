@@ -11,13 +11,13 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1702 : MultipleSyntaxAnalyzerRule
+    public class AnalyzerRuleConA1704 : MultipleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>
         /// Gets the rule id.
         /// </summary>
-        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1702));
+        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1704));
 
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
@@ -37,17 +37,17 @@
         /// <summary>
         /// Gets the rule title.
         /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1702Title), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Title), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule message format.
         /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1702MessageFormat), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1704MessageFormat), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule description.
         /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1702Description), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Description), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule category.
@@ -62,12 +62,12 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA1704", TraceLevel);
+
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            TraceLevel TraceLevel = TraceLevel.Debug;
-            Analyzer.Trace($"AnalyzerRuleConA1702 ({Node})", TraceLevel);
-
-            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: true, TraceLevel, out string ExpectedRegionText, out string MemberText))
+            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: false, TraceLevel, out string ExpectedRegionText, out string MemberText))
                 return;
 
             Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);

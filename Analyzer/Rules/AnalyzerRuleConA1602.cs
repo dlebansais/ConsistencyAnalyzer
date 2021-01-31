@@ -53,7 +53,8 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            Analyzer.Trace("AnalyzerRuleConA1602");
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA1602", TraceLevel);
 
             EnumMemberDeclarationSyntax Node = (EnumMemberDeclarationSyntax)context.Node;
 
@@ -64,7 +65,7 @@
             bool IsDocumented = XmlCommentHelper.HasDocumentation(Node);
             List<EnumMemberDeclarationSyntax> OtherEnumList = new List<EnumMemberDeclarationSyntax>(Parent.Members);
 
-            Analyzer.Trace($"{Node.Identifier}: {IsDocumented}");
+            Analyzer.Trace($"{Node.Identifier}: {IsDocumented}", TraceLevel);
 
             bool IsDocumentedDifferently = false;
             foreach (EnumMemberDeclarationSyntax OtherEnum in OtherEnumList)
@@ -74,7 +75,7 @@
 
                 bool IsOtherDocumented = XmlCommentHelper.HasDocumentation(OtherEnum);
 
-                Analyzer.Trace($"{Node.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}");
+                Analyzer.Trace($"{Node.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", TraceLevel);
 
                 if (IsOtherDocumented != IsDocumented)
                 {

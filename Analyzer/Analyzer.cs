@@ -54,10 +54,14 @@
         /// Displays traces.
         /// </summary>
         /// <param name="msg">Message to display.</param>
-        public static void Trace(string msg)
+        /// <param name="traceLevel">The trace level.</param>
+        public static void Trace(string msg, TraceLevel traceLevel)
         {
             if (!TraceId.IsValueCreated)
                 TraceId.Value = Interlocked.Increment(ref lastTraceId);
+
+            if (traceLevel > MaxTraceLevel)
+                return;
 
             string Line = $"{TraceId.Value}.  {msg}";
 
@@ -86,6 +90,11 @@
         /// Gets or sets the method that display traces during a unit test.
         /// </summary>
         public static Action<string> TestTrace { get; set; } = (string msg) => { };
+
+        /// <summary>
+        /// Minimum trace level.
+        /// </summary>
+        public static TraceLevel MaxTraceLevel { get; set; } = TraceLevel.Debug;
 
         private static ThreadLocal<int> TraceId = new ThreadLocal<int>();
         #endregion

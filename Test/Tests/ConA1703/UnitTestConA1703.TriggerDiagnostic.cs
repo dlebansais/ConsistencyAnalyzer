@@ -23,6 +23,22 @@ namespace ConsistencyAnalyzerTest
         protected Test() {}
 #endregion
     }
+
+    public class EnableInterfaceCategorySimple1
+    {
+#region Init
+        public EnableInterfaceCategorySimple1() {}
+        public void EnableTest1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple2
+    {
+#region Init
+        public EnableInterfaceCategorySimple2() {}
+        public void EnableTest2() {}
+#endregion
+    }
 }";
 
         private const string OneClassTwoRegionsField = @"
@@ -40,6 +56,22 @@ namespace ConsistencyAnalyzerTest
         protected int Test2;
 #endregion
     }
+
+    public class EnableInterfaceCategorySimple1
+    {
+#region Init
+        public EnableInterfaceCategorySimple1() {}
+        public void EnableTest1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple2
+    {
+#region Init
+        public EnableInterfaceCategorySimple2() {}
+        public void EnableTest2() {}
+#endregion
+    }
 }";
 
         private const string OneClassTwoRegionsMethod = @"
@@ -50,11 +82,27 @@ namespace ConsistencyAnalyzerTest
     public class Test
     {
 #region Init1
-        protected void Test1() {}
+        protected int Test1;
 #endregion
 
 #region Init2
         protected void Test2() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple1
+    {
+#region Init
+        public EnableInterfaceCategorySimple1() {}
+        public void EnableTest1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple2
+    {
+#region Init
+        public EnableInterfaceCategorySimple2() {}
+        public void EnableTest2() {}
 #endregion
     }
 }";
@@ -72,6 +120,22 @@ namespace ConsistencyAnalyzerTest
 
 #region Init2
         protected int Test2 { get; set; }
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple1
+    {
+#region Init
+        public EnableInterfaceCategorySimple1() {}
+        public void EnableTest1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategorySimple2
+    {
+#region Init
+        public EnableInterfaceCategorySimple2() {}
+        public void EnableTest2() {}
 #endregion
     }
 }";

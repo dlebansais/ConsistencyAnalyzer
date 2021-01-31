@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
     using System.Collections.Generic;
+    using System.Threading;
 
     /// <summary>
     /// Represents an object that provides info about regions.
@@ -17,12 +18,15 @@
         /// </summary>
         /// <param name="context">The source code.</param>
         /// <param name="classDeclaration">The class with regions.</param>
-        public RegionExplorer(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration)
+        /// <param name="memberList">The list of class members.</param>
+        /// <param name="traceLevel">The trace level.</param>
+        public RegionExplorer(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, List<MemberDeclarationSyntax> memberList, TraceLevel traceLevel)
         {
             Context = context;
             ClassDeclaration = classDeclaration;
+            MemberList = memberList;
 
-            Explore();
+            Explore(traceLevel);
         }
         #endregion
 
@@ -38,6 +42,11 @@
         public ClassDeclarationSyntax ClassDeclaration { get; init; }
 
         /// <summary>
+        /// Gets the list of class members.
+        /// </summary>
+        public List<MemberDeclarationSyntax> MemberList { get; init; }
+
+        /// <summary>
         /// Gets a value indicating whether the class has regions.
         /// </summary>
         public bool HasRegion { get; private set; }
@@ -48,9 +57,9 @@
         public bool HasMembersOutsideRegion { get; private set; }
 
         /// <summary>
-        /// The detected region mode.
+        /// The region mode.
         /// </summary>
-        public static RegionModes RegionMode { get; private set; } = RegionModes.Undecided;
+        public RegionModes ThisRegionMode { get; private set; } = RegionModes.Undecided;
 
         /// <summary>
         /// Gets regions by access level.
@@ -66,11 +75,6 @@
         /// Gets members by region.
         /// </summary>
         internal Dictionary<RegionDirectiveTriviaSyntax, List<MemberDeclarationSyntax>> RegionMemberTable { get; } = new Dictionary<RegionDirectiveTriviaSyntax, List<MemberDeclarationSyntax>>();
-
-        /// <summary>
-        /// Gets members types in classes.
-        /// </summary>
-        internal static Dictionary<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> SortedRegionTable { get; } = new Dictionary<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>>();
         #endregion
 
         #region Client Interface
@@ -89,17 +93,19 @@
             return Result;
         }
 
-        internal static bool IsRegionMismatch(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, AccessLevel expectedAccessLevel, out string expectedRegionText, out string memberText)
+        internal static bool IsRegionMismatch(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, AccessLevel expectedAccessLevel, bool isSimpleAccessibilityCheck, TraceLevel traceLevel, out string expectedRegionText, out string memberText)
         {
             expectedRegionText = string.Empty;
             memberText = string.Empty;
 
             ClassDeclarationSyntax ClassDeclaration = (ClassDeclarationSyntax)memberDeclaration.Parent!;
-            ClassExplorer.AddClass(context, ClassDeclaration);
+            ContextExplorer ContextExplorer = ContextExplorer.Get(context, traceLevel);
+            RegionModes GlobalRegionMode = ContextExplorer.GlobalRegionMode;
 
-            if (RegionMode != RegionModes.AccessibilitySimple && RegionMode != RegionModes.AccessibilityFull)
+            // Another diagnostic will apply if not in a particular mode.
+            if ((GlobalRegionMode != RegionModes.AccessibilitySimple || !isSimpleAccessibilityCheck) && (GlobalRegionMode != RegionModes.AccessibilityFull || isSimpleAccessibilityCheck))
             {
-                Analyzer.Trace($"Region mode is {RegionMode}, exit");
+                Analyzer.Trace($"Region mode is {GlobalRegionMode}, exit", traceLevel);
                 return false;
             }
 
@@ -109,22 +115,22 @@
 
             if (MemberAccessLevel != expectedAccessLevel)
             {
-                Analyzer.Trace($"Member Access Level is {MemberAccessLevel}, exit");
+                Analyzer.Trace($"Member Access Level is {MemberAccessLevel}, exit", traceLevel);
                 return false;
             }
 
-            RegionExplorer Explorer = ClassExplorer.GetRegionExplorer(context, ClassDeclaration);
+            RegionExplorer Explorer = ContextExplorer.GetRegionExplorer(ClassDeclaration);
 
             if (!Explorer.RegionsByAccelLevel.ContainsKey(expectedAccessLevel))
             {
-                Analyzer.Trace($"No other member with the same access level, exit");
+                Analyzer.Trace($"No other member with the same access level, exit", traceLevel);
                 return false;
             }
 
             List<RegionDirectiveTriviaSyntax> RegionList = Explorer.RegionsByAccelLevel[expectedAccessLevel];
             if (RegionList.Count <= 1)
             {
-                Analyzer.Trace($"Only one region with the members with same access level, exit");
+                Analyzer.Trace($"Only one region with the members with same access level, exit", traceLevel);
                 return false;
             }
 
@@ -133,12 +139,18 @@
 
             if (MemberRegion == FirstRegion)
             {
-                Analyzer.Trace($"Analyzing the first region, exit");
+                Analyzer.Trace($"Analyzing the first region, exit", traceLevel);
                 return false;
             }
 
-            expectedRegionText = RegionExplorer.GetRegionText(FirstRegion);
+            expectedRegionText = GetRegionText(FirstRegion);
             memberText = "<Unknown>";
+
+            if (Explorer.IsHomogeneousRegionPair(FirstRegion, MemberRegion) && isSimpleAccessibilityCheck)
+            {
+                Analyzer.Trace($"Handled in a separate diagnostic, exit", traceLevel);
+                return false;
+            }
 
             switch (memberDeclaration)
             {
@@ -158,10 +170,72 @@
 
             return true;
         }
+
+        private bool IsHomogeneousRegionPair(RegionDirectiveTriviaSyntax region1, RegionDirectiveTriviaSyntax region2)
+        {
+            List<MemberDeclarationSyntax> MemberList1 = RegionMemberTable[region1];
+            List<MemberDeclarationSyntax> MemberList2 = RegionMemberTable[region2];
+
+            if (MemberList1.Count == 0 || MemberList2.Count == 0)
+                return false;
+
+            MemberDeclarationSyntax FirstMember1 = MemberList1[0];
+            MemberTypes FirstMemberType1 = ClassExplorer.GetMemberType(FirstMember1);
+            MemberDeclarationSyntax FirstMember2 = MemberList2[0];
+            MemberTypes FirstMemberType2 = ClassExplorer.GetMemberType(FirstMember2);
+
+            foreach (MemberDeclarationSyntax Member1 in MemberList1)
+                if (ClassExplorer.GetMemberType(Member1) != FirstMemberType2)
+                    return false;
+
+            foreach (MemberDeclarationSyntax Member2 in MemberList2)
+                if (ClassExplorer.GetMemberType(Member2) != FirstMemberType1)
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Calculates a global region mode.
+        /// </summary>
+        /// <param name="regionExplorerList">The source code.</param>
+        /// <param name="traceLevel">The trace level.</param>
+        public static RegionModes GetGlobalRegionMode(List<RegionExplorer> regionExplorerList, TraceLevel traceLevel)
+        {
+            if (regionExplorerList.Count < 3)
+            {
+                Analyzer.Trace("Not enough classes with content to set region mode", traceLevel);
+                return RegionModes.Free;
+            }
+
+            Dictionary<RegionModes, int> ModeTable = new Dictionary<RegionModes, int>();
+            foreach (RegionModes Mode in typeof(RegionModes).GetEnumValues())
+                if (Mode != RegionModes.Undecided)
+                    ModeTable.Add(Mode, 0);
+
+            foreach (RegionExplorer Item in regionExplorerList)
+            {
+                RegionModes Mode = Item.ThisRegionMode;
+                if (Mode != RegionModes.Undecided)
+                    ModeTable[Mode]++;
+            }
+
+            int MainModeCount = 0;
+            RegionModes MainMode = RegionModes.Undecided;
+
+            foreach (RegionModes Mode in typeof(RegionModes).GetEnumValues())
+                if (Mode != RegionModes.Undecided && MainModeCount < ModeTable[Mode])
+                {
+                    MainModeCount = ModeTable[Mode];
+                    MainMode = Mode;
+                }
+
+            return MainMode;
+        }
         #endregion
 
         #region Implementation
-        private void Explore()
+        private void Explore(TraceLevel traceLevel)
         {
             SyntaxToken CurrentToken = ClassDeclaration.OpenBraceToken;
             int RegionNestedLevel = 0;
@@ -202,19 +276,36 @@
                 }
             }
 
-            int ClassWithContentCount = GetCountOfClassWithContent();
+            bool HasAccessLevelDifference = false;
+            bool HasTypeDifference = false;
 
-            if (ClassWithContentCount < 3)
+            foreach (KeyValuePair<RegionDirectiveTriviaSyntax, List<MemberDeclarationSyntax>> Entry in RegionMemberTable)
             {
-                Analyzer.Trace("Not enough classes with content to set region mode");
-                RegionMode = RegionModes.Free;
+                List<MemberDeclarationSyntax> RegionMemberList = Entry.Value;
+
+                if (RegionMemberList.Count > 0)
+                {
+                    AccessLevel FirstMemberAccessLevel = AccessLevelHelper.GetAccessLevel(RegionMemberList[0].Modifiers);
+                    MemberTypes FirstMemberType = ClassExplorer.GetMemberType(RegionMemberList[0]);
+
+                    foreach (MemberDeclarationSyntax Member in RegionMemberList)
+                    {
+                        HasAccessLevelDifference |= FirstMemberAccessLevel != AccessLevelHelper.GetAccessLevel(Member.Modifiers);
+                        HasTypeDifference |= FirstMemberType != ClassExplorer.GetMemberType(Member);
+                    }
+                }
             }
+
+            if (RegionMemberTable.Count == 0)
+                ThisRegionMode = RegionModes.Undecided;
+            else if (HasAccessLevelDifference)
+                ThisRegionMode = RegionModes.Free;
+            else if (HasTypeDifference)
+                ThisRegionMode = RegionModes.AccessibilitySimple;
             else
-            {
-                CheckInterfaceCategoryRegionMode(ClassWithContentCount);
+                ThisRegionMode = RegionModes.AccessibilityFull;
 
-                Analyzer.Trace($"Region mode: {RegionMode}");
-            }
+            Analyzer.Trace($"Class {ClassDeclaration.Identifier} region mode is {ThisRegionMode}", traceLevel);
         }
 
         private void MemberClassification(MemberDeclarationSyntax memberDeclaration, RegionDirectiveTriviaSyntax memberRegion)
@@ -237,66 +328,6 @@
 
             List<MemberDeclarationSyntax> MemberList = RegionMemberTable[memberRegion];
             MemberList.Add(memberDeclaration);
-
-            ClassDeclarationSyntax OwnerClass = ClassExplorer.GetClass(Context, memberDeclaration);
-            if (!SortedRegionTable.ContainsKey(OwnerClass))
-                SortedRegionTable.Add(OwnerClass, new Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>());
-
-            Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>> RegionByMemberType = SortedRegionTable[OwnerClass];
-            MemberTypes MemberType = ClassExplorer.GetMemberType(memberDeclaration);
-
-            if (!RegionByMemberType.ContainsKey(MemberType))
-                RegionByMemberType.Add(MemberType, new List<RegionDirectiveTriviaSyntax>());
-
-            List<RegionDirectiveTriviaSyntax> RegionListForThisType = RegionByMemberType[MemberType];
-            if (!RegionListForThisType.Contains(memberRegion))
-                RegionListForThisType.Add(memberRegion);
-        }
-
-        private int GetCountOfClassWithContent()
-        {
-            int Count = 0;
-
-            foreach (KeyValuePair<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> ClassEntry in SortedRegionTable)
-            {
-                if (ClassEntry.Value.Count > 0)
-                    Count++;
-            }
-
-            return Count;
-        }
-
-        private void CheckInterfaceCategoryRegionMode(int classWithContentCount)
-        {
-            Dictionary<MemberTypes, int> DispersedTypeTable = new Dictionary<MemberTypes, int>();
-            foreach (MemberTypes Value in typeof(MemberTypes).GetEnumValues())
-                DispersedTypeTable.Add(Value, 0);
-
-            foreach (KeyValuePair<ClassDeclarationSyntax, Dictionary<MemberTypes, List<RegionDirectiveTriviaSyntax>>> ClassEntry in SortedRegionTable)
-            {
-                foreach (KeyValuePair<MemberTypes, List<RegionDirectiveTriviaSyntax>> TypeEntry in ClassEntry.Value)
-                {
-                    MemberTypes MemberType = TypeEntry.Key;
-                    List<RegionDirectiveTriviaSyntax> RegionList = TypeEntry.Value;
-
-                    if (RegionList.Count > 1)
-                    {
-                        DispersedTypeTable[MemberType]++;
-                    }
-                }
-            }
-
-            int MaxDispersedCount = 0;
-            foreach (KeyValuePair<MemberTypes, int> Entry in DispersedTypeTable)
-                if (MaxDispersedCount < Entry.Value)
-                    MaxDispersedCount = Entry.Value;
-
-            int MinConsistencyCount = (classWithContentCount + 1) / 2;
-
-            if (MaxDispersedCount < classWithContentCount - MinConsistencyCount)
-                RegionMode = RegionModes.AccessibilityFull;
-            else
-                RegionMode = RegionModes.Free;
         }
         #endregion
     }

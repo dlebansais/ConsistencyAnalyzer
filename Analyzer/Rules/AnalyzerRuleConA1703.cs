@@ -62,24 +62,16 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            Analyzer.Trace("AnalyzerRuleConA1703");
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA1703", TraceLevel);
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Protected, out string ExpectedRegionText, out string MemberText))
+            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Protected, isSimpleAccessibilityCheck: true, TraceLevel, out string ExpectedRegionText, out string MemberText))
                 return;
 
-            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}");
+            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);
             context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
-        }
-
-        private bool HasSameMemberType(MemberDeclarationSyntax memberDeclaration, List<MemberDeclarationSyntax> memberList)
-        {
-            foreach (MemberDeclarationSyntax Member in memberList)
-                if (Member.GetType() != memberDeclaration.GetType())
-                    return false;
-
-            return true;
         }
         #endregion
     }
