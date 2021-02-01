@@ -11,35 +11,35 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1704 : SingleSyntaxAnalyzerRule
+    public class AnalyzerRuleConA1705 : SingleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>
         /// Gets the rule id.
         /// </summary>
-        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1704));
+        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1705));
 
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
         /// </summary>
-        public override SyntaxKind RuleSyntaxKind { get; } = SyntaxKind.ConstructorDeclaration;
+        public override SyntaxKind RuleSyntaxKind { get; } = SyntaxKind.FieldDeclaration;
         #endregion
 
         #region Ancestor Interface
         /// <summary>
         /// Gets the rule title.
         /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Title), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1705Title), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule message format.
         /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1704MessageFormat), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1705MessageFormat), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule description.
         /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Description), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1705Description), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule category.
@@ -55,7 +55,7 @@
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("AnalyzerRuleConA1704", TraceLevel);
+            Analyzer.Trace("AnalyzerRuleConA1705", TraceLevel);
 
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 

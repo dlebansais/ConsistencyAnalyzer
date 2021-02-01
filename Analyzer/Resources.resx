@@ -180,4 +180,31 @@
   <data name="ConA1704Title" xml:space="preserve">
     <value>Public constructor outside the expected region</value>
   </data>
+  <data name="ConA1705Description" xml:space="preserve">
+    <value>A public field of a class is not the same region as other public fields</value>
+  </data>
+  <data name="ConA1705MessageFormat" xml:space="preserve">
+    <value>Field '{0}' is not within region '{1}'</value>
+  </data>
+  <data name="ConA1705Title" xml:space="preserve">
+    <value>Public field outside the expected region</value>
+  </data>
+  <data name="ConA1706Description" xml:space="preserve">
+    <value>A public method of a class is not the same region as other public methods</value>
+  </data>
+  <data name="ConA1706MessageFormat" xml:space="preserve">
+    <value>Method '{0}' is not within region '{1}'</value>
+  </data>
+  <data name="ConA1706Title" xml:space="preserve">
+    <value>Public method outside the expected region</value>
+  </data>
+  <data name="ConA1707Description" xml:space="preserve">
+    <value>A public property of a class is not the same region as other public properties</value>
+  </data>
+  <data name="ConA1707MessageFormat" xml:space="preserve">
+    <value>Property '{0}' is not within region '{1}'</value>
+  </data>
+  <data name="ConA1707Title" xml:space="preserve">
+    <value>Public property outside the expected region</value>
+  </data>
 </root>

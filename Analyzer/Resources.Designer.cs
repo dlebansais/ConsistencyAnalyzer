@@ -248,5 +248,86 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1704Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A public field of a class is not the same region as other public fields.
+        /// </summary>
+        public static string ConA1705Description {
+            get {
+                return ResourceManager.GetString("ConA1705Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; is not within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1705MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1705MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public field outside the expected region.
+        /// </summary>
+        public static string ConA1705Title {
+            get {
+                return ResourceManager.GetString("ConA1705Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A public method of a class is not the same region as other public methods.
+        /// </summary>
+        public static string ConA1706Description {
+            get {
+                return ResourceManager.GetString("ConA1706Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method &apos;{0}&apos; is not within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1706MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1706MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public method outside the expected region.
+        /// </summary>
+        public static string ConA1706Title {
+            get {
+                return ResourceManager.GetString("ConA1706Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A public property of a class is not the same region as other public properties.
+        /// </summary>
+        public static string ConA1707Description {
+            get {
+                return ResourceManager.GetString("ConA1707Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; is not within region &apos;{1}&apos;.
+        /// </summary>
+        public static string ConA1707MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1707MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public property outside the expected region.
+        /// </summary>
+        public static string ConA1707Title {
+            get {
+                return ResourceManager.GetString("ConA1707Title", resourceCulture);
+            }
+        }
     }
 }

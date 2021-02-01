@@ -6,9 +6,9 @@
     using System.Threading.Tasks;
     using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
 
-    public partial class UnitTestConA1704
+    public partial class UnitTestConA1706
     {
-        private const string OneClassTwoRegionsConstructor = @"
+        private const string OneClassTwoRegionsMethod = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -16,11 +16,11 @@ namespace ConsistencyAnalyzerTest
     public class Test
     {
 #region Init1
-        public Test() {}
+        public void Test1() {}
 #endregion
 
 #region Init2
-        public Test(int n) {}
+        public void Test2() {}
 #endregion
     }
 
@@ -38,18 +38,50 @@ namespace ConsistencyAnalyzerTest
 #endregion
     }
 }";
+/*
+        private const string OneClassTwoRegionsProperty = @"
+using System;
 
+namespace ConsistencyAnalyzerTest
+{
+    public class Test
+    {
+#region Init1
+        public int Test1 { get; set; }
+#endregion
+
+#region Init2
+        public int Test2 { get; set; }
+#endregion
+    }
+
+    public class EnableInterfaceCategoryFull1
+    {
+#region Init
+        public EnableInterfaceCategoryFull1() {}
+#endregion
+    }
+
+    public class EnableInterfaceCategoryFull2
+    {
+#region Init
+        public EnableInterfaceCategoryFull2() {}
+#endregion
+    }
+}";
+*/
         [DataTestMethod]
         [
-        DataRow(OneClassTwoRegionsConstructor, 13, 9, "Test", "Init1"),
+        DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
+        //DataRow(OneClassTwoRegionsProperty, 13, 9, "Test2", "Init1"),
         ]
         public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
         {
-            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1704MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
+            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1706MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
             string FormatedMessage = string.Format(AnalyzerMessageFormat, memberName, regionName);
 
             var descriptor = new DiagnosticDescriptor(
-                AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1704)),
+                AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1706)),
                 "title",
                 FormatedMessage,
                 "description",

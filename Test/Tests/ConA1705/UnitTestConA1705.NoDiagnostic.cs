@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
 
-    public partial class UnitTestConA1704
+    public partial class UnitTestConA1705
     {
         private const string OneClassNoMember = @"
 using System;
@@ -16,40 +16,40 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneClassOneConstructor = @"
+        private const string OneClassOneField = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-        public Test() {}
+        public int Test1;
     }
 }";
 
-        private const string OneClassOneConstructorOneRegion = @"
+        private const string OneClassOneFieldOneRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-#region Init
-        public Test() {}
+#region Fields
+        public int Test1;
 #endregion
     }
 }";
 
-        private const string OneClassTwoConstructorOneRegion = @"
+        private const string OneClassTwoFieldOneRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-#region Init
-        public Test() {}
-        public Test(int n) {}
+#region Fields
+        public int Test1;
+        public int Test2;
 #endregion
     }
 }";
@@ -78,14 +78,14 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneClassOneConstructorFull = @"
+        private const string OneClassOneFieldFull = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-        public Test() {}
+        public int Test1;
     }
 
     public class EnableInterfaceCategoryFull1
@@ -103,15 +103,15 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneClassOneConstructorOneRegionFull = @"
+        private const string OneClassOneFieldOneRegionFull = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-#region Init
-        public Test() {}
+#region Fields
+        public int Test1;
 #endregion
     }
 
@@ -130,16 +130,16 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneClassTwoConstructorOneRegionFull = @"
+        private const string OneClassTwoFieldOneRegionFull = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
     public class Test
     {
-#region Init
-        public Test() {}
-        public Test(int n) {}
+#region Fields
+        public int Test1;
+        public int Test2;
 #endregion
     }
 
@@ -161,13 +161,13 @@ namespace ConsistencyAnalyzerTest
         [DataTestMethod]
         [
         DataRow(OneClassNoMember),
-        DataRow(OneClassOneConstructor),
-        DataRow(OneClassOneConstructorOneRegion),
-        DataRow(OneClassTwoConstructorOneRegion),
+        DataRow(OneClassOneField),
+        DataRow(OneClassOneFieldOneRegion),
+        DataRow(OneClassTwoFieldOneRegion),
         DataRow(OneClassNoMemberFull),
-        DataRow(OneClassOneConstructorFull),
-        DataRow(OneClassOneConstructorOneRegionFull),
-        DataRow(OneClassTwoConstructorOneRegionFull),
+        DataRow(OneClassOneFieldFull),
+        DataRow(OneClassOneFieldOneRegionFull),
+        DataRow(OneClassTwoFieldOneRegionFull),
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {
