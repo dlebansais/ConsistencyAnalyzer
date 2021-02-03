@@ -64,7 +64,7 @@
         {
             MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            TraceLevel TraceLevel = TraceLevel.Debug;
+            TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace($"AnalyzerRuleConA1702 ({Node})", TraceLevel);
 
             if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: true, TraceLevel, out string ExpectedRegionText, out string MemberText))

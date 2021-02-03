@@ -49,7 +49,7 @@ namespace ConsistencyAnalyzerTest
         [DataTestMethod]
         [
         DataRow(FirstClassWithRegionOnly, 12, 5, "Test2"),
-        DataRow(SecondClassWithRegionOnly, 6, 5, "Test1")
+        DataRow(SecondClassWithRegionOnly, 6, 5, "Test1"),
         ]
         public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string variableName)
         {

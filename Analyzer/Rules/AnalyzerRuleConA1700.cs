@@ -5,8 +5,10 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System.Linq;
     using System;
     using System.Collections.Generic;
+    using System.Threading;
 
     /// <summary>
     /// Represents a rule of the analyzer.
@@ -54,22 +56,45 @@
         /// <param name="context">The source code.</param>
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            TraceLevel TraceLevel = TraceLevel.Info;
+            TraceLevel TraceLevel = TraceLevel.Debug;
             Analyzer.Trace("AnalyzerRuleConA1700", TraceLevel);
 
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
-            RegionExplorer Explorer = ContextExplorer.Get(context, TraceLevel).GetRegionExplorer(Node);
+            RegionExplorer RegionExplorer = ContextExplorer.Get(context, TraceLevel).GetRegionExplorer(Node);
 
-            if (!Explorer.HasRegion)
+            IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
+            CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
+            ClassSynchronizer Synchronizer;
+
+            lock (ProgramHasMembersOutsideRegionTable)
+            {
+                if (!ProgramHasMembersOutsideRegionTable.ContainsKey(Root))
+                {
+                    ProgramHasMembersOutsideRegionTable.Add(Root, new GlobalState<bool?>());
+                    Synchronizer = new ClassSynchronizer(context, TraceLevel);
+                    ClassInspectedTable.Add(Root, Synchronizer);
+
+                    Analyzer.Trace($"Total added: {ProgramHasMembersOutsideRegionTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
+                }
+                else
+                    Synchronizer = ClassInspectedTable[Root];
+            }
+
+            GlobalState<bool?> ProgramHasMembersOutsideRegion = ProgramHasMembersOutsideRegionTable[Root];
+
+            if (RegionExplorer.HasRegion)
+                ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
+
+            Synchronizer.WaitAll(TraceLevel);
+
+            if (!RegionExplorer.HasRegion)
             {
                 Analyzer.Trace("No region to analyze, exit", TraceLevel);
                 return;
             }
 
-            ProgramHasMembersOutsideRegion.Update(Explorer.HasMembersOutsideRegion);
-
             // Report for classes with members outside region only.
-            if (!Explorer.HasMembersOutsideRegion)
+            if (!RegionExplorer.HasMembersOutsideRegion)
             {
                 Analyzer.Trace("No member outside region, exit", TraceLevel);
                 return;
@@ -81,11 +106,13 @@
                 return;
             }
 
+            Analyzer.Trace("Found classes with and without regions", TraceLevel);
             string ClassName = Node.Identifier.ValueText;
             context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ClassName));
         }
 
-        private GlobalState<bool> ProgramHasMembersOutsideRegion = new GlobalState<bool>();
+        private Dictionary<CompilationUnitSyntax, GlobalState<bool?>> ProgramHasMembersOutsideRegionTable = new Dictionary<CompilationUnitSyntax, GlobalState<bool?>>();
+        private Dictionary<CompilationUnitSyntax, ClassSynchronizer> ClassInspectedTable = new Dictionary<CompilationUnitSyntax, ClassSynchronizer>();
         #endregion
     }
 }

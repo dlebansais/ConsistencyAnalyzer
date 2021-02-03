@@ -329,5 +329,32 @@ namespace ConsistencyAnalyzer {
                 return ResourceManager.GetString("ConA1707Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A region is started within some block but ends in another block at a different block level.
+        /// </summary>
+        public static string ConA1708Description {
+            get {
+                return ResourceManager.GetString("ConA1708Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region &apos;{0}&apos; does not start and end at the same block level.
+        /// </summary>
+        public static string ConA1708MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1708MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start and end regions at the same block level.
+        /// </summary>
+        public static string ConA1708Title {
+            get {
+                return ResourceManager.GetString("ConA1708Title", resourceCulture);
+            }
+        }
     }
 }

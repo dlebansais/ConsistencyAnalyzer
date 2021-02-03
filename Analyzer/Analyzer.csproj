@@ -35,6 +35,9 @@
 
   <ItemGroup>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Update="Rules\AnalyzerRuleConA1708.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Rules\AnalyzerRuleConA1707.cs">
       <SubType>Code</SubType>
     </Compile>

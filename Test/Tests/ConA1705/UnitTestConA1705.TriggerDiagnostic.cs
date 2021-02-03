@@ -38,74 +38,10 @@ namespace ConsistencyAnalyzerTest
 #endregion
     }
 }";
-/*
-        private const string OneClassTwoRegionsMethod = @"
-using System;
 
-namespace ConsistencyAnalyzerTest
-{
-    public class Test
-    {
-#region Init1
-        public void Test1() {}
-#endregion
-
-#region Init2
-        public void Test2() {}
-#endregion
-    }
-
-    public class EnableInterfaceCategoryFull1
-    {
-#region Init
-        public EnableInterfaceCategoryFull1() {}
-#endregion
-    }
-
-    public class EnableInterfaceCategoryFull2
-    {
-#region Init
-        public EnableInterfaceCategoryFull2() {}
-#endregion
-    }
-}";
-
-        private const string OneClassTwoRegionsProperty = @"
-using System;
-
-namespace ConsistencyAnalyzerTest
-{
-    public class Test
-    {
-#region Init1
-        public int Test1 { get; set; }
-#endregion
-
-#region Init2
-        public int Test2 { get; set; }
-#endregion
-    }
-
-    public class EnableInterfaceCategoryFull1
-    {
-#region Init
-        public EnableInterfaceCategoryFull1() {}
-#endregion
-    }
-
-    public class EnableInterfaceCategoryFull2
-    {
-#region Init
-        public EnableInterfaceCategoryFull2() {}
-#endregion
-    }
-}";
-*/
         [DataTestMethod]
         [
         DataRow(OneClassTwoRegionsField, 13, 9, "Test2", "Init1"),
-        //DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
-        //DataRow(OneClassTwoRegionsProperty, 13, 9, "Test2", "Init1"),
         ]
         public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
         {

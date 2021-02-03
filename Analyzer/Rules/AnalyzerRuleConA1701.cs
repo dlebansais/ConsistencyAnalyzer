@@ -84,19 +84,20 @@
         {
             classDeclaration = null!;
 
-            var CurrentToken = node.HashToken;
-
+            SyntaxToken CurrentToken = node.HashToken;
+            SyntaxToken PreviousCurrentToken = CurrentToken;
             do
             {
-                CurrentToken = CurrentToken.GetPreviousToken();
+                CurrentToken = PreviousCurrentToken;
+                PreviousCurrentToken = CurrentToken.GetPreviousToken();
 
-                if (CurrentToken.Parent is ClassDeclarationSyntax AsClassDeclaration)
+                if (PreviousCurrentToken.Parent is ClassDeclarationSyntax AsClassDeclaration)
                 {
                     classDeclaration = AsClassDeclaration;
                     return true;
                 }
             }
-            while (CurrentToken != null);
+            while (CurrentToken != PreviousCurrentToken);
 
             return false;
         }

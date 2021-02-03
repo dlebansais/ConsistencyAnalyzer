@@ -73,7 +73,6 @@ namespace ConsistencyAnalyzerTest
         [DataTestMethod]
         [
         DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
-        //DataRow(OneClassTwoRegionsProperty, 13, 9, "Test2", "Init1"),
         ]
         public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
         {
