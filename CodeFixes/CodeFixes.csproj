@@ -32,13 +32,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="CodeFixes\CodeFixConA1701.cs">
+    <Compile Update="CodeFixes\1700\CodeFixConA1701.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="CodeFixes\CodeFixConA1602.cs">
+    <Compile Update="CodeFixes\1600\CodeFixConA1602.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="CodeFixes\CodeFixConA0001.cs">
+    <Compile Update="CodeFixes\0000\CodeFixConA0001.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="CodeFixResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="CodeFixResources.resx" />

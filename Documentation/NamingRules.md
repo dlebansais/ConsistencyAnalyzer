@@ -1,17 +1,2 @@
-# Special Rules
+**[ConA1300](NamingRules/ConA1300.md)**
 
-# Spacing Rules
-
-# Readability Rules
-
-# Ordering Rules
-
-# Naming Rules
-
-# Maintainability Rules
-
-# Layout Rules
-
-# Documentation Rules
-
-# Alternative Rules

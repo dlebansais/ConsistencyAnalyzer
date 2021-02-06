@@ -35,22 +35,22 @@
 
   <ItemGroup>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
-    <Compile Update="Rules\AnalyzerRuleConA1708.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1708.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1707.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1707.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1706.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1706.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1705.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1705.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1704.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1704.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1703.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1703.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Rules\MultipleSyntaxAnalyzerRule.cs">
@@ -62,16 +62,16 @@
     <Compile Update="Rules\AnalyzerRule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1702.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1702.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1701.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1701.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1700.cs">
+    <Compile Update="Rules\1700\AnalyzerRuleConA1700.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Rules\AnalyzerRuleConA1602.cs">
+    <Compile Update="Rules\1600\AnalyzerRuleConA1602.cs">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Update="Resources.fr.resx">
