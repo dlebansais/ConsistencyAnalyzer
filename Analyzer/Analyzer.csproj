@@ -34,6 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="NameExplorer.Parsing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NameExplorer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
     <Compile Update="Rules\1700\AnalyzerRuleConA1708.cs">
       <SubType>Code</SubType>
