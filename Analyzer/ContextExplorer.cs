@@ -36,7 +36,10 @@
             Context = context;
 
             ClassExplorer = new ClassExplorer(context, traceLevel);
-            
+
+            CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)context.SemanticModel.SyntaxTree.GetRoot();
+            NameExplorer = new NameExplorer(CompilationUnit, traceLevel);
+
             List<ClassDeclarationSyntax> ClassList = ClassExplorer.GetClassList();
             foreach (ClassDeclarationSyntax ClassDeclaration in ClassList)
             {
@@ -65,6 +68,11 @@
         /// Gets the class explorer.
         /// </summary>
         public ClassExplorer ClassExplorer { get; init; }
+
+        /// <summary>
+        /// Gets the name explorer.
+        /// </summary>
+        public NameExplorer NameExplorer { get; init; }
 
         /// <summary>
         /// The global region mode.

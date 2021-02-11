@@ -88,6 +88,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for namespaces.
+        /// </summary>
+        public static string ConA1300Description {
+            get {
+                return ResourceManager.GetString("ConA1300Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad namespace name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1300MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1300MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespace names must be consistent.
+        /// </summary>
+        public static string ConA1300Title {
+            get {
+                return ResourceManager.GetString("ConA1300Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
