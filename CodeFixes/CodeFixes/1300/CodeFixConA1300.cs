@@ -25,14 +25,13 @@
         {
         }
 
-        private async Task<Document> AsyncHandler(Document document, NamespaceDeclarationSyntax syntaxNode, CancellationToken cancellationToken)
+        private async Task<Document> AsyncHandler(Document document, NamespaceDeclarationSyntax syntaxNode, CancellationToken cancellationToken, string newValueText)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("CodeFixConA1300", TraceLevel);
 
             SyntaxNode? Root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            CompilationUnitSyntax? CompilationUnit = Root as CompilationUnitSyntax;
-            if (CompilationUnit == null)
+            if (Root == null)
                 return document;
 
             SimpleNameSyntax? SimpleName = syntaxNode.Name as SimpleNameSyntax;
@@ -42,11 +41,8 @@
             var Leading = SimpleName.Identifier.LeadingTrivia;
             var Trailing = SimpleName.Identifier.TrailingTrivia;
 
-            NameExplorer NameExplorer = new NameExplorer(CompilationUnit, TraceLevel.Info);
-            string NewValueText = NameExplorer.FixName(SimpleName.Identifier.ValueText, NameCategory.Namespace);
-
-            var NewSimpleName = SimpleName.WithIdentifier(SyntaxFactory.Identifier(Leading, NewValueText, Trailing));
-            var newRoot = CompilationUnit.ReplaceNode(SimpleName, NewSimpleName);
+            var NewSimpleName = SimpleName.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
+            var newRoot = Root.ReplaceNode(SimpleName, NewSimpleName);
 
             Document Result = document.WithSyntaxRoot(newRoot);
 
@@ -68,15 +64,21 @@
             if (DiagnosticToken.Parent == null)
                 return null;
 
+            CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)root;
+            NameExplorer NameExplorer = new NameExplorer(CompilationUnit, TraceLevel.Info);
+
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             NamespaceDeclarationSyntax Node = Nodes.OfType<NamespaceDeclarationSyntax>().First();
-            string Name = NameExplorer.GetName(Node.Name);
+            SimpleNameSyntax SimpleName = (SimpleNameSyntax)Node.Name;
+            string ValueText = NameExplorer.GetName(SimpleName);
+
+            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.Namespace);
 
             string CodeFixMessageFormat = new LocalizableResourceString(nameof(CodeFixResources.ConA1300FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
-            string FormatedMessage = string.Format(CodeFixMessageFormat, Name);
+            string FormatedMessage = string.Format(CodeFixMessageFormat, NewValueText);
 
             var Action = CodeAction.Create(title: FormatedMessage,
-                    createChangedDocument: c => AsyncHandler(context.Document, Node, c),
+                    createChangedDocument: c => AsyncHandler(context.Document, Node, c, NewValueText),
                     equivalenceKey: nameof(CodeFixResources.ConA1300FixTitle));
 
             return Action;

@@ -16,13 +16,11 @@
         /// <summary>
         /// Creates a ClassExplorer.
         /// </summary>
-        /// <param name="context">The source code.</param>
+        /// <param name="compilationUnit">The source code.</param>
         /// <param name="traceLevel">The trace level.</param>
-        public ClassExplorer(SyntaxNodeAnalysisContext context, TraceLevel traceLevel)
+        public ClassExplorer(CompilationUnitSyntax compilationUnit, TraceLevel traceLevel)
         {
-            Context = context;
-
-            CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)context.SemanticModel.SyntaxTree.GetRoot();
+            CompilationUnit = compilationUnit;
 
             List<ClassDeclarationSyntax> ClassDeclarationList = new List<ClassDeclarationSyntax>();
             AddClassMembers(CompilationUnit.Members, ClassDeclarationList);
@@ -52,7 +50,7 @@
         /// <summary>
         /// Gets the source code.
         /// </summary>
-        public SyntaxNodeAnalysisContext Context { get; init; }
+        public CompilationUnitSyntax CompilationUnit { get; init; }
         #endregion
 
         #region Client Interface

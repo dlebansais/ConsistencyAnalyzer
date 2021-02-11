@@ -12,9 +12,125 @@ namespace twowords
 }
 ";
 
+        private const string TwoNamespaces = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+";
+
+        private const string NamespaceSchemetwowordsOk1 = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace twoWords3
+{
+}
+";
+
+        private const string NamespaceSchemeTWOWORDSOk1 = @"
+namespace TWOWORDS1
+{
+}
+
+namespace TWOWORDS2
+{
+}
+
+namespace TwoWords3
+{
+}
+";
+
+        private const string NamespaceSchemetwoWordsOk1 = @"
+namespace twoWords1
+{
+}
+
+namespace twoWords2
+{
+}
+
+namespace twowords
+{
+}
+";
+
+        private const string NamespaceSchemeTwoWordsOk1 = @"
+namespace TwoWords1
+{
+}
+
+namespace TwoWords2
+{
+}
+
+namespace TWOWORDS3
+{
+}
+";
+
+        private const string NamespaceSchemetwo_wordsOk1 = @"
+namespace two_words1
+{
+}
+
+namespace two_words2
+{
+}
+
+namespace twowords3
+{
+}
+";
+
+        private const string NamespaceSchemeTWO_WORDSOk1 = @"
+namespace TWO_WORDS1
+{
+}
+
+namespace TWO_WORDS2
+{
+}
+
+namespace TWOWORDS3
+{
+}
+";
+
+        private const string NamespaceSchemetwo_WordsOk1 = @"
+namespace two_Words1
+{
+}
+
+namespace two_Words2
+{
+}
+
+namespace twowords3
+{
+}
+";
+
         [DataTestMethod]
         [
         DataRow(OneNamespace),
+        DataRow(TwoNamespaces),
+        DataRow(NamespaceSchemetwowordsOk1),
+        DataRow(NamespaceSchemeTWOWORDSOk1),
+        DataRow(NamespaceSchemetwoWordsOk1),
+        DataRow(NamespaceSchemeTwoWordsOk1),
+        DataRow(NamespaceSchemetwo_wordsOk1),
+        DataRow(NamespaceSchemeTWO_WORDSOk1),
+        DataRow(NamespaceSchemetwo_WordsOk1),
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {

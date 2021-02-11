@@ -35,9 +35,8 @@
         {
             Context = context;
 
-            ClassExplorer = new ClassExplorer(context, traceLevel);
-
             CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)context.SemanticModel.SyntaxTree.GetRoot();
+            ClassExplorer = new ClassExplorer(CompilationUnit, traceLevel);
             NameExplorer = new NameExplorer(CompilationUnit, traceLevel);
 
             List<ClassDeclarationSyntax> ClassList = ClassExplorer.GetClassList();

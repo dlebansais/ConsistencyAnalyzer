@@ -84,7 +84,7 @@
 
             foreach (NamingSchemes EnumValue in typeof(NamingSchemes).GetEnumValues())
                 if (EnumValue != NamingSchemes.None && EnumValue != NamingSchemes.All)
-                    if (IsNameMatchingSchemeStrict(Name, EnumValue))
+                    if (IsNameMatchingScheme(Name, EnumValue, UnderscoreUse.Always))
                     {
                         if (!Table.ContainsKey(EnumValue))
                             Table.Add(EnumValue, 0);
@@ -117,12 +117,12 @@
         /// <param name="name"></param>
         /// <param name="scheme"></param>
         /// <returns></returns>
-        public static bool IsNameMatchingCompositeScheme(string name, NamingSchemes scheme)
+        internal static bool IsNameMatchingCompositeScheme(string name, NamingSchemes scheme)
         {
             if (name.Length > 0)
             {
                 foreach (NamingSchemes EnumValue in typeof(NamingSchemes).GetEnumValues())
-                    if (scheme.HasFlag(EnumValue) && IsNameMatchingScheme(name, EnumValue))
+                    if (scheme.HasFlag(EnumValue) && IsNameMatchingScheme(name, EnumValue, UnderscoreUse.Optional))
                         return true;
             }
 
@@ -132,10 +132,10 @@
         /// <summary>
         /// Checks if a name is matching a given naming scheme.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="scheme"></param>
-        /// <returns></returns>
-        public static bool IsNameMatchingScheme(string name, NamingSchemes scheme)
+        /// <param name="name">The name to check.</param>
+        /// <param name="scheme">The scheme to use.</param>
+        /// <param name="underscoreUse">The specification about underscore.</param>
+        internal static bool IsNameMatchingScheme(string name, NamingSchemes scheme, UnderscoreUse underscoreUse)
         {
             if (name.Length == 0)
                 return false;
@@ -150,126 +150,87 @@
                     return true;
 
                 case NamingSchemes.twowords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: true, onlyUpper: false, startLower: true, startUpper: false);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyLower);
 
                 case NamingSchemes.TWOWORDS:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: true, startLower: false, startUpper: true);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyUpper);
 
                 case NamingSchemes.twoWords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: false, startLower: true, startUpper: false);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstLower);
 
                 case NamingSchemes.TwoWords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: false, startLower: false, startUpper: true);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstUpper);
 
                 case NamingSchemes.two_words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: false, afterUnderscoreLower: true, afterUnderscoreUpper: false, onlyLower: true, onlyUpper: false, startLower: true, startUpper: false);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyLower);
 
                 case NamingSchemes.TWO_WORDS:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: true, startLower: false, startUpper: true);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyUpper);
 
                 case NamingSchemes.two_Words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: false, startLower: true, startUpper: false);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstLower);
 
                 case NamingSchemes.Two_Words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: false, startLower: true, startUpper: true);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstUpper);
             }
         }
 
-        /// <summary>
-        /// Checks if a name is matching a given naming scheme, specifically.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="scheme"></param>
-        /// <returns></returns>
-        public static bool IsNameMatchingSchemeStrict(string name, NamingSchemes scheme)
+        private static bool IsNameMatchingScheme(string name, UnderscoreUse underscoreUse, CharacterCasing characterCasing)
         {
-            if (name.Length == 0)
-                return false;
-
-            switch (scheme)
+            switch (underscoreUse)
             {
-                default:
-                case NamingSchemes.None:
-                    return false;
-
-                case NamingSchemes.All:
-                    return true;
-
-                case NamingSchemes.twowords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: true, onlyUpper: false, startLower: true, startUpper: false);
-
-                case NamingSchemes.TWOWORDS:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: true, startLower: false, startUpper: true);
-
-                case NamingSchemes.twoWords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: false, startLower: true, startUpper: false);
-
-                case NamingSchemes.TwoWords:
-                    return IsNameMatchingScheme(name, noUnderscore: true, mandatoryUnderscore: false, afterUnderscoreLower: false, afterUnderscoreUpper: false, onlyLower: false, onlyUpper: false, startLower: false, startUpper: true);
-
-                case NamingSchemes.two_words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: true, afterUnderscoreLower: true, afterUnderscoreUpper: false, onlyLower: true, onlyUpper: false, startLower: true, startUpper: false);
-
-                case NamingSchemes.TWO_WORDS:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: true, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: true, startLower: false, startUpper: true);
-
-                case NamingSchemes.two_Words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: true, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: false, startLower: true, startUpper: false);
-
-                case NamingSchemes.Two_Words:
-                    return IsNameMatchingScheme(name, noUnderscore: false, mandatoryUnderscore: true, afterUnderscoreLower: false, afterUnderscoreUpper: true, onlyLower: false, onlyUpper: false, startLower: true, startUpper: true);
-            }
-        }
-
-        private static bool IsNameMatchingScheme(string name, bool noUnderscore, bool mandatoryUnderscore, bool afterUnderscoreLower, bool afterUnderscoreUpper, bool onlyLower, bool onlyUpper, bool startLower, bool startUpper)
-        {
-            if (noUnderscore)
-            {
-                if (name.Contains("_"))
-                    return false;
-            }
-            else
-            {
-                if (mandatoryUnderscore)
-                {
+                case UnderscoreUse.Never:
+                    if (name.Contains("_"))
+                        return false;
+                    break;
+                case UnderscoreUse.Always:
                     if (!name.Contains("_"))
                         return false;
-                }
-
-                if (afterUnderscoreLower)
-                {
-                    for (int i = 0; i + 1 < name.Length; i++)
-                        if (name[i] == '_' && !char.IsLower(name[i + 1]))
-                            return false;
-                }
-
-                if (afterUnderscoreUpper)
-                {
-                    for (int i = 0; i + 1 < name.Length; i++)
-                        if (name[i] == '_' && !char.IsUpper(name[i + 1]))
-                            return false;
-                }
+                    break;
             }
 
-            if (onlyLower)
+            switch (characterCasing)
             {
-                foreach (char c in name)
-                    if (char.IsUpper(c))
+                case CharacterCasing.OnlyLower:
+                    foreach (char c in name)
+                        if (char.IsUpper(c))
+                            return false;
+                    break;
+                case CharacterCasing.OnlyUpper:
+                    foreach (char c in name)
+                        if (char.IsLower(c))
+                            return false;
+                    break;
+                case CharacterCasing.FirstLower:
+                    if (!char.IsLower(name[0]))
                         return false;
+                    break;
+                case CharacterCasing.FirstUpper:
+                    if (!char.IsUpper(name[0]))
+                        return false;
+                    break;
             }
 
-            if (onlyUpper)
+            if ((characterCasing == CharacterCasing.FirstLower || characterCasing == CharacterCasing.FirstUpper) && underscoreUse != UnderscoreUse.Never)
             {
-                foreach (char c in name)
-                    if (char.IsLower(c))
+                bool isPreviousUnderscore = false;
+
+                for (int i = 0; i < name.Length; i++)
+                {
+                    char c = name[i];
+
+                    if (c == '_')
+                        isPreviousUnderscore = true;
+                    else if (isPreviousUnderscore)
+                    {
+                        if (!char.IsUpper(c))
+                            return false;
+                        isPreviousUnderscore = false;
+                    }
+                    else if (i > 0 && char.IsUpper(c))
                         return false;
+                }
             }
-
-            if (startLower && !char.IsLower(name[0]))
-                return false;
-
-            if (startUpper && !char.IsUpper(name[0]))
-                return false;
 
             return true;
         }
@@ -429,44 +390,264 @@
 
             string Result;
 
-            if (name.Contains("_") && !ExpectedSheme.HasFlag(NamingSchemes.two_words) && !ExpectedSheme.HasFlag(NamingSchemes.two_Words) && !ExpectedSheme.HasFlag(NamingSchemes.TWO_WORDS) && !ExpectedSheme.HasFlag(NamingSchemes.Two_Words))
+            if (name.Contains("_"))
+                Result = FixNameWithUnderscore(name, ExpectedSheme);
+            else
+                Result = FixNameWithoutUnderscore(name, ExpectedSheme);
+
+            return Result;
+        }
+
+        private string FixNameWithUnderscore(string name, NamingSchemes expectedSheme)
+        {
+            string Result;
+
+            if (!expectedSheme.HasFlag(NamingSchemes.two_words) && !expectedSheme.HasFlag(NamingSchemes.two_Words) && !expectedSheme.HasFlag(NamingSchemes.TWO_WORDS) && !expectedSheme.HasFlag(NamingSchemes.Two_Words))
+                Result = FixNameRemoveUnderscore(name, expectedSheme);
+            else if (expectedSheme.HasFlag(NamingSchemes.two_words))
+                Result = name.ToLower();
+            else if (expectedSheme.HasFlag(NamingSchemes.TWO_WORDS))
+                Result = name.ToUpper();
+            else if (expectedSheme.HasFlag(NamingSchemes.two_Words))
+                Result = FixNameRemoveUnderscoreFirstLower(name, expectedSheme);
+            else if (expectedSheme.HasFlag(NamingSchemes.Two_Words))
+                Result = FixNameRemoveUnderscoreFirstUpper(name, expectedSheme);
+            else
+                Result = name;
+
+            return Result;
+        }
+
+        private string FixNameRemoveUnderscore(string name, NamingSchemes expectedSheme)
+        {
+            string Result;
+
+            if (expectedSheme.HasFlag(NamingSchemes.twowords))
+                Result = name.Replace("_", "").ToLower();
+            else if (expectedSheme.HasFlag(NamingSchemes.TWOWORDS))
+                Result = name.Replace("_", "").ToUpper();
+            else
             {
-                if (ExpectedSheme.HasFlag(NamingSchemes.twowords))
-                    Result = name.Replace("_", "").ToLower();
-                else if (ExpectedSheme.HasFlag(NamingSchemes.TWOWORDS))
-                    Result = name.Replace("_", "").ToUpper();
-                else
+                bool SetUpper = false;
+                Result = string.Empty;
+
+                for (int i = 0; i < name.Length; i++)
                 {
-                    bool SetUpper = true;
-                    Result = string.Empty;
+                    char c = name[i];
 
-                    for (int i = 0; i < name.Length; i++)
+                    if (c == '_')
+                        SetUpper = true;
+                    else if (i == 0)
                     {
-                        char c = name[i];
-
-                        if (c == '_')
-                            SetUpper = true;
-                        else if (i == 0)
-                        {
-                            if (ExpectedSheme.HasFlag(NamingSchemes.twoWords))
-                                Result += char.ToLower(c);
-                            else if (ExpectedSheme.HasFlag(NamingSchemes.TwoWords))
-                                Result += char.ToUpper(c);
-                            else
-                                Result += c;
-                        }
-                        else if (SetUpper)
-                        {
+                        if (expectedSheme.HasFlag(NamingSchemes.twoWords))
+                            Result += char.ToLower(c);
+                        else if (expectedSheme.HasFlag(NamingSchemes.TwoWords))
                             Result += char.ToUpper(c);
-                            SetUpper = false;
-                        }
                         else
                             Result += c;
                     }
+                    else if (SetUpper)
+                    {
+                        Result += char.ToUpper(c);
+                        SetUpper = false;
+                    }
+                    else
+                        Result += char.ToLower(c);
                 }
             }
+
+            return Result;
+        }
+
+        private string FixNameRemoveUnderscoreFirstLower(string name, NamingSchemes expectedSheme)
+        {
+            string Result = string.Empty;
+            bool SetUpper = false;
+
+            int i;
+
+            for (i = 0; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (c == '_')
+                {
+                    SetUpper = true;
+                    break;
+                }
+                else if (!char.IsUpper(c))
+                    break;
+
+                Result += char.ToLower(c);
+            }
+
+            for (; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (c == '_')
+                {
+                    Result += c;
+                    SetUpper = true;
+                }
+                else if (SetUpper)
+                {
+                    Result += char.ToUpper(c);
+                    SetUpper = false;
+                }
+                else
+                    Result += char.ToLower(c);
+            }
+
+            return Result;
+        }
+
+        private string FixNameRemoveUnderscoreFirstUpper(string name, NamingSchemes expectedSheme)
+        {
+            string Result = string.Empty;
+            bool SetUpper = false;
+
+            for (int i = 0; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (c == '_')
+                {
+                    Result += c;
+                    SetUpper = true;
+                }
+                else if (i == 0)
+                    Result += char.ToUpper(c);
+                else if (SetUpper)
+                {
+                    Result += char.ToUpper(c);
+                    SetUpper = false;
+                }
+                else
+                    Result += char.ToLower(c);
+            }
+
+            return Result;
+        }
+
+        private string FixNameWithoutUnderscore(string name, NamingSchemes expectedSheme)
+        {
+            string Result;
+
+            if (expectedSheme.HasFlag(NamingSchemes.twowords))
+                Result = name.ToLower();
+            else if (expectedSheme.HasFlag(NamingSchemes.TWOWORDS) || expectedSheme.HasFlag(NamingSchemes.TWO_WORDS))
+                Result = name.ToUpper();
+            else if (expectedSheme.HasFlag(NamingSchemes.twoWords))
+                Result = char.ToLower(name[0]) + name.Substring(1);
+            else if (expectedSheme.HasFlag(NamingSchemes.TwoWords))
+                Result = char.ToUpper(name[0]) + name.Substring(1);
+            else
+                Result = FixNameInsertUnderscore(name, expectedSheme);
+
+            return Result;
+        }
+
+        private string FixNameInsertUnderscore(string name, NamingSchemes expectedSheme)
+        {
+            string Result;
+
+            if (expectedSheme.HasFlag(NamingSchemes.two_words))
+            {
+                Result = string.Empty;
+                bool IsPreviousLower = false;
+
+                for (int i = 0; i < name.Length; i++)
+                {
+                    char c = name[i];
+
+                    if (IsPreviousLower && char.IsUpper(c))
+                        Result += "_";
+
+                    Result += char.ToLower(c);
+                    IsPreviousLower = char.IsLower(c);
+                }
+            }
+            else if (expectedSheme.HasFlag(NamingSchemes.two_Words))
+                Result = FixNameInsertUnderscoreFirstLower(name, expectedSheme);
+            else if (expectedSheme.HasFlag(NamingSchemes.Two_Words))
+                Result = FixNameInsertUnderscoreFirstUpper(name, expectedSheme);
             else
                 Result = name;
+
+            return Result;
+        }
+
+        private string FixNameInsertUnderscoreFirstLower(string name, NamingSchemes expectedSheme)
+        {
+            string Result = string.Empty;
+            int i;
+
+            for (i = 0; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (!char.IsUpper(c))
+                    break;
+
+                Result += char.ToLower(c);
+            }
+
+            bool IsUnderscoreInserted = false;
+
+            for (; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (char.IsUpper(c))
+                {
+                    if (!IsUnderscoreInserted)
+                    {
+                        IsUnderscoreInserted = true;
+                        Result += "_";
+                        Result += c;
+                    }
+                    else
+                        Result += char.ToLower(c);
+                }
+                else
+                {
+                    IsUnderscoreInserted = false;
+                    Result += char.ToLower(c);
+                }
+            }
+
+            return Result;
+        }
+
+        private string FixNameInsertUnderscoreFirstUpper(string name, NamingSchemes expectedSheme)
+        {
+            string Result = string.Empty;
+            bool IsUnderscoreInserted = true;
+
+            for (int i = 0; i < name.Length; i++)
+            {
+                char c = name[i];
+
+                if (i == 0)
+                    Result += char.ToUpper(c);
+                else if (char.IsUpper(c))
+                {
+                    if (!IsUnderscoreInserted)
+                    {
+                        IsUnderscoreInserted = true;
+                        Result += "_";
+                        Result += c;
+                    }
+                    else
+                        Result += char.ToLower(c);
+                }
+                else
+                {
+                    IsUnderscoreInserted = false;
+                    Result += char.ToLower(c);
+                }
+            }
 
             return Result;
         }
