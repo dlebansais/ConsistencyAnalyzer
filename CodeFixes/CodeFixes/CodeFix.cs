@@ -21,6 +21,7 @@
                 new CodeFixConA1602(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1602))]),
                 new CodeFixConA1701(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1701))]),
                 new CodeFixConA1300(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1300))]),
+                new CodeFixConA1301(AnalyzerRule.RuleTable[AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1301))]),
             };
 
             Dictionary<string, CodeFix> Table = new Dictionary<string, CodeFix>();

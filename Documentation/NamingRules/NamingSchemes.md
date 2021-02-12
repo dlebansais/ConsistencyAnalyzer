@@ -7,11 +7,9 @@ It is common to expect all names in a program to follow some naming convention. 
 In C#, the following elements are expected to follow some convention, but not all elements should follow the same one.
 
 + Namespaces
-+ Classes
++ Classes, records and structs
 + Enums
 + Enum members
-+ Structs
-+ Records
 + Delegates
 + Events
 + Methods

@@ -115,6 +115,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for classes.
+        /// </summary>
+        public static string ConA1301Description {
+            get {
+                return ResourceManager.GetString("ConA1301Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad class name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1301MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1301MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classes names must be consistent.
+        /// </summary>
+        public static string ConA1301Title {
+            get {
+                return ResourceManager.GetString("ConA1301Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
