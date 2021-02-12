@@ -67,36 +67,8 @@
         private Document FixQualifiedName(Document document, SyntaxNode root, QualifiedNameSyntax qualifiedName, string newValueText)
         {
             NameSyntax Current = qualifiedName;
-            SyntaxTriviaList Leading = SyntaxTriviaList.Empty;
-            SyntaxTriviaList Trailing = SyntaxTriviaList.Empty;
-
-            bool Exit = false;
-            while (!Exit)
-            {
-                switch (Current)
-                {
-                    case QualifiedNameSyntax AsQualifiedName:
-                        Current = AsQualifiedName.Left;
-                        break;
-                    case IdentifierNameSyntax AsIdentifierName:
-                        Leading = AsIdentifierName.Identifier.LeadingTrivia;
-                        Exit = true;
-                        break;
-                    default:
-                        return document;
-                }
-            }
-
-            switch (qualifiedName.Right)
-            {
-                case IdentifierNameSyntax AsIdentifierName:
-                    Leading = AsIdentifierName.Identifier.LeadingTrivia;
-                    Exit = true;
-                    break;
-                default:
-                    return document;
-            }
-
+            SyntaxTriviaList Leading = qualifiedName.GetLeadingTrivia();
+            SyntaxTriviaList Trailing = qualifiedName.GetTrailingTrivia();
             string[] Splitted = newValueText.Split('.');
 
             NameSyntax Name = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(Leading, Splitted[0], SyntaxTriviaList.Empty));

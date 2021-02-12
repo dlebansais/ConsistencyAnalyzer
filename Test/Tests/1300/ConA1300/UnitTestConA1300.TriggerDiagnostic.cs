@@ -1436,6 +1436,62 @@ namespace twowords.twowords3.twowords
 }
 ";
 
+        private const string Trivia1 = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace /* */TWOWORDS3/* */
+{
+}
+";
+
+        private const string Trivia1Fixed = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace /* */twowords3/* */
+{
+}
+";
+
+        private const string Trivia2 = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace /* */twowords.TWOWORDS3.twowords/* */
+{
+}
+";
+
+        private const string Trivia2Fixed = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace /* */twowords.twowords3.twowords/* */
+{
+}
+";
+
         [DataTestMethod]
         [
         DataRow(NamespaceSchemetwowords1, NamespaceSchemetwowords1Fixed, 10, 1, "TWOWORDS3"),
@@ -1489,6 +1545,8 @@ namespace twowords.twowords3.twowords
         DataRow(NamespaceSchemeTwo_Words7, NamespaceSchemeTwo_Words7Fixed, 10, 1, "two_Words3"),
         DataRow(MultiNamespaceSchemetwowords1, MultiNamespaceSchemetwowords1Fixed, 10, 1, "TWOWORDS3"),
         DataRow(MultiNamespaceSchemetwowords2, MultiNamespaceSchemetwowords2Fixed, 10, 1, "TWOWORDS3"),
+        DataRow(Trivia1, Trivia1Fixed, 10, 1, "TWOWORDS3"),
+        DataRow(Trivia2, Trivia2Fixed, 10, 1, "TWOWORDS3"),
         ]
         public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixedsource, int line, int column, string badName)
         {
