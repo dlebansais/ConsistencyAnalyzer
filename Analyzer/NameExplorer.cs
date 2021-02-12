@@ -266,14 +266,14 @@
         /// </summary>
         /// <param name="nameSyntax">The syntax node.</param>
         /// <returns></returns>
-        public static string GetName(NameSyntax nameSyntax)
+        public static string GetNameText(NameSyntax nameSyntax)
         {
             switch (nameSyntax)
             {
                 case AliasQualifiedNameSyntax AsAliasQualifiedName:
-                    return GetName(AsAliasQualifiedName.Name);
+                    return GetNameText(AsAliasQualifiedName.Name);
                 case QualifiedNameSyntax AsQualifiedName:
-                    return GetName(AsQualifiedName.Right);
+                    return GetNameText(AsQualifiedName.Left) + "." + GetNameText(AsQualifiedName.Right);
                 case GenericNameSyntax AsGenericName:
                     return AsGenericName.Identifier.ValueText;
                 case IdentifierNameSyntax AsIdentifierName:

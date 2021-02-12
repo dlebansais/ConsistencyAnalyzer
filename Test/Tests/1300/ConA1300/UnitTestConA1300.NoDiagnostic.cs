@@ -120,6 +120,38 @@ namespace twowords3
 }
 ";
 
+        private const string OneNamespaceMulti1 = @"
+namespace twowords.twowords
+{
+}
+";
+
+        private const string TwoNamespacesMulti1 = @"
+namespace twowords.twowords1
+{
+}
+
+namespace twowords.twowords2
+{
+}
+";
+
+        private const string OneNamespaceMulti2 = @"
+namespace twowords.twowords.twowords
+{
+}
+";
+
+        private const string TwoNamespacesMulti2 = @"
+namespace twowords.twowords1.twowords1
+{
+}
+
+namespace twowords.twowords2.twowords2
+{
+}
+";
+
         [DataTestMethod]
         [
         DataRow(OneNamespace),
@@ -131,6 +163,10 @@ namespace twowords3
         DataRow(NamespaceSchemetwo_wordsOk1),
         DataRow(NamespaceSchemeTWO_WORDSOk1),
         DataRow(NamespaceSchemetwo_WordsOk1),
+        DataRow(OneNamespaceMulti1),
+        DataRow(TwoNamespacesMulti1),
+        DataRow(OneNamespaceMulti2),
+        DataRow(TwoNamespacesMulti2),
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {

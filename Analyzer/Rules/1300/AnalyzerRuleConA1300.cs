@@ -57,15 +57,17 @@
             Analyzer.Trace("AnalyzerRuleConA1300", TraceLevel);
 
             NamespaceDeclarationSyntax Node = (NamespaceDeclarationSyntax)context.Node;
-            string Name = NameExplorer.GetName(Node.Name);
+            string[] MultiValueText = NameExplorer.GetNameText(Node.Name).Split('.');
 
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             NameExplorer Explorer = ContextExplorer.NameExplorer;
-            if (!Explorer.IsNameMismatch(Name, NameCategory.Namespace, out NamingSchemes ExpectedSheme, TraceLevel))
-                return;
 
-            Analyzer.Trace($"Name {Name} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), Name));
+            foreach (string ValueText in MultiValueText)
+                if (Explorer.IsNameMismatch(ValueText, NameCategory.Namespace, out NamingSchemes ExpectedSheme, TraceLevel))
+                {
+                    Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
+                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+                }
         }
         #endregion
     }

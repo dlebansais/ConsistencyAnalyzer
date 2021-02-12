@@ -34,21 +34,90 @@
             if (Root == null)
                 return document;
 
-            SimpleNameSyntax? SimpleName = syntaxNode.Name as SimpleNameSyntax;
-            if (SimpleName == null)
-                return document;
+            Document Result;
 
-            var Leading = SimpleName.Identifier.LeadingTrivia;
-            var Trailing = SimpleName.Identifier.TrailingTrivia;
-
-            var NewSimpleName = SimpleName.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
-            var newRoot = Root.ReplaceNode(SimpleName, NewSimpleName);
-
-            Document Result = document.WithSyntaxRoot(newRoot);
+            switch (syntaxNode.Name)
+            {
+                case SimpleNameSyntax AsSimpleName:
+                    Result = FixSimpleName(document, Root, AsSimpleName, newValueText);
+                    break;
+                case QualifiedNameSyntax AsQualifiedName:
+                    Result = FixQualifiedName(document, Root, AsQualifiedName, newValueText);
+                    break;
+                default:
+                    return document;
+            }
 
             Analyzer.Trace("Fixed", TraceLevel);
 
             return Result;
+        }
+
+        private Document FixSimpleName(Document document, SyntaxNode root, SimpleNameSyntax simpleName, string newValueText)
+        {
+            SyntaxTriviaList Leading = simpleName.Identifier.LeadingTrivia;
+            SyntaxTriviaList Trailing = simpleName.Identifier.TrailingTrivia;
+
+            SimpleNameSyntax NewSimpleName = simpleName.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
+            SyntaxNode NewRoot = root.ReplaceNode(simpleName, NewSimpleName);
+
+            return document.WithSyntaxRoot(NewRoot);
+        }
+
+        private Document FixQualifiedName(Document document, SyntaxNode root, QualifiedNameSyntax qualifiedName, string newValueText)
+        {
+            NameSyntax Current = qualifiedName;
+            SyntaxTriviaList Leading = SyntaxTriviaList.Empty;
+            SyntaxTriviaList Trailing = SyntaxTriviaList.Empty;
+
+            bool Exit = false;
+            while (!Exit)
+            {
+                switch (Current)
+                {
+                    case QualifiedNameSyntax AsQualifiedName:
+                        Current = AsQualifiedName.Left;
+                        break;
+                    case IdentifierNameSyntax AsIdentifierName:
+                        Leading = AsIdentifierName.Identifier.LeadingTrivia;
+                        Exit = true;
+                        break;
+                    default:
+                        return document;
+                }
+            }
+
+            switch (qualifiedName.Right)
+            {
+                case IdentifierNameSyntax AsIdentifierName:
+                    Leading = AsIdentifierName.Identifier.LeadingTrivia;
+                    Exit = true;
+                    break;
+                default:
+                    return document;
+            }
+
+            string[] Splitted = newValueText.Split('.');
+
+            NameSyntax Name = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(Leading, Splitted[0], SyntaxTriviaList.Empty));
+
+            for (int i = 1; i < Splitted.Length; i++)
+            {
+                SimpleNameSyntax RightName;
+                string Text = Splitted[i];
+
+                if (i + 1 < Splitted.Length)
+                    RightName = SyntaxFactory.IdentifierName(Text);
+                else
+                    RightName = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxTriviaList.Empty, Text, Trailing));
+
+                Name = SyntaxFactory.QualifiedName(Name, RightName);
+            }
+
+            QualifiedNameSyntax NewQualifiedName = (QualifiedNameSyntax)Name;
+            SyntaxNode NewRoot = root.ReplaceNode(qualifiedName, NewQualifiedName);
+
+            return document.WithSyntaxRoot(NewRoot);
         }
 
         /// <summary>
@@ -69,10 +138,16 @@
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             NamespaceDeclarationSyntax Node = Nodes.OfType<NamespaceDeclarationSyntax>().First();
-            SimpleNameSyntax SimpleName = (SimpleNameSyntax)Node.Name;
-            string ValueText = NameExplorer.GetName(SimpleName);
+            string[] MultiValueText = NameExplorer.GetNameText(Node.Name).Split('.');
 
-            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.Namespace);
+            string NewValueText = string.Empty;
+            foreach (string ValueText in MultiValueText)
+            {
+                if (NewValueText.Length > 0)
+                    NewValueText += ".";
+
+                NewValueText += NameExplorer.FixName(ValueText, NameCategory.Namespace);
+            }
 
             string CodeFixMessageFormat = new LocalizableResourceString(nameof(CodeFixResources.ConA1300FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
             string FormatedMessage = string.Format(CodeFixMessageFormat, NewValueText);

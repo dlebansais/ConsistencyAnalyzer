@@ -1380,6 +1380,62 @@ namespace Two_Words3
 }
 ";
 
+        private const string MultiNamespaceSchemetwowords1 = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace twowords.TWOWORDS3
+{
+}
+";
+
+        private const string MultiNamespaceSchemetwowords1Fixed = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace twowords.twowords3
+{
+}
+";
+
+        private const string MultiNamespaceSchemetwowords2 = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace twowords.TWOWORDS3.twowords
+{
+}
+";
+
+        private const string MultiNamespaceSchemetwowords2Fixed = @"
+namespace twowords1
+{
+}
+
+namespace twowords2
+{
+}
+
+namespace twowords.twowords3.twowords
+{
+}
+";
+
         [DataTestMethod]
         [
         DataRow(NamespaceSchemetwowords1, NamespaceSchemetwowords1Fixed, 10, 1, "TWOWORDS3"),
@@ -1431,6 +1487,8 @@ namespace Two_Words3
         DataRow(NamespaceSchemeTwo_Words5, NamespaceSchemeTwo_Words5Fixed, 10, 1, "two_words3"),
         DataRow(NamespaceSchemeTwo_Words6, NamespaceSchemeTwo_Words6Fixed, 10, 1, "TWO_WORDS3"),
         DataRow(NamespaceSchemeTwo_Words7, NamespaceSchemeTwo_Words7Fixed, 10, 1, "two_Words3"),
+        DataRow(MultiNamespaceSchemetwowords1, MultiNamespaceSchemetwowords1Fixed, 10, 1, "TWOWORDS3"),
+        DataRow(MultiNamespaceSchemetwowords2, MultiNamespaceSchemetwowords2Fixed, 10, 1, "TWOWORDS3"),
         ]
         public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixedsource, int line, int column, string badName)
         {
