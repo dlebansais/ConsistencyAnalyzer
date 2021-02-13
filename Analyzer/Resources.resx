@@ -142,7 +142,16 @@
     <value>Bad class name '{0}' </value>
   </data>
   <data name="ConA1301Title" xml:space="preserve">
-    <value>Classes names must be consistent</value>
+    <value>Class names must be consistent</value>
+  </data>
+  <data name="ConA1302Description" xml:space="preserve">
+    <value>Use a consistent naming scheme for records</value>
+  </data>
+  <data name="ConA1302MessageFormat" xml:space="preserve">
+    <value>Bad record name '{0}' </value>
+  </data>
+  <data name="ConA1302Title" xml:space="preserve">
+    <value>Record names must be consistent</value>
   </data>
   <data name="ConA1602Description" xml:space="preserve">
     <value>Inconsistent documentation of enumeration element</value>

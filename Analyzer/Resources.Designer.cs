@@ -133,11 +133,38 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes names must be consistent.
+        ///   Looks up a localized string similar to Class names must be consistent.
         /// </summary>
         public static string ConA1301Title {
             get {
                 return ResourceManager.GetString("ConA1301Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for records.
+        /// </summary>
+        public static string ConA1302Description {
+            get {
+                return ResourceManager.GetString("ConA1302Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad record name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1302MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1302MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record names must be consistent.
+        /// </summary>
+        public static string ConA1302Title {
+            get {
+                return ResourceManager.GetString("ConA1302Title", resourceCulture);
             }
         }
         
