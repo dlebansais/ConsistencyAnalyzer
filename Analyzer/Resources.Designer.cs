@@ -196,6 +196,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for enums.
+        /// </summary>
+        public static string ConA1304Description {
+            get {
+                return ResourceManager.GetString("ConA1304Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad enum name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1304MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1304MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum names must be consistent.
+        /// </summary>
+        public static string ConA1304Title {
+            get {
+                return ResourceManager.GetString("ConA1304Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

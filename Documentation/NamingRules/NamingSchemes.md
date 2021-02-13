@@ -9,6 +9,7 @@ In C#, the following elements are expected to follow some convention, but not al
 + Namespaces
 + Classes, records and structs
 + Enums
++ Interfaces
 + Enum members
 + Delegates
 + Events
