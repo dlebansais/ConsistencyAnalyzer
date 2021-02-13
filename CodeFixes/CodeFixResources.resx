@@ -129,6 +129,9 @@
   <data name="ConA1302FixTitle" xml:space="preserve">
     <value>Rename to '{0}'</value>
   </data>
+  <data name="ConA1303FixTitle" xml:space="preserve">
+    <value>Rename to '{0}'</value>
+  </data>
   <data name="ConA1602FixTitle" xml:space="preserve">
     <value>Add documentation</value>
   </data>

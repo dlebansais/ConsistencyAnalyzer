@@ -30,6 +30,7 @@
                 new AnalyzerRuleConA1300(),
                 new AnalyzerRuleConA1301(),
                 new AnalyzerRuleConA1302(),
+                new AnalyzerRuleConA1303(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();

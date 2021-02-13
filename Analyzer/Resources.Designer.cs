@@ -169,6 +169,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for structs.
+        /// </summary>
+        public static string ConA1303Description {
+            get {
+                return ResourceManager.GetString("ConA1303Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad struct name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1303MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1303MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Struct names must be consistent.
+        /// </summary>
+        public static string ConA1303Title {
+            get {
+                return ResourceManager.GetString("ConA1303Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
