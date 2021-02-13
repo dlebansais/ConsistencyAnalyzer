@@ -155,7 +155,6 @@
             if (constructorDeclaration.Initializer != null)
                 ParseConstructorInitializer(constructorDeclaration.Initializer);
             ParseParameterList(constructorDeclaration.ParameterList);
-            ParseIdentifier(constructorDeclaration.Identifier, NameCategory.ClassRecordOrStruct);
             if (constructorDeclaration.ExpressionBody != null)
                 ParseArrowExpressionClause(constructorDeclaration.ExpressionBody);
         }
@@ -175,7 +174,6 @@
             if (destructorDeclaration.Body != null)
                 ParseBlock(destructorDeclaration.Body);
             ParseParameterList(destructorDeclaration.ParameterList);
-            ParseIdentifier(destructorDeclaration.Identifier, NameCategory.ClassRecordOrStruct);
             if (destructorDeclaration.ExpressionBody != null)
                 ParseArrowExpressionClause(destructorDeclaration.ExpressionBody);
         }
@@ -262,7 +260,7 @@
                 ParseBaseList(classDeclaration.BaseList);
             if (classDeclaration.TypeParameterList != null)
                 ParseTypeParameterList(classDeclaration.TypeParameterList);
-            ParseIdentifier(classDeclaration.Identifier, NameCategory.ClassRecordOrStruct);
+            ParseIdentifier(classDeclaration.Identifier, NameCategory.Class);
         }
 
         private void ParseInterfaceDeclaration(InterfaceDeclarationSyntax interfaceDeclaration)
@@ -290,7 +288,7 @@
                 ParseParameterList(recordDeclaration.ParameterList);
             if (recordDeclaration.TypeParameterList != null)
                 ParseTypeParameterList(recordDeclaration.TypeParameterList);
-            ParseIdentifier(recordDeclaration.Identifier, NameCategory.ClassRecordOrStruct);
+            ParseIdentifier(recordDeclaration.Identifier, NameCategory.Record);
         }
 
         private void ParseStructDeclaration(StructDeclarationSyntax structDeclaration)
@@ -303,7 +301,7 @@
                 ParseBaseList(structDeclaration.BaseList);
             if (structDeclaration.TypeParameterList != null)
                 ParseTypeParameterList(structDeclaration.TypeParameterList);
-            ParseIdentifier(structDeclaration.Identifier, NameCategory.ClassRecordOrStruct);
+            ParseIdentifier(structDeclaration.Identifier, NameCategory.Struct);
         }
 
         private void ParseDelegateDeclaration(DelegateDeclarationSyntax delegateDeclaration)

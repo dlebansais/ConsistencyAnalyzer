@@ -62,7 +62,7 @@
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             NameExplorer Explorer = ContextExplorer.NameExplorer;
 
-            if (!Explorer.IsNameMismatch(ValueText, NameCategory.ClassRecordOrStruct, out NamingSchemes ExpectedSheme, TraceLevel))
+            if (!Explorer.IsNameMismatch(ValueText, NameCategory.Class, out NamingSchemes ExpectedSheme, TraceLevel))
                 return;
 
             Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);

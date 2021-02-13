@@ -16,9 +16,19 @@
         Namespace,
 
         /// <summary>
-        /// A class, record or struct name.
+        /// A class name.
         /// </summary>
-        ClassRecordOrStruct,
+        Class,
+
+        /// <summary>
+        /// A record name.
+        /// </summary>
+        Record,
+
+        /// <summary>
+        /// A struct name.
+        /// </summary>
+        Struct,
 
         /// <summary>
         /// An enum name.

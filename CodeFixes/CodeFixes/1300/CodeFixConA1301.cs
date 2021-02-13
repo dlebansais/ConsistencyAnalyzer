@@ -66,7 +66,7 @@
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             ClassDeclarationSyntax Node = Nodes.OfType<ClassDeclarationSyntax>().First();
             string ValueText = Node.Identifier.ValueText;
-            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.ClassRecordOrStruct);
+            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.Class);
 
             string CodeFixMessageFormat = new LocalizableResourceString(nameof(CodeFixResources.ConA1301FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
             string FormatedMessage = string.Format(CodeFixMessageFormat, NewValueText);

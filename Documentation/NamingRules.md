@@ -2,3 +2,5 @@
 
 **[ConA1301](NamingRules/ConA1301.md)**
 
+**[ConA1302](NamingRules/ConA1302.md)**
+
