@@ -83,14 +83,27 @@
             Dictionary<NamingSchemes, int> Table = SchemeTable[nameCategory];
 
             foreach (NamingSchemes EnumValue in typeof(NamingSchemes).GetEnumValues())
-                if (EnumValue != NamingSchemes.None && EnumValue != NamingSchemes.All)
-                    if (IsNameMatchingScheme(Name, EnumValue, UnderscoreUse.Always))
-                    {
-                        if (!Table.ContainsKey(EnumValue))
-                            Table.Add(EnumValue, 0);
+                if (EnumValue != NamingSchemes.None && EnumValue != NamingSchemes.All && EnumValue != NamingSchemes.Interface)
+                {
+                    NamingSchemes Scheme = EnumValue;
 
-                        Table[EnumValue]++;
+                    if (IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
+                        IncrementMatchingSchemeCount(Table, Scheme);
+                    else if (nameCategory == NameCategory.Interface)
+                    {
+                        Scheme |= NamingSchemes.Interface;
+                        if (IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
+                            IncrementMatchingSchemeCount(Table, Scheme);
                     }
+                }
+        }
+
+        private void IncrementMatchingSchemeCount(Dictionary<NamingSchemes, int> table, NamingSchemes scheme)
+        {
+            if (!table.ContainsKey(scheme))
+                table.Add(scheme, 0);
+
+            table[scheme]++;
         }
         #endregion
 
@@ -140,7 +153,10 @@
             if (name.Length == 0)
                 return false;
 
-            switch (scheme)
+            bool IsInterfaceScheme = scheme.HasFlag(NamingSchemes.Interface);
+            NamingSchemes RootScheme = scheme & ~NamingSchemes.Interface;
+
+            switch (RootScheme)
             {
                 default:
                 case NamingSchemes.None:
@@ -150,33 +166,36 @@
                     return true;
 
                 case NamingSchemes.twowords:
-                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyLower);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyLower, IsInterfaceScheme);
 
                 case NamingSchemes.TWOWORDS:
-                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyUpper);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.OnlyUpper, IsInterfaceScheme);
 
                 case NamingSchemes.twoWords:
-                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstLower);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstLower, IsInterfaceScheme);
 
                 case NamingSchemes.TwoWords:
-                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstUpper);
+                    return IsNameMatchingScheme(name, UnderscoreUse.Never, CharacterCasing.FirstUpper, IsInterfaceScheme);
 
                 case NamingSchemes.two_words:
-                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyLower);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyLower, IsInterfaceScheme);
 
                 case NamingSchemes.TWO_WORDS:
-                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyUpper);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.OnlyUpper, IsInterfaceScheme);
 
                 case NamingSchemes.two_Words:
-                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstLower);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstLower, IsInterfaceScheme);
 
                 case NamingSchemes.Two_Words:
-                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstUpper);
+                    return IsNameMatchingScheme(name, underscoreUse, CharacterCasing.FirstUpper, IsInterfaceScheme);
             }
         }
 
-        private static bool IsNameMatchingScheme(string name, UnderscoreUse underscoreUse, CharacterCasing characterCasing)
+        private static bool IsNameMatchingScheme(string name, UnderscoreUse underscoreUse, CharacterCasing characterCasing, bool isStartingWithI)
         {
+            if (isStartingWithI && name[0] != 'I')
+                return false;
+
             switch (underscoreUse)
             {
                 case UnderscoreUse.Never:
@@ -189,24 +208,26 @@
                     break;
             }
 
+            int FirstLetterIndex = isStartingWithI && name.Length > 1 ? 1 : 0;
+
             switch (characterCasing)
             {
                 case CharacterCasing.OnlyLower:
-                    foreach (char c in name)
-                        if (char.IsUpper(c))
+                    for (int i = FirstLetterIndex; i < name.Length; i++)
+                        if (char.IsUpper(name[i]))
                             return false;
                     break;
                 case CharacterCasing.OnlyUpper:
-                    foreach (char c in name)
-                        if (char.IsLower(c))
+                    for (int i = FirstLetterIndex; i < name.Length; i++)
+                        if (char.IsLower(name[i]))
                             return false;
                     break;
                 case CharacterCasing.FirstLower:
-                    if (!char.IsLower(name[0]))
+                    if (!char.IsLower(name[FirstLetterIndex]))
                         return false;
                     break;
                 case CharacterCasing.FirstUpper:
-                    if (!char.IsUpper(name[0]))
+                    if (!char.IsUpper(name[FirstLetterIndex]))
                         return false;
                     break;
             }
@@ -215,7 +236,7 @@
             {
                 bool isPreviousUnderscore = false;
 
-                for (int i = 0; i < name.Length; i++)
+                for (int i = FirstLetterIndex; i < name.Length; i++)
                 {
                     char c = name[i];
 
@@ -227,7 +248,7 @@
                             return false;
                         isPreviousUnderscore = false;
                     }
-                    else if (i > 0 && char.IsUpper(c))
+                    else if (i > FirstLetterIndex && char.IsUpper(c))
                         return false;
                 }
             }
@@ -290,7 +311,13 @@
         /// <param name="schemeReference">The reference scheme.</param>
         public static bool IsSchemeCompatible(NamingSchemes scheme, NamingSchemes schemeReference)
         {
-            switch (schemeReference)
+            if (scheme.HasFlag(NamingSchemes.Interface) != schemeReference.HasFlag(NamingSchemes.Interface))
+                return false;
+
+            NamingSchemes RootScheme = scheme & ~NamingSchemes.Interface;
+            NamingSchemes RootSchemeReference = schemeReference & ~NamingSchemes.Interface;
+
+            switch (RootSchemeReference)
             {
                 default:
                 case NamingSchemes.None:
@@ -299,7 +326,7 @@
                     return true;
 
                 case NamingSchemes.twowords:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.twowords:
                             return true;
@@ -308,7 +335,7 @@
                     }
 
                 case NamingSchemes.TWOWORDS:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.TWOWORDS:
                             return true;
@@ -317,7 +344,7 @@
                     }
 
                 case NamingSchemes.twoWords:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.twowords:
                         case NamingSchemes.twoWords:
@@ -327,7 +354,7 @@
                     }
 
                 case NamingSchemes.TwoWords:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.TwoWords:
                             return true;
@@ -336,7 +363,7 @@
                     }
 
                 case NamingSchemes.two_words:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.twowords:
                         case NamingSchemes.two_words:
@@ -346,7 +373,7 @@
                     }
 
                 case NamingSchemes.TWO_WORDS:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.TWOWORDS:
                         case NamingSchemes.TWO_WORDS:
@@ -356,7 +383,7 @@
                     }
 
                 case NamingSchemes.two_Words:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.twowords:
                         case NamingSchemes.two_Words:
@@ -366,7 +393,7 @@
                     }
 
                 case NamingSchemes.Two_Words:
-                    switch (scheme)
+                    switch (RootScheme)
                     {
                         case NamingSchemes.Two_Words:
                             return true;
@@ -389,20 +416,33 @@
                 return name;
 
             string Result;
+            string RootName = ExpectedSheme.HasFlag(NamingSchemes.Interface) && name[0] == 'I' ? name.Substring(1) : name;
+            NamingSchemes RootScheme = ExpectedSheme & ~NamingSchemes.Interface;
 
-            if (name.Contains("_"))
-                Result = FixNameWithUnderscore(name, ExpectedSheme);
+            if (RootName.Contains("_"))
+                Result = FixNameWithUnderscore(RootName, RootScheme);
             else
-                Result = FixNameWithoutUnderscore(name, ExpectedSheme);
+                Result = FixNameWithoutUnderscore(RootName, RootScheme);
+
+            if (ExpectedSheme.HasFlag(NamingSchemes.Interface) && name[0] != 'I')
+                Result = "I" + name;
 
             return Result;
+        }
+
+        private static bool SchemeHasUnderscore(NamingSchemes scheme)
+        {
+            return scheme.HasFlag(NamingSchemes.two_words) ||
+                   scheme.HasFlag(NamingSchemes.two_Words) ||
+                   scheme.HasFlag(NamingSchemes.TWO_WORDS) ||
+                   scheme.HasFlag(NamingSchemes.Two_Words);
         }
 
         private string FixNameWithUnderscore(string name, NamingSchemes expectedSheme)
         {
             string Result;
 
-            if (!expectedSheme.HasFlag(NamingSchemes.two_words) && !expectedSheme.HasFlag(NamingSchemes.two_Words) && !expectedSheme.HasFlag(NamingSchemes.TWO_WORDS) && !expectedSheme.HasFlag(NamingSchemes.Two_Words))
+            if (!SchemeHasUnderscore(expectedSheme))
                 Result = FixNameRemoveUnderscore(name, expectedSheme);
             else if (expectedSheme.HasFlag(NamingSchemes.two_words))
                 Result = name.ToLower();
