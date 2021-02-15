@@ -35,4 +35,8 @@ The analyzer recognizes the following schemes:
 + Two_Words
 
 Since the analyzer doesn't perform semantic analysis of names, it can sometimes fail to detect non-compliance. For example, in the list above, `twowords` is compatible with `twoWords` and will just be interpreted as a single word. However, `twoWords` and `two_Words` are not compatible.
+
+## Interfaces
+
+In addition to usual name schemes, interface are treated as a special case where the `I` prefix is recognized. Interface names with and without this prefix are not compliant with each other.
     

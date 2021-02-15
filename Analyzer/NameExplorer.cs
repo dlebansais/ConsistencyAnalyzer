@@ -81,20 +81,22 @@
 
             string Name = identifier.ValueText;
             Dictionary<NamingSchemes, int> Table = SchemeTable[nameCategory];
+            bool IsStartingAsInterface = Name.Length > 0 && Name[0] == 'I';
 
             foreach (NamingSchemes EnumValue in typeof(NamingSchemes).GetEnumValues())
                 if (EnumValue != NamingSchemes.None && EnumValue != NamingSchemes.All && EnumValue != NamingSchemes.Interface)
                 {
                     NamingSchemes Scheme = EnumValue;
 
-                    if (IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
-                        IncrementMatchingSchemeCount(Table, Scheme);
-                    else if (nameCategory == NameCategory.Interface)
+                    if (nameCategory == NameCategory.Interface)
                     {
-                        Scheme |= NamingSchemes.Interface;
-                        if (IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
+                        if (IsNameMatchingScheme(Name, Scheme | NamingSchemes.Interface, UnderscoreUse.Always))
+                            IncrementMatchingSchemeCount(Table, Scheme | NamingSchemes.Interface);
+                        else if (!IsStartingAsInterface && IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
                             IncrementMatchingSchemeCount(Table, Scheme);
                     }
+                    else if (IsNameMatchingScheme(Name, Scheme, UnderscoreUse.Always))
+                        IncrementMatchingSchemeCount(Table, Scheme);
                 }
         }
 
@@ -127,16 +129,19 @@
         /// <summary>
         /// Checks if a name is matching a given naming scheme.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="scheme"></param>
-        /// <returns></returns>
-        internal static bool IsNameMatchingCompositeScheme(string name, NamingSchemes scheme)
+        /// <param name="name">The name to check.</param>
+        /// <param name="scheme">The scheme.</param>
+        /// <param name="isInterface">True if the test is for an interface name.</param>
+        internal static bool IsNameMatchingCompositeScheme(string name, NamingSchemes scheme, bool isInterface)
         {
             if (name.Length > 0)
             {
+                NamingSchemes Additional = scheme & NamingSchemes.Interface;
+
                 foreach (NamingSchemes EnumValue in typeof(NamingSchemes).GetEnumValues())
-                    if (scheme.HasFlag(EnumValue) && IsNameMatchingScheme(name, EnumValue, UnderscoreUse.Optional))
-                        return true;
+                    if (EnumValue != NamingSchemes.None && EnumValue != NamingSchemes.All && EnumValue != NamingSchemes.Interface)
+                        if (scheme.HasFlag(EnumValue) && IsNameMatchingScheme(name, EnumValue | Additional, UnderscoreUse.Optional))
+                            return true;
             }
 
             return false;
@@ -273,7 +278,7 @@
                 return false;
             }
 
-            if (IsNameMatchingCompositeScheme(name, expectedSheme))
+            if (IsNameMatchingCompositeScheme(name, expectedSheme, nameCategory == NameCategory.Interface))
             {
                 Analyzer.Trace($"Name {name} is matching scheme for {nameCategory}, exit", traceLevel);
                 return false;
@@ -424,8 +429,8 @@
             else
                 Result = FixNameWithoutUnderscore(RootName, RootScheme);
 
-            if (ExpectedSheme.HasFlag(NamingSchemes.Interface) && name[0] != 'I')
-                Result = "I" + name;
+            if (ExpectedSheme.HasFlag(NamingSchemes.Interface) && name[0] == 'I')
+                Result = "I" + Result;
 
             return Result;
         }

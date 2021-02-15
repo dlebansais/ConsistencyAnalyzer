@@ -223,6 +223,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for interfaces.
+        /// </summary>
+        public static string ConA1305Description {
+            get {
+                return ResourceManager.GetString("ConA1305Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad interface name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1305MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1305MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface names must be consistent.
+        /// </summary>
+        public static string ConA1305Title {
+            get {
+                return ResourceManager.GetString("ConA1305Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

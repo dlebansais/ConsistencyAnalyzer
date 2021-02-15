@@ -5,3 +5,7 @@
 **[ConA1302](NamingRules/ConA1302.md)**
 
 **[ConA1303](NamingRules/ConA1303.md)**
+
+**[ConA1304](NamingRules/ConA1304.md)**
+
+**[ConA1305](NamingRules/ConA1305.md)**
