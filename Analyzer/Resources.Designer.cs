@@ -304,6 +304,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for events.
+        /// </summary>
+        public static string ConA1308Description {
+            get {
+                return ResourceManager.GetString("ConA1308Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad event name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1308MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1308MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event names must be consistent.
+        /// </summary>
+        public static string ConA1308Title {
+            get {
+                return ResourceManager.GetString("ConA1308Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
