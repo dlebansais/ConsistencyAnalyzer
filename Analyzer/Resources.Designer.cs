@@ -277,6 +277,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for delegates.
+        /// </summary>
+        public static string ConA1307Description {
+            get {
+                return ResourceManager.GetString("ConA1307Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad delegate name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1307MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1307MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delegate names must be consistent.
+        /// </summary>
+        public static string ConA1307Title {
+            get {
+                return ResourceManager.GetString("ConA1307Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

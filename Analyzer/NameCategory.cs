@@ -41,9 +41,9 @@
         Interface,
 
         /// <summary>
-        /// A type name.
+        /// A delegate name.
         /// </summary>
-        Type,
+        Delegate,
 
         /// <summary>
         /// A field name.

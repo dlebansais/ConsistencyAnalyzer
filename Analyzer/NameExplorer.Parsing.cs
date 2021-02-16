@@ -311,7 +311,7 @@
             ParseParameterList(delegateDeclaration.ParameterList);
             if (delegateDeclaration.TypeParameterList != null)
                 ParseTypeParameterList(delegateDeclaration.TypeParameterList);
-            ParseIdentifier(delegateDeclaration.Identifier, NameCategory.Type);
+            ParseIdentifier(delegateDeclaration.Identifier, NameCategory.Delegate);
         }
 
         private void ParseEnumMemberDeclaration(EnumMemberDeclarationSyntax enumMemberDeclaration)
@@ -399,7 +399,7 @@
                     ParseFunctionPointerType(AsFunctionPointerType);
                     break;
                 case NameSyntax AsName:
-                    ParseName(AsName, NameCategory.Type);
+                    ParseName(AsName, NameCategory.Neutral);
                     break;
                 case NullableTypeSyntax AsNullableType:
                     ParseNullableType(AsNullableType);
@@ -477,7 +477,7 @@
 
         private void ParseGenericName(GenericNameSyntax genericName)
         {
-            ParseIdentifier(genericName.Identifier, NameCategory.Type);
+            ParseIdentifier(genericName.Identifier, NameCategory.Neutral);
             ParseTypeArgumentList(genericName.TypeArgumentList);
         }
 
@@ -509,7 +509,7 @@
 
         private void ParseTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax typeParameterConstraintClause)
         {
-            ParseIdentifierName(typeParameterConstraintClause.Name, NameCategory.Type);
+            ParseIdentifierName(typeParameterConstraintClause.Name, NameCategory.Neutral);
             foreach (TypeParameterConstraintSyntax TypeParameterConstraint in typeParameterConstraintClause.Constraints)
                 ParseTypeParameterConstraint(TypeParameterConstraint);
         }
@@ -522,7 +522,7 @@
 
         private void ParseExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier)
         {
-            ParseName(explicitInterfaceSpecifier.Name, NameCategory.Type);
+            ParseName(explicitInterfaceSpecifier.Name, NameCategory.Neutral);
         }
 
         private void ParseAccessorList(AccessorListSyntax accessorList)
@@ -619,7 +619,7 @@
 
         private void ParseTypeParameter(TypeParameterSyntax typeParameter)
         {
-            ParseIdentifier(typeParameter.Identifier, NameCategory.Type);
+            ParseIdentifier(typeParameter.Identifier, NameCategory.Neutral);
         }
 
         private void ParseAccessorDeclaration(AccessorDeclarationSyntax accessorDeclaration)

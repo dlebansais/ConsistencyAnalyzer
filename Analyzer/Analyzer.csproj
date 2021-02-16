@@ -41,6 +41,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Update="Rules\1300\AnalyzerRuleConA1307.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Rules\1300\AnalyzerRuleConA1306.cs">
       <SubType>Code</SubType>
     </Compile>
