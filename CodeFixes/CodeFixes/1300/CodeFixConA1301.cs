@@ -37,8 +37,8 @@
             SyntaxTriviaList Leading = syntaxNode.Identifier.LeadingTrivia;
             SyntaxTriviaList Trailing = syntaxNode.Identifier.TrailingTrivia;
 
-            ClassDeclarationSyntax NewClassDeclaration = syntaxNode.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
-            SyntaxNode NewRoot = Root.ReplaceNode(syntaxNode, NewClassDeclaration);
+            ClassDeclarationSyntax NewNode = syntaxNode.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
+            SyntaxNode NewRoot = Root.ReplaceNode(syntaxNode, NewNode);
 
             Document Result = document.WithSyntaxRoot(NewRoot);
 

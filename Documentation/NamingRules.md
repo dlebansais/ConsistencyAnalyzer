@@ -9,3 +9,5 @@
 **[ConA1304](NamingRules/ConA1304.md)**
 
 **[ConA1305](NamingRules/ConA1305.md)**
+
+**[ConA1306](NamingRules/ConA1306.md)**

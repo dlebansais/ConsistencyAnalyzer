@@ -14,21 +14,21 @@
     /// <summary>
     /// Represents a code fix for a rule of the analyzer.
     /// </summary>
-    public class CodeFixConA1304 : CodeFix
+    public class CodeFixConA1306 : CodeFix
     {
         /// <summary>
         /// Creates an instance of the <see cref="CodeFix"/> class.
         /// </summary>
         /// <param name="rule">The associated rule.</param>
-        public CodeFixConA1304(AnalyzerRule rule)
+        public CodeFixConA1306(AnalyzerRule rule)
             : base(rule)
         {
         }
 
-        private async Task<Document> AsyncHandler(Document document, EnumDeclarationSyntax syntaxNode, CancellationToken cancellationToken, string newValueText)
+        private async Task<Document> AsyncHandler(Document document, EnumMemberDeclarationSyntax syntaxNode, CancellationToken cancellationToken, string newValueText)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("CodeFixConA1304", TraceLevel);
+            Analyzer.Trace("CodeFixConA1306", TraceLevel);
 
             SyntaxNode? Root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             if (Root == null)
@@ -37,7 +37,7 @@
             SyntaxTriviaList Leading = syntaxNode.Identifier.LeadingTrivia;
             SyntaxTriviaList Trailing = syntaxNode.Identifier.TrailingTrivia;
 
-            EnumDeclarationSyntax NewNode = syntaxNode.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
+            EnumMemberDeclarationSyntax NewNode = syntaxNode.WithIdentifier(SyntaxFactory.Identifier(Leading, newValueText, Trailing));
             SyntaxNode NewRoot = Root.ReplaceNode(syntaxNode, NewNode);
 
             Document Result = document.WithSyntaxRoot(NewRoot);
@@ -64,16 +64,16 @@
             NameExplorer NameExplorer = new NameExplorer(CompilationUnit, TraceLevel.Info);
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
-            EnumDeclarationSyntax Node = Nodes.OfType<EnumDeclarationSyntax>().First();
+            EnumMemberDeclarationSyntax Node = Nodes.OfType<EnumMemberDeclarationSyntax>().First();
             string ValueText = Node.Identifier.ValueText;
-            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.Enum);
+            string NewValueText = NameExplorer.FixName(ValueText, NameCategory.EnumMember);
 
-            string CodeFixMessageFormat = new LocalizableResourceString(nameof(CodeFixResources.ConA1304FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
+            string CodeFixMessageFormat = new LocalizableResourceString(nameof(CodeFixResources.ConA1306FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
             string FormatedMessage = string.Format(CodeFixMessageFormat, NewValueText);
 
             var Action = CodeAction.Create(title: FormatedMessage,
                     createChangedDocument: c => AsyncHandler(context.Document, Node, c, NewValueText),
-                    equivalenceKey: nameof(CodeFixResources.ConA1304FixTitle));
+                    equivalenceKey: nameof(CodeFixResources.ConA1306FixTitle));
 
             return Action;
         }
