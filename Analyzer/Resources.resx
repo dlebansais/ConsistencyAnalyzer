@@ -216,6 +216,15 @@
   <data name="ConA1309Title" xml:space="preserve">
     <value>Field names must be consistent</value>
   </data>
+  <data name="ConA1310Description" xml:space="preserve">
+    <value>Use a consistent naming scheme for properties</value>
+  </data>
+  <data name="ConA1310MessageFormat" xml:space="preserve">
+    <value>Bad property name '{0}' </value>
+  </data>
+  <data name="ConA1310Title" xml:space="preserve">
+    <value>Property names must be consistent</value>
+  </data>
   <data name="ConA1602Description" xml:space="preserve">
     <value>Inconsistent documentation of enumeration element</value>
   </data>

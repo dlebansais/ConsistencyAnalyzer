@@ -358,6 +358,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for properties.
+        /// </summary>
+        public static string ConA1310Description {
+            get {
+                return ResourceManager.GetString("ConA1310Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad property name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1310MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1310MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property names must be consistent.
+        /// </summary>
+        public static string ConA1310Title {
+            get {
+                return ResourceManager.GetString("ConA1310Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
