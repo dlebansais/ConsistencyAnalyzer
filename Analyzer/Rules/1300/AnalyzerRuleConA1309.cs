@@ -10,13 +10,13 @@
     /// <summary>
     /// Represents a rule of the analyzer.
     /// </summary>
-    public class AnalyzerRuleConA1308 : SingleSyntaxAnalyzerRule
+    public class AnalyzerRuleConA1309 : SingleSyntaxAnalyzerRule
     {
         #region Properties
         /// <summary>
         /// Gets the rule id.
         /// </summary>
-        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1308));
+        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1309));
 
         /// <summary>
         /// Gets the kind of syntax this rule analyzes.
@@ -28,17 +28,17 @@
         /// <summary>
         /// Gets the rule title.
         /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1308Title), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1309Title), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule message format.
         /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1308MessageFormat), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1309MessageFormat), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule description.
         /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1308Description), Resources.ResourceManager, typeof(Resources));
+        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1309Description), Resources.ResourceManager, typeof(Resources));
 
         /// <summary>
         /// Gets the rule category.
@@ -54,7 +54,7 @@
         public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("AnalyzerRuleConA1308", TraceLevel);
+            Analyzer.Trace("AnalyzerRuleConA1309", TraceLevel);
 
             VariableDeclaratorSyntax Node = (VariableDeclaratorSyntax)context.Node;
             string ValueText = Node.Identifier.ValueText;
@@ -69,8 +69,8 @@
                 case VariableDeclarationSyntax AsVariableDeclaration:
                     switch (AsVariableDeclaration.Parent)
                     {
-                        case EventFieldDeclarationSyntax _:
-                            NameCategory = NameCategory.Event;
+                        case FieldDeclarationSyntax _:
+                            NameCategory = NameCategory.Field;
                             break;
                     }
                     break;

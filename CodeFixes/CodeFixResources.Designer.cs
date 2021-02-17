@@ -151,6 +151,15 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename to &apos;{0}&apos;.
+        /// </summary>
+        internal static string ConA1309FixTitle {
+            get {
+                return ResourceManager.GetString("ConA1309FixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add documentation.
         /// </summary>
         internal static string ConA1602FixTitle {

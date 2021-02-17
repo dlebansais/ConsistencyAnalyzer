@@ -331,6 +331,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for fields.
+        /// </summary>
+        public static string ConA1309Description {
+            get {
+                return ResourceManager.GetString("ConA1309Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad field name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1309MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1309MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field names must be consistent.
+        /// </summary>
+        public static string ConA1309Title {
+            get {
+                return ResourceManager.GetString("ConA1309Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
