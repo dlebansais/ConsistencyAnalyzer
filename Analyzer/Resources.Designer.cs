@@ -412,6 +412,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for parameters.
+        /// </summary>
+        public static string ConA1312Description {
+            get {
+                return ResourceManager.GetString("ConA1312Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad parameter name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1312MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1312MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names must be consistent.
+        /// </summary>
+        public static string ConA1312Title {
+            get {
+                return ResourceManager.GetString("ConA1312Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

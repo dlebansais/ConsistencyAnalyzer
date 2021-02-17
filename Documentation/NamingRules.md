@@ -21,3 +21,5 @@
 **[ConA1310](NamingRules/ConA1310.md)**
 
 **[ConA1311](NamingRules/ConA1311.md)**
+
+**[ConA1312](NamingRules/ConA1312.md)**
