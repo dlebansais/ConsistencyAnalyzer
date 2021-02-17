@@ -76,6 +76,11 @@
         Parameter,
 
         /// <summary>
+        /// A type parameter name.
+        /// </summary>
+        TypeParameter,
+
+        /// <summary>
         /// A local variable name.
         /// </summary>
         LocalVariable,

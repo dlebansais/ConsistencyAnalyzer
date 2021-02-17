@@ -243,6 +243,15 @@
   <data name="ConA1312Title" xml:space="preserve">
     <value>Parameter names must be consistent</value>
   </data>
+  <data name="ConA1313Description" xml:space="preserve">
+    <value>Use a consistent naming scheme for type parameters</value>
+  </data>
+  <data name="ConA1313MessageFormat" xml:space="preserve">
+    <value>Bad type parameter name '{0}' </value>
+  </data>
+  <data name="ConA1313Title" xml:space="preserve">
+    <value>Type parameter names must be consistent</value>
+  </data>
   <data name="ConA1602Description" xml:space="preserve">
     <value>Inconsistent documentation of enumeration element</value>
   </data>

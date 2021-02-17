@@ -619,7 +619,7 @@
 
         private void ParseTypeParameter(TypeParameterSyntax typeParameter)
         {
-            ParseIdentifier(typeParameter.Identifier, NameCategory.Neutral);
+            ParseIdentifier(typeParameter.Identifier, NameCategory.TypeParameter);
         }
 
         private void ParseAccessorDeclaration(AccessorDeclarationSyntax accessorDeclaration)

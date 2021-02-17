@@ -18,6 +18,7 @@ In C#, the following elements are expected to follow some convention, but not al
 + Fields
 + Method parameters
 + Type parameters
++ Local variables
 
 When a name of a particular category of elements, **Methods** for instance, is not compliant with other names of that category, because a scheme has been inferred, the corresponding diagnostic is raised.
 
