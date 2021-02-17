@@ -385,6 +385,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for methods.
+        /// </summary>
+        public static string ConA1311Description {
+            get {
+                return ResourceManager.GetString("ConA1311Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad method name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1311MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1311MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method names must be consistent.
+        /// </summary>
+        public static string ConA1311Title {
+            get {
+                return ResourceManager.GetString("ConA1311Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

@@ -13,9 +13,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -25,9 +25,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -37,9 +37,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -49,9 +49,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -61,9 +61,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int two_words3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -73,9 +73,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -85,9 +85,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -97,9 +97,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -109,9 +109,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -121,9 +121,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -133,9 +133,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -145,9 +145,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -157,9 +157,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int twowords3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -169,9 +169,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -181,9 +181,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -193,9 +193,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -205,9 +205,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int two_words3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -217,9 +217,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -229,9 +229,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -241,9 +241,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -253,9 +253,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -265,9 +265,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -277,9 +277,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -289,9 +289,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWOWORDS1{ get; set; }
-        public int TWOWORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWOWORDS1 { get; set; }
+        public int TWOWORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -301,9 +301,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -313,9 +313,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int tWOWORDS3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int tWOWORDS3 { get; set; }
     }
 }
 ";
@@ -325,9 +325,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -337,9 +337,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -349,9 +349,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int two_words3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -361,9 +361,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -373,9 +373,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -385,9 +385,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -397,9 +397,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -409,9 +409,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -421,9 +421,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -433,9 +433,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twoWords1{ get; set; }
-        public int twoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int twoWords1 { get; set; }
+        public int twoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -445,9 +445,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int twowords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -457,9 +457,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int Twowords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int Twowords3 { get; set; }
     }
 }
 ";
@@ -469,9 +469,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -481,9 +481,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -493,9 +493,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int two_words3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -505,9 +505,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -517,9 +517,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -529,9 +529,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -541,9 +541,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -553,9 +553,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -565,9 +565,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -577,9 +577,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TwoWords1{ get; set; }
-        public int TwoWords2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TwoWords1 { get; set; }
+        public int TwoWords2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -589,9 +589,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -601,9 +601,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int twowords3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -613,9 +613,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -625,9 +625,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -637,9 +637,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -649,9 +649,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -661,9 +661,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -673,9 +673,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -685,9 +685,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -697,9 +697,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -709,9 +709,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -721,9 +721,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_words1{ get; set; }
-        public int two_words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_words1 { get; set; }
+        public int two_words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -733,9 +733,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int twowords3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -745,9 +745,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -757,9 +757,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -769,9 +769,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -781,9 +781,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -793,9 +793,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -805,9 +805,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int two_words3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -817,9 +817,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -829,9 +829,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -841,9 +841,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -853,9 +853,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -865,9 +865,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int TWO_WORDS1{ get; set; }
-        public int TWO_WORDS2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int TWO_WORDS1 { get; set; }
+        public int TWO_WORDS2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -877,9 +877,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -889,9 +889,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int twowords3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -901,9 +901,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -913,9 +913,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -925,9 +925,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -937,9 +937,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -949,9 +949,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -961,9 +961,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -973,9 +973,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -985,9 +985,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -997,9 +997,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1009,9 +1009,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int two_Words1{ get; set; }
-        public int two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int two_Words1 { get; set; }
+        public int two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -1021,9 +1021,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int twowords3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int twowords3 { get; set; }
     }
 }
 ";
@@ -1033,9 +1033,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Twowords3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Twowords3 { get; set; }
     }
 }
 ";
@@ -1045,9 +1045,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int TWOWORDS3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int TWOWORDS3 { get; set; }
     }
 }
 ";
@@ -1057,9 +1057,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Twowords3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Twowords3 { get; set; }
     }
 }
 ";
@@ -1069,9 +1069,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int twoWords3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int twoWords3 { get; set; }
     }
 }
 ";
@@ -1081,9 +1081,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1093,9 +1093,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int TwoWords3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int TwoWords3 { get; set; }
     }
 }
 ";
@@ -1105,9 +1105,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1117,9 +1117,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int two_words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int two_words3 { get; set; }
     }
 }
 ";
@@ -1129,9 +1129,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1141,9 +1141,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int TWO_WORDS3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int TWO_WORDS3 { get; set; }
     }
 }
 ";
@@ -1153,9 +1153,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1165,9 +1165,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int two_Words3 { get; set; }
     }
 }
 ";
@@ -1177,9 +1177,9 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int Two_Words1{ get; set; }
-        public int Two_Words2{ get; set; }
-        public int Two_Words3{ get; set; }
+        public int Two_Words1 { get; set; }
+        public int Two_Words2 { get; set; }
+        public int Two_Words3 { get; set; }
     }
 }
 ";
@@ -1189,8 +1189,8 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
         public int /* */TWOWORDS3/* */{ get; set; }
     }
 }
@@ -1201,8 +1201,8 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public int twowords1{ get; set; }
-        public int twowords2{ get; set; }
+        public int twowords1 { get; set; }
+        public int twowords2 { get; set; }
         public int /* */twowords3/* */{ get; set; }
     }
 }
