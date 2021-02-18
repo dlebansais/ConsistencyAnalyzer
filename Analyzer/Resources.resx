@@ -252,6 +252,15 @@
   <data name="ConA1313Title" xml:space="preserve">
     <value>Type parameter names must be consistent</value>
   </data>
+  <data name="ConA1314Description" xml:space="preserve">
+    <value>Use a consistent naming scheme for local variables</value>
+  </data>
+  <data name="ConA1314MessageFormat" xml:space="preserve">
+    <value>Bad local variable name '{0}' </value>
+  </data>
+  <data name="ConA1314Title" xml:space="preserve">
+    <value>Local variables names must be consistent</value>
+  </data>
   <data name="ConA1602Description" xml:space="preserve">
     <value>Inconsistent documentation of enumeration element</value>
   </data>

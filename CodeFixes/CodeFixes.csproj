@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CodeFixes\1300\CodeFixConA1314.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="CodeFixes\1300\CodeFixConA1313.cs">
       <SubType>Code</SubType>
     </Compile>

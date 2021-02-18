@@ -466,6 +466,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a consistent naming scheme for local variables.
+        /// </summary>
+        public static string ConA1314Description {
+            get {
+                return ResourceManager.GetString("ConA1314Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bad local variable name &apos;{0}&apos; .
+        /// </summary>
+        public static string ConA1314MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1314MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variables names must be consistent.
+        /// </summary>
+        public static string ConA1314Title {
+            get {
+                return ResourceManager.GetString("ConA1314Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {
