@@ -17,10 +17,12 @@
         /// Creates a ClassExplorer.
         /// </summary>
         /// <param name="compilationUnit">The source code.</param>
+        /// <param name="context">A context for source code analysis.</param>
         /// <param name="traceLevel">The trace level.</param>
-        public ClassExplorer(CompilationUnitSyntax compilationUnit, TraceLevel traceLevel)
+        public ClassExplorer(CompilationUnitSyntax compilationUnit, SyntaxNodeAnalysisContext? context, TraceLevel traceLevel)
         {
             CompilationUnit = compilationUnit;
+            Context = context;
 
             List<ClassDeclarationSyntax> ClassDeclarationList = new List<ClassDeclarationSyntax>();
             AddClassMembers(CompilationUnit.Members, ClassDeclarationList);
@@ -44,6 +46,8 @@
                 }
             }
         }
+
+        private SyntaxNodeAnalysisContext? Context;
         #endregion
 
         #region Properties

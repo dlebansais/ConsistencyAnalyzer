@@ -20,6 +20,12 @@ namespace ConsistencyAnalyzerTest
             int n = 0;
             Console.WriteLine(n);
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -35,6 +41,12 @@ namespace ConsistencyAnalyzerTest
             const int n = 0;
             Console.WriteLine(n);
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -48,6 +60,12 @@ namespace ConsistencyAnalyzerTest
         static void Main(string[] args)
         {
             string s = ""abc"";
+        }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
         }
     }
 }";
@@ -63,6 +81,12 @@ namespace ConsistencyAnalyzerTest
         {
             const string s = ""abc"";
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -76,6 +100,12 @@ namespace ConsistencyAnalyzerTest
         static void Main(string[] args)
         {
             var v = 4;
+        }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
         }
     }
 }";
@@ -91,6 +121,12 @@ namespace ConsistencyAnalyzerTest
         {
             const int v = 4;
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -105,6 +141,12 @@ namespace ConsistencyAnalyzerTest
         {
             var v = ""abc"";
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
         private const string StringDeclarationUsesVarFixedHasType = @"
@@ -117,6 +159,12 @@ namespace ConsistencyAnalyzerTest
         static void Main(string[] args)
         {
             const string v = ""abc"";
+        }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
         }
     }
 }";

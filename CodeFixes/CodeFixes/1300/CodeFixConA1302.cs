@@ -61,7 +61,7 @@
                 return null;
 
             CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)root;
-            NameExplorer NameExplorer = new NameExplorer(CompilationUnit, TraceLevel.Info);
+            NameExplorer NameExplorer = new NameExplorer(CompilationUnit, null, TraceLevel.Info);
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             RecordDeclarationSyntax Node = Nodes.OfType<RecordDeclarationSyntax>().First();

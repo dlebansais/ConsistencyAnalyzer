@@ -1,6 +1,7 @@
 ﻿namespace ConsistencyAnalyzer
 {
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using System;
@@ -824,6 +825,14 @@
         private void ParseLocalDeclarationStatement(LocalDeclarationStatementSyntax localDeclarationStatement)
         {
             ParseVariableDeclaration(localDeclarationStatement.Declaration, NameCategory.LocalVariable);
+
+            if (Context != null)
+            {
+                if (localDeclarationStatement.Modifiers.Any(SyntaxKind.ConstKeyword))
+                    LocalVariableConstCount++;
+                else if (AnalyzerRuleConA0001.AnalyzeConstness((SyntaxNodeAnalysisContext)Context, localDeclarationStatement))
+                    LocalVariableConstCandidateCount++;
+            }
         }
 
         private void ParseLocalFunctionStatement(LocalFunctionStatementSyntax localFunctionStatement)

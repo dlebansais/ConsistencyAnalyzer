@@ -1,5 +1,6 @@
 ﻿namespace ConsistencyAnalyzer
 {
+    using System.Diagnostics;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
@@ -47,49 +48,37 @@
 
         #region Client Interface
         /// <summary>
-        /// Analyzes a source code node.
+        /// Analyzes the possible constness of local variables.
         /// </summary>
-        /// <param name="context">The source code.</param>
-        public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        /// <param name="context">A context to analyze the code.</param>
+        /// <param name="node">The local variables.</param>
+        public static bool AnalyzeConstness(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax node)
         {
-            LocalDeclarationStatementSyntax Node = (LocalDeclarationStatementSyntax)context.Node;
-
             // make sure the declaration isn't already const:
-            if (Node.Modifiers.Any(SyntaxKind.ConstKeyword))
-            {
-                return;
-            }
+            Debug.Assert(!node.Modifiers.Any(SyntaxKind.ConstKeyword));
 
-            var variableTypeName = Node.Declaration.Type;
+            var variableTypeName = node.Declaration.Type;
             var variableType = context.SemanticModel.GetTypeInfo(variableTypeName).ConvertedType;
             if (variableType == null)
-            {
-                return;
-            }
+                return false;
 
             // Ensure that all variables in the local declaration have initializers that
             // are assigned with constant values.
-            foreach (var variable in Node.Declaration.Variables)
+            foreach (var variable in node.Declaration.Variables)
             {
                 var initializer = variable.Initializer;
                 if (initializer == null)
-                {
-                    return;
-                }
+                    return false;
 
                 var constantValue = context.SemanticModel.GetConstantValue(initializer.Value);
                 if (!constantValue.HasValue)
-                {
-                    return;
-                }
+                    return false;
 
                 // Ensure that the initializer value can be converted to the type of the
                 // local declaration without a user-defined conversion.
                 var conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
                 if (!conversion.Exists || conversion.IsUserDefined)
-                {
-                    return;
-                }
+                    return false;
 
                 // Special cases:
                 //  * If the constant value is a string, the type of the local declaration
@@ -99,36 +88,57 @@
                 if (constantValue.Value is string)
                 {
                     if (variableType.SpecialType != SpecialType.System_String)
-                    {
-                        return;
-                    }
+                        return false;
                 }
                 else if (variableType.IsReferenceType && constantValue.Value != null)
-                {
-                    return;
-                }
+                    return false;
             }
 
             // Perform data flow analysis on the local declaration.
-            var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(Node);
+            var dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(node);
             if (dataFlowAnalysis == null)
-            {
-                return;
-            }
+                return false;
 
-            foreach (var variable in Node.Declaration.Variables)
+            foreach (var variable in node.Declaration.Variables)
             {
                 // Retrieve the local symbol for each variable in the local declaration
                 // and ensure that it is not written outside of the data flow analysis region.
                 var variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable);
                 if (variableSymbol != null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
-                {
-                    return;
-                }
+                    return false;
             }
 
-            foreach (var variable in Node.Declaration.Variables)
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
+            return true;
+        }
+
+        /// <summary>
+        /// Analyzes a source code node.
+        /// </summary>
+        /// <param name="context">The source code.</param>
+        public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        {
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("AnalyzerRuleConA0001", TraceLevel);
+
+            LocalDeclarationStatementSyntax Node = (LocalDeclarationStatementSyntax)context.Node;
+
+            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+            NameExplorer Explorer = ContextExplorer.NameExplorer;
+
+            if (!Explorer.IsLocalVariableConstnessExpected)
+                return;
+
+            // make sure the declaration isn't already const.
+            bool IsConst = Node.Modifiers.Any(SyntaxKind.ConstKeyword);
+            if (!IsConst)
+            {
+                bool CanBeConst = AnalyzeConstness(context, Node);
+                if (CanBeConst)
+                {
+                    foreach (var variable in Node.Declaration.Variables)
+                        context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
+                }
+            }
         }
         #endregion
     }

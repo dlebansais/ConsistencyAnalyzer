@@ -15,10 +15,12 @@
         /// Creates a NameExplorer.
         /// </summary>
         /// <param name="compilationUnit">The source code.</param>
+        /// <param name="context">A context for source code analysis.</param>
         /// <param name="traceLevel">The trace level.</param>
-        public NameExplorer(CompilationUnitSyntax compilationUnit, TraceLevel traceLevel)
+        public NameExplorer(CompilationUnitSyntax compilationUnit, SyntaxNodeAnalysisContext? context, TraceLevel traceLevel)
         {
             CompilationUnit = compilationUnit;
+            Context = context;
 
             ParseCompilationUnit(CompilationUnit);
             ReduceSchemes();
@@ -71,6 +73,8 @@
                 countList.Insert(Index, Count);
             }
         }
+
+        private SyntaxNodeAnalysisContext? Context;
         #endregion
 
         #region Name Parsing
@@ -114,6 +118,14 @@
         /// Gets the source code.
         /// </summary>
         public CompilationUnitSyntax CompilationUnit { get; init; }
+
+        /// <summary>
+        /// Gets a value indicating whether constness of local variable is expected.
+        /// </summary>
+        public bool IsLocalVariableConstnessExpected
+        {
+            get { return LocalVariableConstCount + LocalVariableConstCandidateCount >= 3 && LocalVariableConstCount > LocalVariableConstCandidateCount; } 
+        }
         #endregion
 
         #region Client Interface
@@ -699,6 +711,8 @@
 
         private Dictionary<NameCategory, Dictionary<NamingSchemes, int>> SchemeTable = new();
         private Dictionary<NameCategory, NamingSchemes> ExpectedSchemeTable = new();
+        private int LocalVariableConstCount;
+        private int LocalVariableConstCandidateCount;
         #endregion
     }
 }

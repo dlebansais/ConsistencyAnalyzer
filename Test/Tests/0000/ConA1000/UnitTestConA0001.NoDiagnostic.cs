@@ -18,6 +18,12 @@ namespace ConsistencyAnalyzerTest
             int i = 0;
             Console.WriteLine(i++);
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -32,6 +38,12 @@ namespace ConsistencyAnalyzerTest
         {
             const int i = 0;
             Console.WriteLine(i);
+        }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
         }
     }
 }";
@@ -49,6 +61,12 @@ namespace ConsistencyAnalyzerTest
             i = 0;
             Console.WriteLine(i);
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -63,6 +81,12 @@ namespace ConsistencyAnalyzerTest
         {
             int i = DateTime.Now.DayOfYear;
             Console.WriteLine(i);
+        }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
         }
     }
 }";
@@ -79,6 +103,12 @@ namespace ConsistencyAnalyzerTest
             int i = 0, j = DateTime.Now.DayOfYear;
             Console.WriteLine($""{i}, {j}"");
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -93,6 +123,12 @@ namespace ConsistencyAnalyzerTest
         {
             object s = ""abc"";
         }
+
+        static void Test()
+        {
+            const int i = 0;
+            const int j = 0;
+        }
     }
 }";
 
@@ -105,6 +141,31 @@ namespace ConsistencyAnalyzerTest
          DataRow(MultipleInitializers),
          DataRow(ReferenceTypeIsntString)]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+        {
+            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+            result.Wait();
+        }
+
+        private const string LocalIntCouldBeConstantNoConstness = @"
+using System;
+
+namespace ConsistencyAnalyzerTest
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 0;
+            Console.WriteLine(n);
+        }
+    }
+}";
+
+        [DataTestMethod]
+        [
+         DataRow(LocalIntCouldBeConstantNoConstness),
+        ]
+        public void WhenConstnessIsUndecidedNoDiagnosticIsTriggered(string testCode)
         {
             Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
             result.Wait();
