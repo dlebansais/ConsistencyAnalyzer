@@ -88,6 +88,60 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A using directives must be moved.
+        /// </summary>
+        public static string ConA1200Description {
+            get {
+                return ResourceManager.GetString("ConA1200Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directive should appear before namespace declaration.
+        /// </summary>
+        public static string ConA1200MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1200MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directives should appear in a consistent order.
+        /// </summary>
+        public static string ConA1200Title {
+            get {
+                return ResourceManager.GetString("ConA1200Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A using directives must be moved.
+        /// </summary>
+        public static string ConA1201Description {
+            get {
+                return ResourceManager.GetString("ConA1201Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directive should appear within a namespace declaration.
+        /// </summary>
+        public static string ConA1201MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1201MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directives should appear in a consistent order.
+        /// </summary>
+        public static string ConA1201Title {
+            get {
+                return ResourceManager.GetString("ConA1201Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use a consistent naming scheme for namespaces.
         /// </summary>
         public static string ConA1300Description {

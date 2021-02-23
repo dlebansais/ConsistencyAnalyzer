@@ -41,6 +41,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <Compile Update="Rules\1200\AnalyzerRuleConA1201.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Rules\1200\AnalyzerRuleConA1200.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Rules\1300\AnalyzerRuleConA1314.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +108,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Rules\1700\AnalyzerRuleConA1703.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UsingExplorer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Rules\MultipleSyntaxAnalyzerRule.cs">

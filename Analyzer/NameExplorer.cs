@@ -709,6 +709,76 @@
             return Result;
         }
 
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="namespaceDeclaration"/>.
+        /// </summary>
+        /// <param name="namespaceDeclaration">The namespace.</param>
+        public static string NamespaceNameToString(NamespaceDeclarationSyntax namespaceDeclaration)
+        {
+            return NameToString(namespaceDeclaration.Name);
+        }
+
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="name"/>.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public static string NameToString(NameSyntax name)
+        {
+            switch (name)
+            {
+                case AliasQualifiedNameSyntax AsAliasQualifiedName:
+                    return AliasQualifiedNameToString(AsAliasQualifiedName);
+                case QualifiedNameSyntax AsQualifiedName:
+                    return QualifiedNameToString(AsQualifiedName);
+                case SimpleNameSyntax AsSimpleName:
+                    return SimpleNameToString(AsSimpleName);
+                default:
+                    return null!;
+            }
+        }
+
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="aliasQualifiedName"/>.
+        /// </summary>
+        /// <param name="aliasQualifiedName">The alias name.</param>
+        public static string AliasQualifiedNameToString(AliasQualifiedNameSyntax aliasQualifiedName)
+        {
+            return $"{IdentifierNameToString(aliasQualifiedName.Alias)}::{SimpleNameToString(aliasQualifiedName.Name)}";
+        }
+
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="qualifiedName"/>.
+        /// </summary>
+        /// <param name="qualifiedName">The qualified name.</param>
+        public static string QualifiedNameToString(QualifiedNameSyntax qualifiedName)
+        {
+            return $"{NameToString(qualifiedName.Left)}.{SimpleNameToString(qualifiedName.Right)}";
+        }
+
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="simpleName"/>.
+        /// </summary>
+        /// <param name="simpleName">The simple name.</param>
+        public static string SimpleNameToString(SimpleNameSyntax simpleName)
+        {
+            switch (simpleName)
+            {
+                case IdentifierNameSyntax AsIdentifierName:
+                    return IdentifierNameToString(AsIdentifierName);
+                default:
+                    return null!;
+            }
+        }
+
+        /// <summary>
+        /// Gets the string corresponding to <paramref name="identifierName"/>.
+        /// </summary>
+        /// <param name="identifierName">The identifier name.</param>
+        public static string IdentifierNameToString(IdentifierNameSyntax identifierName)
+        {
+            return identifierName.Identifier.ValueText;
+        }
+
         private Dictionary<NameCategory, Dictionary<NamingSchemes, int>> SchemeTable = new();
         private Dictionary<NameCategory, NamingSchemes> ExpectedSchemeTable = new();
         private int LocalVariableConstCount;

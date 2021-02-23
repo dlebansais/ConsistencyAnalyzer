@@ -42,6 +42,8 @@
                 new AnalyzerRuleConA1312(),
                 new AnalyzerRuleConA1313(),
                 new AnalyzerRuleConA1314(),
+                new AnalyzerRuleConA1200(),
+                new AnalyzerRuleConA1201(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();
@@ -99,6 +101,14 @@
         /// Gets the rule category.
         /// </summary>
         protected abstract string Category { get; }
+
+        /// <summary>
+        /// Resets fields linked to context.
+        /// </summary>
+        protected void ResetContext()
+        {
+            DescriptorInternal = null;
+        }
         #endregion
 
         #region Client Interface

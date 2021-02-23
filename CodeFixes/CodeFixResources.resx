@@ -120,6 +120,12 @@
   <data name="ConA1000FixTitle" xml:space="preserve">
     <value>Make constant</value>
   </data>
+  <data name="ConA1200FixTitle" xml:space="preserve">
+    <value>Reorder using statements</value>
+  </data>
+  <data name="ConA1201FixTitle" xml:space="preserve">
+    <value>Reorder using statements</value>
+  </data>
   <data name="ConA1300FixTitle" xml:space="preserve">
     <value>Rename to '{0}'</value>
   </data>

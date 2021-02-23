@@ -126,6 +126,24 @@
   <data name="ConA1000Title" xml:space="preserve">
     <value>Variable can be made constant</value>
   </data>
+  <data name="ConA1200Description" xml:space="preserve">
+    <value>A using directives must be moved</value>
+  </data>
+  <data name="ConA1200MessageFormat" xml:space="preserve">
+    <value>Using directive should appear before namespace declaration</value>
+  </data>
+  <data name="ConA1200Title" xml:space="preserve">
+    <value>Using directives should appear in a consistent order</value>
+  </data>
+  <data name="ConA1201Description" xml:space="preserve">
+    <value>A using directives must be moved</value>
+  </data>
+  <data name="ConA1201MessageFormat" xml:space="preserve">
+    <value>Using directive should appear within a namespace declaration</value>
+  </data>
+  <data name="ConA1201Title" xml:space="preserve">
+    <value>Using directives should appear in a consistent order</value>
+  </data>
   <data name="ConA1300Description" xml:space="preserve">
     <value>Use a consistent naming scheme for namespaces</value>
   </data>
