@@ -27,16 +27,16 @@ namespace ConsistencyAnalyzerTest
     public class EnableInterfaceCategorySimple1
     {
 #region Init
-        public EnableInterfaceCategorySimple1() {}
         public void EnableTest1() {}
+        public EnableInterfaceCategorySimple1() {}
 #endregion
     }
 
     public class EnableInterfaceCategorySimple2
     {
 #region Init
-        public EnableInterfaceCategorySimple2() {}
         public void EnableTest2() {}
+        public EnableInterfaceCategorySimple2() {}
 #endregion
     }
 }";
@@ -93,16 +93,18 @@ namespace ConsistencyAnalyzerTest
     public class EnableInterfaceCategorySimple1
     {
 #region Init
-        public EnableInterfaceCategorySimple1() {}
+        public int Test;
         public void EnableTest1() {}
+        public EnableInterfaceCategorySimple1() {}
 #endregion
     }
 
     public class EnableInterfaceCategorySimple2
     {
 #region Init
-        public EnableInterfaceCategorySimple2() {}
+        public int Test;
         public void EnableTest2() {}
+        public EnableInterfaceCategorySimple2() {}
 #endregion
     }
 }";
