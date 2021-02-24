@@ -142,6 +142,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A class element (field, property, method...) should be moved.
+        /// </summary>
+        public static string ConA1202Description {
+            get {
+                return ResourceManager.GetString("ConA1202Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} must appear in a consistent order relative to other elements in class &apos;{2}&apos;.
+        /// </summary>
+        public static string ConA1202MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1202MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elements must appear in a consistent order.
+        /// </summary>
+        public static string ConA1202Title {
+            get {
+                return ResourceManager.GetString("ConA1202Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use a consistent naming scheme for namespaces.
         /// </summary>
         public static string ConA1300Description {

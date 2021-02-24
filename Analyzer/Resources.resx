@@ -144,6 +144,15 @@
   <data name="ConA1201Title" xml:space="preserve">
     <value>Using directives should appear in a consistent order</value>
   </data>
+  <data name="ConA1202Description" xml:space="preserve">
+    <value>A class element (field, property, method...) should be moved</value>
+  </data>
+  <data name="ConA1202MessageFormat" xml:space="preserve">
+    <value>{0} {1} must appear in a consistent order relative to other elements in class '{2}'</value>
+  </data>
+  <data name="ConA1202Title" xml:space="preserve">
+    <value>Elements must appear in a consistent order</value>
+  </data>
   <data name="ConA1300Description" xml:space="preserve">
     <value>Use a consistent naming scheme for namespaces</value>
   </data>
