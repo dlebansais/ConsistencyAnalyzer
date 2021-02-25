@@ -45,6 +45,7 @@
                 new AnalyzerRuleConA1200(),
                 new AnalyzerRuleConA1201(),
                 new AnalyzerRuleConA1202(),
+                new AnalyzerRuleConA1203(),
             };
 
             Dictionary<string, AnalyzerRule> Table = new Dictionary<string, AnalyzerRule>();

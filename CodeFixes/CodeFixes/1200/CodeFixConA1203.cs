@@ -15,13 +15,13 @@
     /// <summary>
     /// Represents a code fix for a rule of the analyzer.
     /// </summary>
-    public class CodeFixConA1201 : CodeFixUsingReorder
+    public class CodeFixConA1203 : CodeFixUsingReorder
     {
         /// <summary>
         /// Creates an instance of the <see cref="CodeFix"/> class.
         /// </summary>
         /// <param name="rule">The associated rule.</param>
-        public CodeFixConA1201(AnalyzerRule rule)
+        public CodeFixConA1203(AnalyzerRule rule)
             : base(rule)
         {
         }
@@ -29,9 +29,9 @@
         private async Task<Document> AsyncHandler(Document document, SyntaxNode syntaxRoot, UsingDirectiveSyntax syntaxNode, CancellationToken cancellationToken, bool systemUsingDirectivesFirst)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("CodeFixConA1201", TraceLevel);
+            Analyzer.Trace("CodeFixConA1203", TraceLevel);
 
-            return await AsyncUsingReorder(document, syntaxRoot, syntaxNode, cancellationToken, UsingDirectivesPlacement.InsideNamespace, systemUsingDirectivesFirst);
+            return await AsyncUsingReorder(document, syntaxRoot, syntaxNode, cancellationToken, UsingDirectivesPlacement.Preserve, systemUsingDirectivesFirst);
         }
 
         /// <summary>
@@ -51,14 +51,14 @@
             UsingExplorer UsingExplorer = new UsingExplorer(CompilationUnit, null, TraceLevel.Info);
             bool SystemUsingDirectivesFirst = UsingExplorer.IsSystemUsingFirstExpected.HasValue && UsingExplorer.IsSystemUsingFirstExpected.Value;
 
-            IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
+            IEnumerable <SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             UsingDirectiveSyntax Node = Nodes.OfType<UsingDirectiveSyntax>().First();
 
-            string CodeFixMessage = new LocalizableResourceString(nameof(CodeFixResources.ConA1201FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
+            string CodeFixMessage = new LocalizableResourceString(nameof(CodeFixResources.ConA1203FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
 
             var Action = CodeAction.Create(title: CodeFixMessage,
                     createChangedDocument: c => AsyncHandler(context.Document, root, Node, c, SystemUsingDirectivesFirst),
-                    equivalenceKey: nameof(CodeFixResources.ConA1201FixTitle));
+                    equivalenceKey: nameof(CodeFixResources.ConA1203FixTitle));
 
             return Action;
         }

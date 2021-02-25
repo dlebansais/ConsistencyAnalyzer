@@ -29,12 +29,12 @@
         {
         }
 
-        private async Task<Document> AsyncHandler(Document document, SyntaxNode syntaxRoot, UsingDirectiveSyntax syntaxNode, CancellationToken cancellationToken)
+        private async Task<Document> AsyncHandler(Document document, SyntaxNode syntaxRoot, UsingDirectiveSyntax syntaxNode, CancellationToken cancellationToken, bool systemUsingDirectivesFirst)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("CodeFixConA1200", TraceLevel);
 
-            return await AsyncUsingReorder(document, syntaxRoot, syntaxNode, cancellationToken, UsingDirectivesPlacement.OutsideNamespace);
+            return await AsyncUsingReorder(document, syntaxRoot, syntaxNode, cancellationToken, UsingDirectivesPlacement.OutsideNamespace, systemUsingDirectivesFirst);
         }
 
         /// <summary>
@@ -51,7 +51,8 @@
                 return null;
 
             CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)root;
-            NameExplorer NameExplorer = new NameExplorer(CompilationUnit, null, TraceLevel.Info);
+            UsingExplorer UsingExplorer = new UsingExplorer(CompilationUnit, null, TraceLevel.Info);
+            bool SystemUsingDirectivesFirst = UsingExplorer.IsSystemUsingFirstExpected.HasValue && UsingExplorer.IsSystemUsingFirstExpected.Value;
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             UsingDirectiveSyntax Node = Nodes.OfType<UsingDirectiveSyntax>().First();
@@ -59,7 +60,7 @@
             string CodeFixMessage = new LocalizableResourceString(nameof(CodeFixResources.ConA1200FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
 
             var Action = CodeAction.Create(title: CodeFixMessage,
-                    createChangedDocument: c => AsyncHandler(context.Document, root, Node, c),
+                    createChangedDocument: c => AsyncHandler(context.Document, root, Node, c, SystemUsingDirectivesFirst),
                     equivalenceKey: nameof(CodeFixResources.ConA1200FixTitle));
 
             return Action;

@@ -169,6 +169,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A using directives must be moved.
+        /// </summary>
+        public static string ConA1203Description {
+            get {
+                return ResourceManager.GetString("ConA1203Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directive should appear after directives for the System namespace.
+        /// </summary>
+        public static string ConA1203MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1203MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System using directives must appear in a consistent order.
+        /// </summary>
+        public static string ConA1203Title {
+            get {
+                return ResourceManager.GetString("ConA1203Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use a consistent naming scheme for namespaces.
         /// </summary>
         public static string ConA1300Description {

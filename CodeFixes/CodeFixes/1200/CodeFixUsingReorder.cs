@@ -40,7 +40,8 @@
         /// <param name="syntaxNode">The node to move.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <param name="usingDirectivesPlacementSettings">The ordering.</param>
-        protected async Task<Document> AsyncUsingReorder(Document document, SyntaxNode syntaxRoot, UsingDirectiveSyntax syntaxNode, CancellationToken cancellationToken, UsingDirectivesPlacement usingDirectivesPlacementSettings)
+        /// <param name="systemUsingDirectivesFirst">True if System must be first.</param>
+        protected async Task<Document> AsyncUsingReorder(Document document, SyntaxNode syntaxRoot, UsingDirectiveSyntax syntaxNode, CancellationToken cancellationToken, UsingDirectivesPlacement usingDirectivesPlacementSettings, bool systemUsingDirectivesFirst)
         {
             var fileHeader = GetFileHeader(syntaxRoot);
             var compilationUnit = (CompilationUnitSyntax)syntaxRoot;
@@ -50,7 +51,7 @@
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var usingDirectivesPlacement = forcePreservePlacement ? UsingDirectivesPlacement.Preserve : DeterminePlacement(compilationUnit, usingDirectivesPlacementSettings);
 
-            var usingsHelper = new UsingsSorter(false, false, semanticModel!, compilationUnit, fileHeader);
+            var usingsHelper = new UsingsSorter(systemUsingDirectivesFirst, false, semanticModel!, compilationUnit, fileHeader);
             IndentationSettings Indentation = new IndentationSettings();
             var usingsIndentation = DetermineIndentation(compilationUnit, Indentation, usingDirectivesPlacement);
 

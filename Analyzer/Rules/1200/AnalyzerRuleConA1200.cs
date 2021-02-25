@@ -70,9 +70,15 @@
             bool IsOutsideUsing = Node.Parent is not NamespaceDeclarationSyntax;
             IsOutsideUsingExpected = Explorer.IsOutsideUsingExpected;
 
-            if (IsOutsideUsingExpected == null || IsOutsideUsingExpected.Value == false)
+            if (IsOutsideUsingExpected == null)
             {
                 Analyzer.Trace($"Using directive order undecided or not applicable, exit", TraceLevel);
+                return;
+            }
+
+            if (IsOutsideUsingExpected.Value == false)
+            {
+                Analyzer.Trace($"handled by ConA1201, exit", TraceLevel);
                 return;
             }
 

@@ -30,6 +30,12 @@
             foreach (MemberDeclarationSyntax MemberDeclaration in compilationUnit.Members)
                 if (MemberDeclaration is NamespaceDeclarationSyntax AsNamespaceDeclaration)
                     ParseNamespaceDeclaration(AsNamespaceDeclaration);
+
+            if (LastUsingDirective != null)
+                if (IsSystemUsing(LastUsingDirective))
+                    SystemUsingFirstCount--;
+                else
+                    SystemUsingAnyCount--;
         }
 
         private void ParseNamespaceDeclaration(NamespaceDeclarationSyntax namespaceDeclaration)
@@ -53,6 +59,19 @@
                 OutsideUsingCount++;
             else
                 InsideUsingCount++;
+
+            if (SystemUsingFirstCount == 0 && SystemUsingNotFirstCount == 0 && SystemUsingAnyCount == 0)
+            {
+                if (IsSystemUsing(usingDirective))
+                {
+                    SystemUsingFirstCount++;
+                    SystemUsingAnyCount++;
+                }
+                else
+                    SystemUsingNotFirstCount++;
+            }
+
+            LastUsingDirective = usingDirective;
         }
 
         private SyntaxNodeAnalysisContext? Context;
@@ -71,13 +90,35 @@
         {
             get { return OutsideUsingCount + InsideUsingCount >= 3 ? OutsideUsingCount > InsideUsingCount : null; }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether using directives for System should be first.
+        /// </summary>
+        public bool? IsSystemUsingFirstExpected
+        {
+//            get { return SystemUsingFirstCount + SystemUsingNotFirstCount >= 3 ? SystemUsingFirstCount > SystemUsingNotFirstCount : (SystemUsingAnyCount > 0 ? true : null); }
+            get { return true; }
+        }
         #endregion
 
         #region Client Interface
+        /// <summary>
+        /// Checks if a using directive is for the System namespace.
+        /// </summary>
+        /// <param name="usingDirective">The using directive.</param>
+        public static bool IsSystemUsing(UsingDirectiveSyntax usingDirective)
+        {
+            string UsingDirectiveText = NameExplorer.GetNameText(usingDirective.Name);
+            return UsingDirectiveText == "System" || UsingDirectiveText.StartsWith("System.");
+        }
 
         private Dictionary<string, UsingDirectiveSyntax> UsingPathTable = new();
         private int OutsideUsingCount;
         private int InsideUsingCount;
+        private int SystemUsingFirstCount;
+        private int SystemUsingNotFirstCount;
+        private int SystemUsingAnyCount;
+        private UsingDirectiveSyntax? LastUsingDirective;
         #endregion
     }
 }

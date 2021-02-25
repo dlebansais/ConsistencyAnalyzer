@@ -88,6 +88,15 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reorder using statements.
+        /// </summary>
+        internal static string ConA1203FixTitle {
+            get {
+                return ResourceManager.GetString("ConA1203FixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename to &apos;{0}&apos;.
         /// </summary>
         internal static string ConA1300FixTitle {
