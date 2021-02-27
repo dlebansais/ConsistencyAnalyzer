@@ -59,6 +59,7 @@
             SyntaxKind.ElseClause,
             SyntaxKind.SwitchSection,
             SyntaxKind.CatchClause,
+            SyntaxKind.Block,
         };
         #endregion
 
@@ -110,10 +111,41 @@
                 return;
             }
 
-            AnalyzeNode(context, Node, Explorer, out bool IsValid, TraceLevel);
+            bool IsValid;
+            if (Node is BlockSyntax _)
+                IsValid = true;
+            else
+                AnalyzeNode(context, Node, Explorer, out IsValid, TraceLevel);
 
-            if (IsValid && Node is DoStatementSyntax AsDoStatement)
-                AnalyzeWhileKeyword(context, AsDoStatement, Explorer, TraceLevel);
+            if (IsValid)
+            {
+                switch (Node)
+                {
+                    case NamespaceDeclarationSyntax AsNamespaceDeclaration:
+                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.OpenBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.CloseBraceToken, Explorer, TraceLevel);
+                        break;
+
+                    case BaseTypeDeclarationSyntax AsBaseTypeDeclaration:
+                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.OpenBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.CloseBraceToken, Explorer, TraceLevel);
+                        break;
+
+                    case BlockSyntax AsBlock:
+                        AnalyzeNodeToken(context, AsBlock, AsBlock.OpenBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBlock, AsBlock.CloseBraceToken, Explorer, TraceLevel);
+                        break;
+
+                    case SwitchStatementSyntax AsSwitchStatement:
+                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.OpenBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.CloseBraceToken, Explorer, TraceLevel);
+                        break;
+
+                    case DoStatementSyntax AsDoStatement:
+                        AnalyzeNodeToken(context, AsDoStatement, AsDoStatement.WhileKeyword, Explorer, TraceLevel);
+                        break;
+                }
+            }
         }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context, SyntaxNode node, NameExplorer nameExplorer, out bool isValid, TraceLevel traceLevel)
@@ -150,23 +182,21 @@
             isValid = false;
         }
 
-        private void AnalyzeWhileKeyword(SyntaxNodeAnalysisContext context, DoStatementSyntax doStatement, NameExplorer nameExplorer, TraceLevel traceLevel)
+        private void AnalyzeNodeToken(SyntaxNodeAnalysisContext context, SyntaxNode node, SyntaxToken token, NameExplorer nameExplorer, TraceLevel traceLevel)
         {
-            SyntaxToken WhileKeyword = doStatement.WhileKeyword;
-
-            if (!IsOnSeparateLine(WhileKeyword))
+            if (!IsOnSeparateLine(token))
             {
                 Analyzer.Trace($"Not on its own line, exit", traceLevel);
                 return;
             }
 
-            int ExpectedIndentationLevel = GetExpectedIndentationLevel(doStatement);
+            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node);
 
             int ActualIndentationLevel;
 
-            if (WhileKeyword.HasLeadingTrivia)
+            if (token.HasLeadingTrivia)
             {
-                if (!nameExplorer.GetIndentationLevel(WhileKeyword.LeadingTrivia, out ActualIndentationLevel, traceLevel))
+                if (!nameExplorer.GetIndentationLevel(token.LeadingTrivia, out ActualIndentationLevel, traceLevel))
                     ActualIndentationLevel = -1;
             }
             else
@@ -179,7 +209,7 @@
             }
 
             Analyzer.Trace($"Inconsistent indentation", traceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, WhileKeyword.GetLocation()));
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, token.GetLocation()));
         }
 
         /// <summary>
@@ -220,6 +250,21 @@
                     ExpectedIndentationLevel = 2;
                     break;
 
+                case BlockSyntax AsBlock:
+                    if (AsBlock.Parent is BlockSyntax)
+                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsBlock);
+                    else if (AsBlock.Parent is StatementSyntax AsStatement)
+                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsStatement);
+                    else if (AsBlock.Parent is ElseClauseSyntax AsElseClause && AsElseClause.Parent is IfStatementSyntax AsIfStatement)
+                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsIfStatement);
+                    else if (AsBlock.Parent is CatchClauseSyntax AsCatchClause && AsCatchClause.Parent is TryStatementSyntax AsTryStatement)
+                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsTryStatement);
+                    else if (AsBlock.Parent is MethodDeclarationSyntax)
+                        ExpectedIndentationLevel = 2;
+                    else
+                        throw new InvalidCastException();
+                    break;
+
                 case StatementSyntax AsStatement:
                     ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsStatement);
                     break;
@@ -250,6 +295,7 @@
         {
             switch (node)
             {
+                case BlockSyntax _:
                 case BreakStatementSyntax _:
                 case CheckedStatementSyntax _:
                 case ForEachStatementSyntax _:

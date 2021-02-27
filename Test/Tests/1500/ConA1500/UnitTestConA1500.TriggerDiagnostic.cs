@@ -38,18 +38,6 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string UsingInsideTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    using System;
-}
-";
-
         private const string UsingInsideTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -62,7 +50,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string UsingInsideTooCloseFixed = @"
+        private const string UsingInsideFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -74,7 +62,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string NamespaceTooFar = @"
+        private const string NamespaceTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using Microsoft;
@@ -85,7 +73,29 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string NamespaceTooFarFixed = @"
+        private const string NamespaceTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using Microsoft;
+}
+
+namespace CodeFixes
+  {
+}
+";
+
+        private const string NamespaceTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using Microsoft;
+}
+
+namespace CodeFixes
+{
+  }
+";
+
+        private const string NamespaceFixed = @"
 namespace ConsistencyAnalyzer
 {
     using Microsoft;
@@ -96,7 +106,7 @@ namespace CodeFixes
 }
 ";
 
-        private const string EnumDeclarationTooFar = @"
+        private const string EnumDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -110,21 +120,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string EnumDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    public enum CodeFixes
-    {
-    }
-}
-";
-
-        private const string EnumDeclarationTooClose = @"
+        private const string EnumDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -138,7 +134,63 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string EnumDeclarationTooCloseFixed = @"
+        private const string EnumDeclarationTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public enum CodeFixes
+       {
+    }
+}
+";
+
+        private const string EnumDeclarationTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public enum CodeFixes
+  {
+    }
+}
+";
+
+        private const string EnumDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public enum CodeFixes
+    {
+       }
+}
+";
+
+        private const string EnumDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public enum CodeFixes
+    {
+  }
+}
+";
+
+        private const string EnumDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -152,7 +204,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string ClassDeclarationTooFar = @"
+        private const string ClassDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -166,21 +218,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string ClassDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    public class CodeFixes
-    {
-    }
-}
-";
-
-        private const string ClassDeclarationTooClose = @"
+        private const string ClassDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -194,7 +232,63 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string ClassDeclarationTooCloseFixed = @"
+        private const string ClassDeclarationTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public class CodeFixes
+       {
+    }
+}
+";
+
+        private const string ClassDeclarationTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public class CodeFixes
+  {
+    }
+}
+";
+
+        private const string ClassDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public class CodeFixes
+    {
+       }
+}
+";
+
+        private const string ClassDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public class CodeFixes
+    {
+  }
+}
+";
+
+        private const string ClassDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -208,7 +302,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string StructDeclarationTooFar = @"
+        private const string StructDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -222,21 +316,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string StructDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    public struct CodeFixes
-    {
-    }
-}
-";
-
-        private const string StructDeclarationTooClose = @"
+        private const string StructDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -250,7 +330,63 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string StructDeclarationTooCloseFixed = @"
+        private const string StructDeclarationTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public struct CodeFixes
+       {
+    }
+}
+";
+
+        private const string StructDeclarationTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public struct CodeFixes
+  {
+    }
+}
+";
+
+        private const string StructDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public struct CodeFixes
+    {
+       }
+}
+";
+
+        private const string StructDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public struct CodeFixes
+    {
+  }
+}
+";
+
+        private const string StructDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -264,7 +400,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string RecordDeclarationTooFar = @"
+        private const string RecordDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -278,21 +414,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string RecordDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    public record CodeFixes
-    {
-    }
-}
-";
-
-        private const string RecordDeclarationTooClose = @"
+        private const string RecordDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -306,7 +428,63 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string RecordDeclarationTooCloseFixed = @"
+        private const string RecordDeclarationTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public record CodeFixes
+       {
+    }
+}
+";
+
+        private const string RecordDeclarationTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public record CodeFixes
+  {
+    }
+}
+";
+
+        private const string RecordDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public record CodeFixes
+    {
+       }
+}
+";
+
+        private const string RecordDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public record CodeFixes
+    {
+  }
+}
+";
+
+        private const string RecordDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -320,7 +498,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string InterfaceDeclarationTooFar = @"
+        private const string InterfaceDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -334,21 +512,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string InterfaceDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    using System;
-}
-
-namespace AnalyzerTest
-{
-    public interface CodeFixes
-    {
-    }
-}
-";
-
-        private const string InterfaceDeclarationTooClose = @"
+        private const string InterfaceDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -362,7 +526,63 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string InterfaceDeclarationTooCloseFixed = @"
+        private const string InterfaceDeclarationTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public interface CodeFixes
+       {
+    }
+}
+";
+
+        private const string InterfaceDeclarationTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public interface CodeFixes
+  {
+    }
+}
+";
+
+        private const string InterfaceDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public interface CodeFixes
+    {
+       }
+}
+";
+
+        private const string InterfaceDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    using System;
+}
+
+namespace AnalyzerTest
+{
+    public interface CodeFixes
+    {
+  }
+}
+";
+
+        private const string InterfaceDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     using System;
@@ -386,16 +606,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DelegateDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public delegate void Test();
-    }
-}
-";
-
         private const string DelegateDeclarationTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -406,7 +616,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DelegateDeclarationTooCloseFixed = @"
+        private const string DelegateDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -426,16 +636,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public event System.EventHandler Test;
-    }
-}
-";
-
         private const string EventDeclarationTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -446,7 +646,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventDeclarationTooCloseFixed = @"
+        private const string EventDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -466,16 +666,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FieldDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public int Test;
-    }
-}
-";
-
         private const string FieldDeclarationTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -486,7 +676,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FieldDeclarationTooCloseFixed = @"
+        private const string FieldDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -496,42 +686,86 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string MethodDeclarationTooFar = @"
+        private const string MethodDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
     {
-           public void Test() {}
+           public void Test()
+        {
+        }
     }
 }
 ";
 
-        private const string MethodDeclarationTooFarFixed = @"
+        private const string MethodDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
     {
-        public void Test() {}
+      public void Test()
+        {
+        }
     }
 }
 ";
 
-        private const string MethodDeclarationTooClose = @"
+        private const string MethodDeclarationTooFar2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
     {
-      public void Test() {}
+        public void Test()
+           {
+        }
     }
 }
 ";
 
-        private const string MethodDeclarationTooCloseFixed = @"
+        private const string MethodDeclarationTooClose2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
     {
-        public void Test() {}
+        public void Test()
+      {
+        }
+    }
+}
+";
+
+        private const string MethodDeclarationTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test()
+        {
+           }
+    }
+}
+";
+
+        private const string MethodDeclarationTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test()
+        {
+      }
+    }
+}
+";
+
+        private const string MethodDeclarationFixed = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test()
+        {
+        }
     }
 }
 ";
@@ -546,16 +780,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclarationTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public int Test { get; set; }
-    }
-}
-";
-
         private const string PropertyDeclarationTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -566,7 +790,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclarationTooCloseFixed = @"
+        private const string PropertyDeclarationFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -586,16 +810,6 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string EnumMemberDeclarationTooFarFixed = @"
-namespace AnalyzerTest
-{
-    public enum CodeFixes
-    {
-        Analyzer,
-    }
-}
-";
-
         private const string EnumMemberDeclarationTooClose = @"
 namespace AnalyzerTest
 {
@@ -606,7 +820,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string EnumMemberDeclarationTooCloseFixed = @"
+        private const string EnumMemberDeclarationFixed = @"
 namespace AnalyzerTest
 {
     public enum CodeFixes
@@ -616,7 +830,7 @@ namespace AnalyzerTest
 }
 ";
 
-        private const string ForStatementTooFar1 = @"
+        private const string OneForStatementTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -631,7 +845,82 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForStatementTooFar1Fixed = @"
+        private const string OneForStatementTooClose1 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+          for (int i = 0; i < 1; i++)
+            {
+            }
+        }
+    }
+}
+";
+
+        private const string OneForStatementTooFar2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            for (int i = 0; i < 1; i++)
+               {
+            }
+        }
+    }
+}
+";
+
+        private const string OneForStatementTooClose2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            for (int i = 0; i < 1; i++)
+          {
+            }
+        }
+    }
+}
+";
+
+        private const string OneForStatementTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            for (int i = 0; i < 1; i++)
+            {
+               }
+        }
+    }
+}
+";
+
+        private const string OneForStatementTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            for (int i = 0; i < 1; i++)
+            {
+          }
+        }
+    }
+}
+";
+
+        private const string OneForStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -646,7 +935,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForStatementTooFar2 = @"
+        private const string TwoForStatementTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -662,53 +951,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForStatementTooFar2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            for (int i = 0; i < 1; i++)
-                for (int j = 0; j < 1; j++)
-                {
-                }
-        }
-    }
-}
-";
-
-        private const string ForStatementTooClose1 = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-          for (int i = 0; i < 1; i++)
-            {
-            }
-        }
-    }
-}
-";
-
-        private const string ForStatementTooClose1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            for (int i = 0; i < 1; i++)
-            {
-            }
-        }
-    }
-}
-";
-
-        private const string ForStatementTooClose2 = @"
+        private const string TwoForStatementTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -724,7 +967,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForStatementTooClose2Fixed = @"
+        private const string TwoForStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -756,22 +999,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string BreakStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            for (int i = 0; i < 1; i++)
-            {
-                break;
-            }
-        }
-    }
-}
-";
-
         private const string BreakStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -788,7 +1015,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string BreakStatementTooCloseFixed = @"
+        private const string BreakStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -820,22 +1047,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ContinueStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            for (int i = 0; i < 1; i++)
-            {
-                continue;
-            }
-        }
-    }
-}
-";
-
         private const string ContinueStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -852,7 +1063,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ContinueStatementTooCloseFixed = @"
+        private const string ContinueStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -883,21 +1094,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string CheckedStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            checked
-            {
-            }
-        }
-    }
-}
-";
-
         private const string CheckedStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -913,7 +1109,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string CheckedStatementTooCloseFixed = @"
+        private const string CheckedStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -943,21 +1139,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForEachStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            foreach (int Item in new int[] { 0 })
-            {
-            }
-        }
-    }
-}
-";
-
         private const string ForEachStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -973,7 +1154,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForEachStatementTooCloseFixed = @"
+        private const string ForEachStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1004,22 +1185,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatementTooFar1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            do
-            {
-            }
-            while (true);
-        }
-    }
-}
-";
-
         private const string DoStatementTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1036,22 +1201,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatementTooClose1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            do
-            {
-            }
-            while (true);
-        }
-    }
-}
-";
-
         private const string DoStatementTooFar2 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1060,23 +1209,7 @@ namespace ConsistencyAnalyzer
         public void Test() 
         {
             do
-            {
-            }
-               while (true);
-        }
-    }
-}
-";
-
-        private const string DoStatementTooFar2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            do
-            {
+               {
             }
             while (true);
         }
@@ -1092,6 +1225,70 @@ namespace ConsistencyAnalyzer
         public void Test() 
         {
             do
+          {
+            }
+            while (true);
+        }
+    }
+}
+";
+
+        private const string DoStatementTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            do
+            {
+               }
+            while (true);
+        }
+    }
+}
+";
+
+        private const string DoStatementTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            do
+            {
+          }
+            while (true);
+        }
+    }
+}
+";
+
+        private const string DoStatementTooFar4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            do
+            {
+            }
+               while (true);
+        }
+    }
+}
+";
+
+        private const string DoStatementTooClose4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            do
             {
             }
           while (true);
@@ -1100,7 +1297,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatementTooClose2Fixed = @"
+        private const string DoStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1138,28 +1335,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FixedStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        unsafe public void Test() 
-        {
-            Point Point = new Point();
-            fixed (int* p = &Point.x)
-            {
-            }
-        }
-    }
-
-    public class Point
-    {
-        public int x;
-        public int y;
-    }
-}
-";
-
         private const string FixedStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -1182,7 +1357,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FixedStatementTooCloseFixed = @"
+        private const string FixedStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1222,24 +1397,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatementTooFar1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            if (true)
-            {
-            }
-            else
-            {
-            }
-        }
-    }
-}
-";
-
         private const string IfElseStatementTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1248,24 +1405,6 @@ namespace ConsistencyAnalyzer
         public void Test() 
         {
           if (true)
-            {
-            }
-            else
-            {
-            }
-        }
-    }
-}
-";
-
-        private const string IfElseStatementTooClose1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            if (true)
             {
             }
             else
@@ -1294,24 +1433,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatementTooFar2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            if (true)
-            {
-            }
-            else
-            {
-            }
-        }
-    }
-}
-";
-
         private const string IfElseStatementTooClose2 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1330,7 +1451,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatementTooClose2Fixed = @"
+        private const string IfElseStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1361,19 +1482,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalDeclarationStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            int i = 0;
-        }
-    }
-}
-";
-
         private const string LocalDeclarationStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -1387,7 +1495,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalDeclarationStatementTooCloseFixed = @"
+        private const string LocalDeclarationStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1416,22 +1524,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LockStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            int[] x = new int[0];
-            lock (x)
-            {
-            }
-        }
-    }
-}
-";
-
         private const string LockStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -1448,7 +1540,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LockStatementTooCloseFixed = @"
+        private const string LockStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1477,19 +1569,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ReturnStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public int Test() 
-        {
-            return 0;
-        }
-    }
-}
-";
-
         private const string ReturnStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -1503,7 +1582,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ReturnStatementTooCloseFixed = @"
+        private const string ReturnStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1535,25 +1614,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatementTooFar1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test(int i)
-        {
-            switch (i)
-            {
-                case 0:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
-";
-
         private const string SwitchBreakStatementTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1562,25 +1622,6 @@ namespace ConsistencyAnalyzer
         public void Test(int i)
         {
           switch (i)
-            {
-                case 0:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
-";
-
-        private const string SwitchBreakStatementTooClose1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test(int i)
-        {
-            switch (i)
             {
                 case 0:
                     break;
@@ -1611,25 +1652,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatementTooFar2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test(int i)
-        {
-            switch (i)
-            {
-                case 0:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
-";
-
         private const string SwitchBreakStatementTooClose2 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1640,25 +1662,6 @@ namespace ConsistencyAnalyzer
             switch (i)
             {
               case 0:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
-";
-
-        private const string SwitchBreakStatementTooClose2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test(int i)
-        {
-            switch (i)
-            {
-                case 0:
                     break;
                 default:
                     break;
@@ -1687,25 +1690,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatementTooFar3Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test(int i)
-        {
-            switch (i)
-            {
-                case 0:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-}
-";
-
         private const string SwitchBreakStatementTooClose3 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1725,7 +1709,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatementTooClose3Fixed = @"
+        private const string SwitchBreakStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1757,19 +1741,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ThrowStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            throw new System.Exception(""msg"");
-        }
-    }
-}
-";
-
         private const string ThrowStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -1783,7 +1754,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ThrowStatementTooCloseFixed = @"
+        private const string ThrowStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1816,26 +1787,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatementTooFar1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            try
-            {
-                return;
-            }
-            catch
-            {
-                return;
-            }
-        }
-    }
-}
-";
-
         private const string TryCatchStatementTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1856,26 +1807,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatementTooClose1Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            try
-            {
-                return;
-            }
-            catch
-            {
-                return;
-            }
-        }
-    }
-}
-";
-
         private const string TryCatchStatementTooFar2 = @"
 namespace ConsistencyAnalyzer
 {
@@ -1884,27 +1815,7 @@ namespace ConsistencyAnalyzer
         public void Test() 
         {
             try
-            {
-                return;
-            }
-               catch
-            {
-                return;
-            }
-        }
-    }
-}
-";
-
-        private const string TryCatchStatementTooFar2Fixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            try
-            {
+               {
                 return;
             }
             catch
@@ -1924,6 +1835,86 @@ namespace ConsistencyAnalyzer
         public void Test() 
         {
             try
+          {
+                return;
+            }
+            catch
+            {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooFar3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+               }
+            catch
+            {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooClose3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+          }
+            catch
+            {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooFar4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+            }
+               catch
+            {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooClose4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
             {
                 return;
             }
@@ -1936,7 +1927,87 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatementTooClose2Fixed = @"
+        private const string TryCatchStatementTooFar5 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+            }
+            catch
+               {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooClose5 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+            }
+            catch
+          {
+                return;
+            }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooFar6 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+            }
+            catch
+            {
+                return;
+               }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementTooClose6 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public void Test() 
+        {
+            try
+            {
+                return;
+            }
+            catch
+            {
+                return;
+          }
+        }
+    }
+}
+";
+
+        private const string TryCatchStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -1971,21 +2042,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UnsafeStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            unsafe
-            {
-            }
-        }
-    }
-}
-";
-
         private const string UnsafeStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -2001,7 +2057,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UnsafeStatementTooCloseFixed = @"
+        private const string UnsafeStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -2031,21 +2087,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UsingStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            using (System.IO.FileStream fs = new System.IO.FileStream(string.Empty, System.IO.FileMode.Open))
-            {
-            }
-        }
-    }
-}
-";
-
         private const string UsingStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -2061,7 +2102,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UsingStatementTooCloseFixed = @"
+        private const string UsingStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -2091,21 +2132,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string WhileStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public void Test() 
-        {
-            while (true)
-            {
-            }
-        }
-    }
-}
-";
-
         private const string WhileStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -2121,7 +2147,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string WhileStatementTooCloseFixed = @"
+        private const string WhileStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -2152,22 +2178,6 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string YieldBreakStatementTooFarFixed = @"
-namespace ConsistencyAnalyzer
-{
-    public class CodeFixes
-    {
-        public System.Collections.Generic.IEnumerable<int> Test()
-        {
-            for (int i = 0; i < 1; i++)
-            {
-                yield break;
-            }
-        }
-    }
-}
-";
-
         private const string YieldBreakStatementTooClose = @"
 namespace ConsistencyAnalyzer
 {
@@ -2184,7 +2194,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string YieldBreakStatementTooCloseFixed = @"
+        private const string YieldBreakStatementFixed = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -2200,82 +2210,170 @@ namespace ConsistencyAnalyzer
 }
 ";
 
+        private const string YieldReturnStatementTooFar = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public System.Collections.Generic.IEnumerable<int> Test()
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                   yield return 0;
+            }
+        }
+    }
+}
+";
+
+        private const string YieldReturnStatementTooClose = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public System.Collections.Generic.IEnumerable<int> Test()
+        {
+            for (int i = 0; i < 1; i++)
+            {
+              yield return 0;
+            }
+        }
+    }
+}
+";
+
+        private const string YieldReturnStatementFixed = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public System.Collections.Generic.IEnumerable<int> Test()
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                yield return 0;
+            }
+        }
+    }
+}
+";
+
         [DataTestMethod]
         [
         DataRow(UsingOutsideTooFar, UsingOutsideTooFarFixed, 2, 4),
-        DataRow(UsingInsideTooFar, UsingInsideTooFarFixed, 9, 7),
-        DataRow(UsingInsideTooClose, UsingInsideTooCloseFixed, 9, 3),
-        DataRow(NamespaceTooFar, NamespaceTooFarFixed, 7, 3),
-        DataRow(EnumDeclarationTooFar, EnumDeclarationTooFarFixed, 9, 8),
-        DataRow(EnumDeclarationTooClose, EnumDeclarationTooCloseFixed, 9, 3),
-        DataRow(ClassDeclarationTooFar, ClassDeclarationTooFarFixed, 9, 8),
-        DataRow(ClassDeclarationTooClose, ClassDeclarationTooCloseFixed, 9, 3),
-        DataRow(StructDeclarationTooFar, StructDeclarationTooFarFixed, 9, 8),
-        DataRow(StructDeclarationTooClose, StructDeclarationTooCloseFixed, 9, 3),
-        DataRow(RecordDeclarationTooFar, RecordDeclarationTooFarFixed, 9, 8),
-        DataRow(RecordDeclarationTooClose, RecordDeclarationTooCloseFixed, 9, 3),
-        DataRow(InterfaceDeclarationTooFar, InterfaceDeclarationTooFarFixed, 9, 8),
-        DataRow(InterfaceDeclarationTooClose, InterfaceDeclarationTooCloseFixed, 9, 3),
-        DataRow(DelegateDeclarationTooFar, DelegateDeclarationTooFarFixed, 6, 12),
-        DataRow(DelegateDeclarationTooClose, DelegateDeclarationTooCloseFixed, 6, 7),
-        DataRow(EventDeclarationTooFar, EventDeclarationTooFarFixed, 6, 12),
-        DataRow(EventDeclarationTooClose, EventDeclarationTooCloseFixed, 6, 7),
-        DataRow(FieldDeclarationTooFar, FieldDeclarationTooFarFixed, 6, 12),
-        DataRow(FieldDeclarationTooClose, FieldDeclarationTooCloseFixed, 6, 7),
-        DataRow(MethodDeclarationTooFar, MethodDeclarationTooFarFixed, 6, 12),
-        DataRow(MethodDeclarationTooClose, MethodDeclarationTooCloseFixed, 6, 7),
-        DataRow(PropertyDeclarationTooFar, PropertyDeclarationTooFarFixed, 6, 12),
-        DataRow(PropertyDeclarationTooClose, PropertyDeclarationTooCloseFixed, 6, 7),
-        DataRow(EnumMemberDeclarationTooFar, EnumMemberDeclarationTooFarFixed, 6, 12),
-        DataRow(EnumMemberDeclarationTooClose, EnumMemberDeclarationTooCloseFixed, 6, 7),
-        DataRow(ForStatementTooFar1, ForStatementTooFar1Fixed, 8, 16),
-        DataRow(ForStatementTooClose1, ForStatementTooClose1Fixed, 8, 11),
-        DataRow(ForStatementTooFar2, ForStatementTooFar2Fixed, 9, 20),
-        DataRow(ForStatementTooClose2, ForStatementTooClose2Fixed, 9, 15),
-        DataRow(BreakStatementTooFar, BreakStatementTooFarFixed, 10, 20),
-        DataRow(BreakStatementTooClose, BreakStatementTooCloseFixed, 10, 15),
-        DataRow(ContinueStatementTooFar, ContinueStatementTooFarFixed, 10, 20),
-        DataRow(ContinueStatementTooClose, ContinueStatementTooCloseFixed, 10, 15),
-        DataRow(CheckedStatementTooFar, CheckedStatementTooFarFixed, 8, 16),
-        DataRow(CheckedStatementTooClose, CheckedStatementTooCloseFixed, 8, 11),
-        DataRow(ForEachStatementTooFar, ForEachStatementTooFarFixed, 8, 16),
-        DataRow(ForEachStatementTooClose, ForEachStatementTooCloseFixed, 8, 11),
-        DataRow(DoStatementTooFar1, DoStatementTooFar1Fixed, 8, 16),
-        DataRow(DoStatementTooClose1, DoStatementTooClose1Fixed, 8, 11),
-        DataRow(DoStatementTooFar2, DoStatementTooFar1Fixed, 11, 16),
-        DataRow(DoStatementTooClose2, DoStatementTooClose1Fixed, 11, 11),
-        DataRow(FixedStatementTooFar, FixedStatementTooFarFixed, 9, 16),
-        DataRow(FixedStatementTooClose, FixedStatementTooCloseFixed, 9, 11),
-        DataRow(IfElseStatementTooFar1, IfElseStatementTooFar2Fixed, 8, 16),
-        DataRow(IfElseStatementTooClose1, IfElseStatementTooClose2Fixed, 8, 11),
-        DataRow(IfElseStatementTooFar2, IfElseStatementTooFar2Fixed, 11, 16),
-        DataRow(IfElseStatementTooClose2, IfElseStatementTooClose2Fixed, 11, 11),
-        DataRow(LocalDeclarationStatementTooFar, LocalDeclarationStatementTooFarFixed, 8, 16),
-        DataRow(LocalDeclarationStatementTooClose, LocalDeclarationStatementTooCloseFixed, 8, 11),
-        DataRow(LockStatementTooFar, LockStatementTooFarFixed, 9, 16),
-        DataRow(LockStatementTooClose, LockStatementTooCloseFixed, 9, 11),
-        DataRow(ReturnStatementTooFar, ReturnStatementTooFarFixed, 8, 16),
-        DataRow(ReturnStatementTooClose, ReturnStatementTooCloseFixed, 8, 11),
-        DataRow(SwitchBreakStatementTooFar1, SwitchBreakStatementTooFar1Fixed, 8, 16),
-        DataRow(SwitchBreakStatementTooClose1, SwitchBreakStatementTooClose1Fixed, 8, 11),
-        DataRow(SwitchBreakStatementTooFar2, SwitchBreakStatementTooFar2Fixed, 10, 20),
-        DataRow(SwitchBreakStatementTooClose2, SwitchBreakStatementTooClose2Fixed, 10, 15),
-        DataRow(SwitchBreakStatementTooFar3, SwitchBreakStatementTooFar3Fixed, 11, 24),
-        DataRow(SwitchBreakStatementTooClose3, SwitchBreakStatementTooClose3Fixed, 11, 19),
-        DataRow(ThrowStatementTooFar, ThrowStatementTooFarFixed, 8, 16),
-        DataRow(ThrowStatementTooClose, ThrowStatementTooCloseFixed, 8, 11),
-        DataRow(TryCatchStatementTooFar1, TryCatchStatementTooFar1Fixed, 8, 16),
-        DataRow(TryCatchStatementTooClose1, TryCatchStatementTooClose1Fixed, 8, 11),
-        DataRow(TryCatchStatementTooFar2, TryCatchStatementTooFar2Fixed, 12, 16),
-        DataRow(TryCatchStatementTooClose2, TryCatchStatementTooClose2Fixed, 12, 11),
-        DataRow(UnsafeStatementTooFar, UnsafeStatementTooFarFixed, 8, 16),
-        DataRow(UnsafeStatementTooClose, UnsafeStatementTooCloseFixed, 8, 11),
-        DataRow(UsingStatementTooFar, UsingStatementTooFarFixed, 8, 16),
-        DataRow(UsingStatementTooClose, UsingStatementTooCloseFixed, 8, 11),
-        DataRow(WhileStatementTooFar, WhileStatementTooFarFixed, 8, 16),
-        DataRow(WhileStatementTooClose, WhileStatementTooCloseFixed, 8, 11),
-        DataRow(YieldBreakStatementTooFar, YieldBreakStatementTooFarFixed, 10, 20),
-        DataRow(YieldBreakStatementTooClose, YieldBreakStatementTooCloseFixed, 10, 15),
+        DataRow(UsingInsideTooFar, UsingInsideFixed, 9, 7),
+        DataRow(UsingInsideTooClose, UsingInsideFixed, 9, 3),
+        DataRow(NamespaceTooFar1, NamespaceFixed, 7, 3),
+        DataRow(NamespaceTooFar2, NamespaceFixed, 8, 3),
+        DataRow(NamespaceTooFar3, NamespaceFixed, 9, 3),
+        DataRow(EnumDeclarationTooFar1, EnumDeclarationFixed, 9, 8),
+        DataRow(EnumDeclarationTooClose1, EnumDeclarationFixed, 9, 3),
+        DataRow(EnumDeclarationTooFar2, EnumDeclarationFixed, 10, 8),
+        DataRow(EnumDeclarationTooClose2, EnumDeclarationFixed, 10, 3),
+        DataRow(EnumDeclarationTooFar3, EnumDeclarationFixed, 11, 8),
+        DataRow(EnumDeclarationTooClose3, EnumDeclarationFixed, 11, 3),
+        DataRow(ClassDeclarationTooFar1, ClassDeclarationFixed, 9, 8),
+        DataRow(ClassDeclarationTooClose1, ClassDeclarationFixed, 9, 3),
+        DataRow(ClassDeclarationTooFar2, ClassDeclarationFixed, 10, 8),
+        DataRow(ClassDeclarationTooClose2, ClassDeclarationFixed, 10, 3),
+        DataRow(ClassDeclarationTooFar3, ClassDeclarationFixed, 11, 8),
+        DataRow(ClassDeclarationTooClose3, ClassDeclarationFixed, 11, 3),
+        DataRow(StructDeclarationTooFar1, StructDeclarationFixed, 9, 8),
+        DataRow(StructDeclarationTooClose1, StructDeclarationFixed, 9, 3),
+        DataRow(StructDeclarationTooFar2, StructDeclarationFixed, 10, 8),
+        DataRow(StructDeclarationTooClose2, StructDeclarationFixed, 10, 3),
+        DataRow(StructDeclarationTooFar3, StructDeclarationFixed, 11, 8),
+        DataRow(StructDeclarationTooClose3, StructDeclarationFixed, 11, 3),
+        DataRow(RecordDeclarationTooFar1, RecordDeclarationFixed, 9, 8),
+        DataRow(RecordDeclarationTooClose1, RecordDeclarationFixed, 9, 3),
+        DataRow(RecordDeclarationTooFar2, RecordDeclarationFixed, 10, 8),
+        DataRow(RecordDeclarationTooClose2, RecordDeclarationFixed, 10, 3),
+        DataRow(RecordDeclarationTooFar3, RecordDeclarationFixed, 11, 8),
+        DataRow(RecordDeclarationTooClose3, RecordDeclarationFixed, 11, 3),
+        DataRow(InterfaceDeclarationTooFar1, InterfaceDeclarationFixed, 9, 8),
+        DataRow(InterfaceDeclarationTooClose1, InterfaceDeclarationFixed, 9, 3),
+        DataRow(InterfaceDeclarationTooFar2, InterfaceDeclarationFixed, 10, 8),
+        DataRow(InterfaceDeclarationTooClose2, InterfaceDeclarationFixed, 10, 3),
+        DataRow(InterfaceDeclarationTooFar3, InterfaceDeclarationFixed, 11, 8),
+        DataRow(InterfaceDeclarationTooClose3, InterfaceDeclarationFixed, 11, 3),
+        DataRow(DelegateDeclarationTooFar, DelegateDeclarationFixed, 6, 12),
+        DataRow(DelegateDeclarationTooClose, DelegateDeclarationFixed, 6, 7),
+        DataRow(EventDeclarationTooFar, EventDeclarationFixed, 6, 12),
+        DataRow(EventDeclarationTooClose, EventDeclarationFixed, 6, 7),
+        DataRow(FieldDeclarationTooFar, FieldDeclarationFixed, 6, 12),
+        DataRow(FieldDeclarationTooClose, FieldDeclarationFixed, 6, 7),
+        DataRow(MethodDeclarationTooFar1, MethodDeclarationFixed, 6, 12),
+        DataRow(MethodDeclarationTooClose1, MethodDeclarationFixed, 6, 7),
+        DataRow(MethodDeclarationTooFar2, MethodDeclarationFixed, 7, 12),
+        DataRow(MethodDeclarationTooClose2, MethodDeclarationFixed, 7, 7),
+        DataRow(MethodDeclarationTooFar3, MethodDeclarationFixed, 8, 12),
+        DataRow(MethodDeclarationTooClose3, MethodDeclarationFixed, 8, 7),
+        DataRow(PropertyDeclarationTooFar, PropertyDeclarationFixed, 6, 12),
+        DataRow(PropertyDeclarationTooClose, PropertyDeclarationFixed, 6, 7),
+        DataRow(EnumMemberDeclarationTooFar, EnumMemberDeclarationFixed, 6, 12),
+        DataRow(EnumMemberDeclarationTooClose, EnumMemberDeclarationFixed, 6, 7),
+        DataRow(OneForStatementTooFar1, OneForStatementFixed, 8, 16),
+        DataRow(OneForStatementTooClose1, OneForStatementFixed, 8, 11),
+        DataRow(TwoForStatementTooFar1, TwoForStatementFixed, 9, 20),
+        DataRow(TwoForStatementTooClose1, TwoForStatementFixed, 9, 15),
+        DataRow(BreakStatementTooFar, BreakStatementFixed, 10, 20),
+        DataRow(BreakStatementTooClose, BreakStatementFixed, 10, 15),
+        DataRow(ContinueStatementTooFar, ContinueStatementFixed, 10, 20),
+        DataRow(ContinueStatementTooClose, ContinueStatementFixed, 10, 15),
+        DataRow(CheckedStatementTooFar, CheckedStatementFixed, 8, 16),
+        DataRow(CheckedStatementTooClose, CheckedStatementFixed, 8, 11),
+        DataRow(ForEachStatementTooFar, ForEachStatementFixed, 8, 16),
+        DataRow(ForEachStatementTooClose, ForEachStatementFixed, 8, 11),
+        DataRow(DoStatementTooFar1, DoStatementFixed, 8, 16),
+        DataRow(DoStatementTooClose1, DoStatementFixed, 8, 11),
+        DataRow(DoStatementTooFar2, DoStatementFixed, 9, 16),
+        DataRow(DoStatementTooClose2, DoStatementFixed, 9, 11),
+        DataRow(DoStatementTooFar3, DoStatementFixed, 10, 16),
+        DataRow(DoStatementTooClose3, DoStatementFixed, 10, 11),
+        DataRow(DoStatementTooFar4, DoStatementFixed, 11, 16),
+        DataRow(DoStatementTooClose4, DoStatementFixed, 11, 11),
+        DataRow(FixedStatementTooFar, FixedStatementFixed, 9, 16),
+        DataRow(FixedStatementTooClose, FixedStatementFixed, 9, 11),
+        DataRow(IfElseStatementTooFar1, IfElseStatementFixed, 8, 16),
+        DataRow(IfElseStatementTooClose1, IfElseStatementFixed, 8, 11),
+        DataRow(IfElseStatementTooFar2, IfElseStatementFixed, 11, 16),
+        DataRow(IfElseStatementTooClose2, IfElseStatementFixed, 11, 11),
+        DataRow(LocalDeclarationStatementTooFar, LocalDeclarationStatementFixed, 8, 16),
+        DataRow(LocalDeclarationStatementTooClose, LocalDeclarationStatementFixed, 8, 11),
+        DataRow(LockStatementTooFar, LockStatementFixed, 9, 16),
+        DataRow(LockStatementTooClose, LockStatementFixed, 9, 11),
+        DataRow(ReturnStatementTooFar, ReturnStatementFixed, 8, 16),
+        DataRow(ReturnStatementTooClose, ReturnStatementFixed, 8, 11),
+        DataRow(SwitchBreakStatementTooFar1, SwitchBreakStatementFixed, 8, 16),
+        DataRow(SwitchBreakStatementTooClose1, SwitchBreakStatementFixed, 8, 11),
+        DataRow(SwitchBreakStatementTooFar2, SwitchBreakStatementFixed, 10, 20),
+        DataRow(SwitchBreakStatementTooClose2, SwitchBreakStatementFixed, 10, 15),
+        DataRow(SwitchBreakStatementTooFar3, SwitchBreakStatementFixed, 11, 24),
+        DataRow(SwitchBreakStatementTooClose3, SwitchBreakStatementFixed, 11, 19),
+        DataRow(ThrowStatementTooFar, ThrowStatementFixed, 8, 16),
+        DataRow(ThrowStatementTooClose, ThrowStatementFixed, 8, 11),
+        DataRow(TryCatchStatementTooFar1, TryCatchStatementFixed, 8, 16),
+        DataRow(TryCatchStatementTooClose1, TryCatchStatementFixed, 8, 11),
+        DataRow(TryCatchStatementTooFar2, TryCatchStatementFixed, 9, 16),
+        DataRow(TryCatchStatementTooClose2, TryCatchStatementFixed, 9, 11),
+        DataRow(TryCatchStatementTooFar3, TryCatchStatementFixed, 11, 16),
+        DataRow(TryCatchStatementTooClose3, TryCatchStatementFixed, 11, 11),
+        DataRow(TryCatchStatementTooFar4, TryCatchStatementFixed, 12, 16),
+        DataRow(TryCatchStatementTooClose4, TryCatchStatementFixed, 12, 11),
+        DataRow(TryCatchStatementTooFar5, TryCatchStatementFixed, 13, 16),
+        DataRow(TryCatchStatementTooClose5, TryCatchStatementFixed, 13, 11),
+        DataRow(TryCatchStatementTooFar6, TryCatchStatementFixed, 15, 16),
+        DataRow(TryCatchStatementTooClose6, TryCatchStatementFixed, 15, 11),
+        DataRow(UnsafeStatementTooFar, UnsafeStatementFixed, 8, 16),
+        DataRow(UnsafeStatementTooClose, UnsafeStatementFixed, 8, 11),
+        DataRow(UsingStatementTooFar, UsingStatementFixed, 8, 16),
+        DataRow(UsingStatementTooClose, UsingStatementFixed, 8, 11),
+        DataRow(WhileStatementTooFar, WhileStatementFixed, 8, 16),
+        DataRow(WhileStatementTooClose, WhileStatementFixed, 8, 11),
+        DataRow(YieldBreakStatementTooFar, YieldBreakStatementFixed, 10, 20),
+        DataRow(YieldBreakStatementTooClose, YieldBreakStatementFixed, 10, 15),
+        DataRow(YieldReturnStatementTooFar, YieldReturnStatementFixed, 10, 20),
+        DataRow(YieldReturnStatementTooClose, YieldReturnStatementFixed, 10, 15),
         ]
         public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixedsource, int line, int column)
         {
