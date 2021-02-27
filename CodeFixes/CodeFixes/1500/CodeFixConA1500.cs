@@ -56,6 +56,39 @@
             return Result;
         }
 
+        private async Task<Document> AsyncWhileHandler(Document document, DoStatementSyntax doStatement, CancellationToken cancellationToken, string nodeIndentation)
+        {
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("CodeFixConA1500", TraceLevel);
+
+            SyntaxNode? Root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            if (Root == null)
+                return document;
+
+            SyntaxTrivia IndentationTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, nodeIndentation);
+            SyntaxTriviaList NewLeadingTrivia = SyntaxTriviaList.Create(IndentationTrivia);
+            SyntaxToken WhileKeyword = doStatement.WhileKeyword;
+
+            if (WhileKeyword.HasLeadingTrivia)
+            {
+                SyntaxTriviaList LeadingTrivia = WhileKeyword.LeadingTrivia;
+                if (LeadingTrivia.Count > 0 && LeadingTrivia[0].IsKind(SyntaxKind.EndOfLineTrivia))
+                {
+                    NewLeadingTrivia = new SyntaxTriviaList(new SyntaxTrivia[] { LeadingTrivia[0], IndentationTrivia });
+                }
+            }
+
+            SyntaxToken NewKeyword = WhileKeyword.WithLeadingTrivia(NewLeadingTrivia);
+            SyntaxNode NewNode = doStatement.WithWhileKeyword(NewKeyword);
+            SyntaxNode NewRoot = Root.ReplaceNode(doStatement, NewNode);
+
+            Document Result = document.WithSyntaxRoot(NewRoot);
+
+            Analyzer.Trace("Fixed", TraceLevel);
+
+            return Result;
+        }
+
         /// <summary>
         /// Creates the action to perform to fix a document.
         /// </summary>
@@ -72,7 +105,7 @@
             NameExplorer NameExplorer = new NameExplorer(CompilationUnit, null, TraceLevel.Info);
 
             SyntaxNode? ParentNode = DiagnosticToken.Parent;
-            while (ParentNode != null && ParentNode is not StatementSyntax && ParentNode is not UsingDirectiveSyntax && ParentNode is not MemberDeclarationSyntax)
+            while (ParentNode != null && ParentNode is not StatementSyntax && ParentNode is not ElseClauseSyntax && ParentNode is not SwitchSectionSyntax && ParentNode is not CatchClauseSyntax && ParentNode is not UsingDirectiveSyntax && ParentNode is not MemberDeclarationSyntax)
                 ParentNode = ParentNode.Parent;
 
             if (ParentNode == null)
@@ -96,10 +129,20 @@
                 NodeIndentation += IndentationString;
 
             string CodeFixMessage = new LocalizableResourceString(nameof(CodeFixResources.ConA1500FixTitle), CodeFixResources.ResourceManager, typeof(CodeFixResources)).ToString();
+            CodeAction Action;
 
-            var Action = CodeAction.Create(title: CodeFixMessage,
-                    createChangedDocument: c => AsyncHandler(context.Document, ParentNode, c, NodeIndentation),
-                    equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
+            if (ParentNode is DoStatementSyntax AsDoStatement && DiagnosticToken == AsDoStatement.WhileKeyword)
+            {
+                Action = CodeAction.Create(title: CodeFixMessage,
+                        createChangedDocument: c => AsyncWhileHandler(context.Document, AsDoStatement, c, NodeIndentation),
+                        equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
+            }
+            else
+            {
+                Action = CodeAction.Create(title: CodeFixMessage,
+                        createChangedDocument: c => AsyncHandler(context.Document, ParentNode, c, NodeIndentation),
+                        equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
+            }
 
             return Action;
         }

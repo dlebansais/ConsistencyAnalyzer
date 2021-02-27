@@ -56,6 +56,9 @@
             SyntaxKind.WhileStatement,
             SyntaxKind.YieldBreakStatement,
             SyntaxKind.YieldReturnStatement,
+            SyntaxKind.ElseClause,
+            SyntaxKind.SwitchSection,
+            SyntaxKind.CatchClause,
         };
         #endregion
 
@@ -107,19 +110,29 @@
                 return;
             }
 
-            if (!IsOnSeparateLine(Node))
+            AnalyzeNode(context, Node, Explorer, out bool IsValid, TraceLevel);
+
+            if (IsValid && Node is DoStatementSyntax AsDoStatement)
+                AnalyzeWhileKeyword(context, AsDoStatement, Explorer, TraceLevel);
+        }
+
+        private void AnalyzeNode(SyntaxNodeAnalysisContext context, SyntaxNode node, NameExplorer nameExplorer, out bool isValid, TraceLevel traceLevel)
+        {
+            isValid = true;
+
+            if (!IsOnSeparateLine(node))
             {
-                Analyzer.Trace($"Not on its own line, exit", TraceLevel);
+                Analyzer.Trace($"Not on its own line, exit", traceLevel);
                 return;
             }
 
-            int ExpectedIndentationLevel = GetExpectedIndentationLevel(Node);
+            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node);
 
             int ActualIndentationLevel;
 
-            if (Node.HasLeadingTrivia)
+            if (node.HasLeadingTrivia)
             {
-                if (!Explorer.GetIndentationLevel(Node.GetLeadingTrivia(), out ActualIndentationLevel, TraceLevel))
+                if (!nameExplorer.GetIndentationLevel(node.GetLeadingTrivia(), out ActualIndentationLevel, traceLevel))
                     ActualIndentationLevel = -1;
             }
             else
@@ -127,12 +140,46 @@
 
             if (ActualIndentationLevel == ExpectedIndentationLevel)
             {
-                Analyzer.Trace($"Valid indentation level, exit", TraceLevel);
+                Analyzer.Trace($"Valid indentation level, exit", traceLevel);
                 return;
             }
 
-            Analyzer.Trace($"Inconsistent indentation", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation()));
+            Analyzer.Trace($"Inconsistent indentation", traceLevel);
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, node.GetLocation()));
+
+            isValid = false;
+        }
+
+        private void AnalyzeWhileKeyword(SyntaxNodeAnalysisContext context, DoStatementSyntax doStatement, NameExplorer nameExplorer, TraceLevel traceLevel)
+        {
+            SyntaxToken WhileKeyword = doStatement.WhileKeyword;
+
+            if (!IsOnSeparateLine(WhileKeyword))
+            {
+                Analyzer.Trace($"Not on its own line, exit", traceLevel);
+                return;
+            }
+
+            int ExpectedIndentationLevel = GetExpectedIndentationLevel(doStatement);
+
+            int ActualIndentationLevel;
+
+            if (WhileKeyword.HasLeadingTrivia)
+            {
+                if (!nameExplorer.GetIndentationLevel(WhileKeyword.LeadingTrivia, out ActualIndentationLevel, traceLevel))
+                    ActualIndentationLevel = -1;
+            }
+            else
+                ActualIndentationLevel = 0;
+
+            if (ActualIndentationLevel == ExpectedIndentationLevel)
+            {
+                Analyzer.Trace($"Valid indentation level, exit", traceLevel);
+                return;
+            }
+
+            Analyzer.Trace($"Inconsistent indentation", traceLevel);
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, WhileKeyword.GetLocation()));
         }
 
         /// <summary>
@@ -173,8 +220,23 @@
                     ExpectedIndentationLevel = 2;
                     break;
 
-                case StatementSyntax _AsStatement:
-                    ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(_AsStatement);
+                case StatementSyntax AsStatement:
+                    ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsStatement);
+                    break;
+
+                case ElseClauseSyntax AsElseClause:
+                    IfStatementSyntax IfStatement = (IfStatementSyntax)AsElseClause.Parent!;
+                    ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(IfStatement);
+                    break;
+
+                case SwitchSectionSyntax AsSwitchSection:
+                    SwitchStatementSyntax SwitchStatement = (SwitchStatementSyntax)AsSwitchSection.Parent!;
+                    ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(SwitchStatement) + 1;
+                    break;
+
+                case CatchClauseSyntax AsCatchClause:
+                    TryStatementSyntax TryStatement = (TryStatementSyntax)AsCatchClause.Parent!;
+                    ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(TryStatement);
                     break;
 
                 default:
@@ -266,6 +328,24 @@
             }
 
             return NestedLevel;
+        }
+
+        private bool IsOnSeparateLine(SyntaxToken token)
+        {
+            if (!token.HasLeadingTrivia)
+                return false;
+
+            SyntaxTriviaList LeadingTrivia = token.LeadingTrivia;
+            if (token.SyntaxTree != null)
+            {
+                var triviaSpan = token.SyntaxTree.GetLineSpan(LeadingTrivia.FullSpan);
+
+                // There is no indentation when the leading trivia doesn't begin at the start of the line.
+                if ((triviaSpan.StartLinePosition == triviaSpan.EndLinePosition) && (triviaSpan.StartLinePosition.Character > 0))
+                    return false;
+            }
+
+            return true;
         }
 
         private bool IsOnSeparateLine(SyntaxNode node)
