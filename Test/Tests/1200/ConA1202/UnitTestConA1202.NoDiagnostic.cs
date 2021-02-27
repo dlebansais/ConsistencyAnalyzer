@@ -39,14 +39,14 @@ namespace ConsistencyAnalyzer
 {
     public class Test1
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 
     public class Test2
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 }
 ";
@@ -56,14 +56,14 @@ namespace ConsistencyAnalyzer
 {
     public class Test1
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 
     public class Test2
     {
-	    public object AnalyzerTest;
-    	public object CodeFixes { get; set; }
+        public object AnalyzerTest;
+        public object CodeFixes { get; set; }
     }
 }
 ";
@@ -90,20 +90,20 @@ namespace ConsistencyAnalyzer
 {
     public class Test1
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 
     public class Test2
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 
     public class Test3
     {
-    	public object CodeFixes { get; set; }
-	    public object AnalyzerTest;
+        public object CodeFixes { get; set; }
+        public object AnalyzerTest;
     }
 }
 ";

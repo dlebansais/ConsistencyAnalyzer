@@ -11,7 +11,7 @@ namespace ConsistencyAnalyzer
 {
     class Test
     {
-        public Test() {int twowords; }
+        public Test() { int twowords; }
     }
 }
 ";

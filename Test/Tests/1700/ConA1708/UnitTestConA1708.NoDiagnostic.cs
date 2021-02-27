@@ -65,7 +65,7 @@ namespace ConsistencyAnalyzerTest
         public Test(int n)
         {
 #region Init
-             if (n > 0)
+            if (n > 0)
                 return;
 
             N = n;
@@ -86,10 +86,10 @@ namespace ConsistencyAnalyzerTest
         public Test(int n)
         {
 #region Init
-             if (n > 0)
-             {
+            if (n > 0)
+            {
                 return;
-             }
+            }
 #endregion
         }
     }

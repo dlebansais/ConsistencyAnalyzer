@@ -297,6 +297,15 @@
   <data name="ConA1314Title" xml:space="preserve">
     <value>Local variables names must be consistent</value>
   </data>
+  <data name="ConA1500Description" xml:space="preserve">
+    <value>A statement or declaration is not indented as it should be</value>
+  </data>
+  <data name="ConA1500MessageFormat" xml:space="preserve">
+    <value>Inconsistent indentation</value>
+  </data>
+  <data name="ConA1500Title" xml:space="preserve">
+    <value>Syntax indentation must be consistent</value>
+  </data>
   <data name="ConA1602Description" xml:space="preserve">
     <value>Inconsistent documentation of enumeration element</value>
   </data>

@@ -601,6 +601,33 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A statement or declaration is not indented as it should be.
+        /// </summary>
+        public static string ConA1500Description {
+            get {
+                return ResourceManager.GetString("ConA1500Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistent indentation.
+        /// </summary>
+        public static string ConA1500MessageFormat {
+            get {
+                return ResourceManager.GetString("ConA1500MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syntax indentation must be consistent.
+        /// </summary>
+        public static string ConA1500Title {
+            get {
+                return ResourceManager.GetString("ConA1500Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inconsistent documentation of enumeration element.
         /// </summary>
         public static string ConA1602Description {

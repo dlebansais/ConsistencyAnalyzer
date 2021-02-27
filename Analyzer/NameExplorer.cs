@@ -1,6 +1,7 @@
 ﻿namespace ConsistencyAnalyzer
 {
     using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using System.Collections.Generic;
@@ -126,6 +127,21 @@
         {
             get { return LocalVariableConstCount + LocalVariableConstCandidateCount >= 3 && LocalVariableConstCount > LocalVariableConstCandidateCount; } 
         }
+
+        /// <summary>
+        /// Gets a value indicating whether how indentation is defined is known.
+        /// </summary>
+        public bool IsIndentationKnown { get { return IsIndentationUsingTab || WhitespaceIndentation > 0; } }
+
+        /// <summary>
+        /// Gets a value indicating whether indentation uses the tab character.
+        /// </summary>
+        public bool IsIndentationUsingTab { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether indentation uses the whitespace and how many are used for one level of indentation.
+        /// </summary>
+        public int WhitespaceIndentation { get; private set; }
         #endregion
 
         #region Client Interface
@@ -777,6 +793,113 @@
         public static string IdentifierNameToString(IdentifierNameSyntax identifierName)
         {
             return identifierName.Identifier.ValueText;
+        }
+
+        private void CheckIndentation(SyntaxNode node)
+        {
+            if (IsIndentationKnown)
+                return;
+
+            if (!node.HasLeadingTrivia)
+                return;
+
+            SyntaxTriviaList LeadingTriviaList = node.GetLeadingTrivia();
+
+            foreach (SyntaxTrivia Trivia in LeadingTriviaList.Reverse())
+                if (Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                {
+                    string Text = Trivia.ToString();
+                    if (Text.Contains("\t"))
+                        IsIndentationUsingTab = true;
+                    else
+                        WhitespaceIndentation += Trivia.Span.End - Trivia.Span.Start;
+                }
+
+            if (IsIndentationUsingTab && WhitespaceIndentation > 0)
+            {
+                IsIndentationUsingTab = false;
+                WhitespaceIndentation = 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the indentation level corresponding to a list of trivia.
+        /// </summary>
+        /// <param name="triviaList">The trivia list.</param>
+        /// <param name="indentationLevel">The indentation level upon return.</param>
+        /// <param name="traceLevel">The trace level.</param>
+        /// <returns>True if indentation could be calculated; otherwise, false.</returns>
+        public bool GetIndentationLevel(SyntaxTriviaList triviaList, out int indentationLevel, TraceLevel traceLevel)
+        {
+            indentationLevel = 0;
+
+            foreach (SyntaxTrivia Trivia in triviaList.Reverse())
+                if (Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                {
+                    if (!UpdateWhitespaceTriviaIndentationLevel(Trivia, ref indentationLevel, traceLevel))
+                        return false;
+                }
+                else if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia) || Trivia.IsKind(SyntaxKind.RegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.EndRegionDirectiveTrivia))
+                    break;
+                else
+                {
+                    string Text = Trivia.ToString();
+                    if (Text.Contains("\n"))
+                        break;
+                }
+
+            return true;
+        }
+
+        private bool UpdateWhitespaceTriviaIndentationLevel(SyntaxTrivia trivia, ref int indentationLevel, TraceLevel traceLevel)
+        {
+            if (IsIndentationUsingTab)
+            {
+                if (!UpdateTabIndentationLevel(trivia, ref indentationLevel))
+                    return false;
+            }
+            else
+            {
+                if (!UpdateWhitespaceIndentationLevel(trivia, ref indentationLevel, traceLevel))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool UpdateTabIndentationLevel(SyntaxTrivia trivia, ref int indentationLevel)
+        {
+            string Text = trivia.ToString();
+            foreach (char c in Text)
+                if (c != '\t')
+                    return false;
+
+            int SpanLength = trivia.Span.End - trivia.Span.Start;
+            indentationLevel += SpanLength;
+            return true;
+        }
+
+        private bool UpdateWhitespaceIndentationLevel(SyntaxTrivia trivia, ref int indentationLevel, TraceLevel traceLevel)
+        {
+            if (WhitespaceIndentation == 0)
+                return false;
+
+            string Text = trivia.ToString();
+            foreach (char c in Text)
+                if (!char.IsWhiteSpace(c) || c == '\t')
+                    return false;
+
+            int SpanLength = trivia.Span.End - trivia.Span.Start;
+            int Level = SpanLength / WhitespaceIndentation;
+
+            Analyzer.Trace($"SpanLength: {SpanLength}", traceLevel);
+
+            indentationLevel += Level;
+
+            if (SpanLength > Level * WhitespaceIndentation)
+                return false;
+
+            return true;
         }
 
         private Dictionary<NameCategory, Dictionary<NamingSchemes, int>> SchemeTable = new();

@@ -232,6 +232,15 @@ namespace ConsistencyAnalyzer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change indentation.
+        /// </summary>
+        internal static string ConA1500FixTitle {
+            get {
+                return ResourceManager.GetString("ConA1500FixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add documentation.
         /// </summary>
         internal static string ConA1602FixTitle {

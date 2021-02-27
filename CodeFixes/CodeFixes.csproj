@@ -89,6 +89,9 @@
     <Compile Update="CodeFixes\1300\CodeFixConA1300.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="CodeFixes\1500\CodeFixConA1500.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="CodeFixes\1700\CodeFixConA1701.cs">
       <SubType>Code</SubType>
     </Compile>

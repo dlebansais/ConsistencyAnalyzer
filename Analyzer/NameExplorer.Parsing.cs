@@ -18,6 +18,8 @@
         {
             foreach (MemberDeclarationSyntax MemberDeclaration in compilationUnit.Members)
                 ParseMemberDeclaration(MemberDeclaration);
+            foreach (UsingDirectiveSyntax UsingDirective in compilationUnit.Usings)
+                ParseUsingDirective(UsingDirective);
         }
 
         private void ParseMemberDeclaration(MemberDeclarationSyntax memberDeclaration)
@@ -52,6 +54,12 @@
                     ParseNamespaceDeclaration(AsNamespaceDeclaration);
                     break;
             }
+        }
+
+        private void ParseUsingDirective(UsingDirectiveSyntax usingDirective)
+        {
+            if (usingDirective.Parent is NamespaceDeclarationSyntax)
+                CheckIndentation(usingDirective);
         }
 
         private void ParseBaseFieldDeclaration(BaseFieldDeclarationSyntax baseFieldDeclaration)
@@ -107,6 +115,8 @@
 
         private void ParseBaseTypeDeclaration(BaseTypeDeclarationSyntax baseTypeDeclaration)
         {
+            CheckIndentation(baseTypeDeclaration);
+
             switch (baseTypeDeclaration)
             {
                 case EnumDeclarationSyntax AsEnumDeclaration:
@@ -336,6 +346,8 @@
             foreach (MemberDeclarationSyntax MemberDeclaration in namespaceDeclaration.Members)
                 ParseMemberDeclaration(MemberDeclaration);
             ParseName(namespaceDeclaration.Name, NameCategory.Namespace);
+            foreach (UsingDirectiveSyntax UsingDirective in namespaceDeclaration.Usings)
+                ParseUsingDirective(UsingDirective);
         }
 
         private void ParseVariableDeclaration(VariableDeclarationSyntax variableDeclaration, NameCategory nameCategory)
