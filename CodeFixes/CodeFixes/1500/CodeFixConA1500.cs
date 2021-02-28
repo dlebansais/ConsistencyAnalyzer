@@ -221,6 +221,72 @@
             return Result;
         }
 
+        private async Task<Document> AsyncAccessorListOpenBraceHandler(Document document, AccessorListSyntax baseTypeDeclaration, CancellationToken cancellationToken, string nodeIndentation)
+        {
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("CodeFixConA1500", TraceLevel);
+
+            SyntaxNode? Root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            if (Root == null)
+                return document;
+
+            SyntaxTrivia IndentationTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, nodeIndentation);
+            SyntaxTriviaList NewLeadingTrivia = SyntaxTriviaList.Create(IndentationTrivia);
+            SyntaxToken OpenBraceToken = baseTypeDeclaration.OpenBraceToken;
+
+            if (OpenBraceToken.HasLeadingTrivia)
+            {
+                SyntaxTriviaList LeadingTrivia = OpenBraceToken.LeadingTrivia;
+                if (LeadingTrivia.Count > 0 && LeadingTrivia[0].IsKind(SyntaxKind.EndOfLineTrivia))
+                {
+                    NewLeadingTrivia = new SyntaxTriviaList(new SyntaxTrivia[] { LeadingTrivia[0], IndentationTrivia });
+                }
+            }
+
+            SyntaxToken NewToken = OpenBraceToken.WithLeadingTrivia(NewLeadingTrivia);
+            SyntaxNode NewNode = baseTypeDeclaration.WithOpenBraceToken(NewToken);
+            SyntaxNode NewRoot = Root.ReplaceNode(baseTypeDeclaration, NewNode);
+
+            Document Result = document.WithSyntaxRoot(NewRoot);
+
+            Analyzer.Trace("Fixed", TraceLevel);
+
+            return Result;
+        }
+
+        private async Task<Document> AsyncAccessorListCloseBraceHandler(Document document, AccessorListSyntax baseTypeDeclaration, CancellationToken cancellationToken, string nodeIndentation)
+        {
+            TraceLevel TraceLevel = TraceLevel.Info;
+            Analyzer.Trace("CodeFixConA1500", TraceLevel);
+
+            SyntaxNode? Root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            if (Root == null)
+                return document;
+
+            SyntaxTrivia IndentationTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, nodeIndentation);
+            SyntaxTriviaList NewLeadingTrivia = SyntaxTriviaList.Create(IndentationTrivia);
+            SyntaxToken CloseBraceToken = baseTypeDeclaration.CloseBraceToken;
+
+            if (CloseBraceToken.HasLeadingTrivia)
+            {
+                SyntaxTriviaList LeadingTrivia = CloseBraceToken.LeadingTrivia;
+                if (LeadingTrivia.Count > 0 && LeadingTrivia[0].IsKind(SyntaxKind.EndOfLineTrivia))
+                {
+                    NewLeadingTrivia = new SyntaxTriviaList(new SyntaxTrivia[] { LeadingTrivia[0], IndentationTrivia });
+                }
+            }
+
+            SyntaxToken NewToken = CloseBraceToken.WithLeadingTrivia(NewLeadingTrivia);
+            SyntaxNode NewNode = baseTypeDeclaration.WithCloseBraceToken(NewToken);
+            SyntaxNode NewRoot = Root.ReplaceNode(baseTypeDeclaration, NewNode);
+
+            Document Result = document.WithSyntaxRoot(NewRoot);
+
+            Analyzer.Trace("Fixed", TraceLevel);
+
+            return Result;
+        }
+
         private async Task<Document> AsyncBlockOpenBraceHandler(Document document, BlockSyntax baseTypeDeclaration, CancellationToken cancellationToken, string nodeIndentation)
         {
             TraceLevel TraceLevel = TraceLevel.Info;
@@ -369,7 +435,15 @@
             NameExplorer NameExplorer = new NameExplorer(CompilationUnit, null, TraceLevel.Info);
 
             SyntaxNode? ParentNode = DiagnosticToken.Parent;
-            while (ParentNode != null && ParentNode is not StatementSyntax && ParentNode is not ElseClauseSyntax && ParentNode is not SwitchSectionSyntax && ParentNode is not CatchClauseSyntax && ParentNode is not UsingDirectiveSyntax && ParentNode is not MemberDeclarationSyntax)
+            while (ParentNode != null &&
+                   ParentNode is not AccessorListSyntax &&
+                   ParentNode is not AccessorDeclarationSyntax &&
+                   ParentNode is not StatementSyntax && 
+                   ParentNode is not ElseClauseSyntax && 
+                   ParentNode is not SwitchSectionSyntax && 
+                   ParentNode is not CatchClauseSyntax && 
+                   ParentNode is not UsingDirectiveSyntax && 
+                   ParentNode is not MemberDeclarationSyntax)
                 ParentNode = ParentNode.Parent;
 
             if (ParentNode == null)
@@ -424,6 +498,21 @@
                     {
                         Action = CodeAction.Create(title: CodeFixMessage,
                                 createChangedDocument: c => AsyncBaseTypeCloseBraceHandler(context.Document, AsBaseTypeDeclaration, c, NodeIndentation),
+                                equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
+                    }
+                    break;
+
+                case AccessorListSyntax AsAccessorList:
+                    if (DiagnosticToken == AsAccessorList.OpenBraceToken)
+                    {
+                        Action = CodeAction.Create(title: CodeFixMessage,
+                                createChangedDocument: c => AsyncAccessorListOpenBraceHandler(context.Document, AsAccessorList, c, NodeIndentation),
+                                equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
+                    }
+                    else if (DiagnosticToken == AsAccessorList.CloseBraceToken)
+                    {
+                        Action = CodeAction.Create(title: CodeFixMessage,
+                                createChangedDocument: c => AsyncAccessorListCloseBraceHandler(context.Document, AsAccessorList, c, NodeIndentation),
                                 equivalenceKey: nameof(CodeFixResources.ConA1500FixTitle));
                     }
                     break;

@@ -60,6 +60,8 @@
             SyntaxKind.SwitchSection,
             SyntaxKind.CatchClause,
             SyntaxKind.Block,
+            SyntaxKind.GetAccessorDeclaration,
+            SyntaxKind.SetAccessorDeclaration,
         };
         #endregion
 
@@ -129,6 +131,19 @@
                     case BaseTypeDeclarationSyntax AsBaseTypeDeclaration:
                         AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.OpenBraceToken, Explorer, TraceLevel);
                         AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.CloseBraceToken, Explorer, TraceLevel);
+                        break;
+
+                    case PropertyDeclarationSyntax AsPropertyDeclaration:
+                        if (AsPropertyDeclaration.AccessorList != null)
+                        {
+                            AccessorListSyntax AccessorList = AsPropertyDeclaration.AccessorList;
+                            AnalyzeNodeToken(context, AccessorList, AccessorList.OpenBraceToken, Explorer, TraceLevel);
+                            AnalyzeNodeToken(context, AccessorList, AccessorList.CloseBraceToken, Explorer, TraceLevel);
+                        }
+                        break;
+
+                    case AccessorDeclarationSyntax AsAccessorDeclaration:
+                        AnalyzeNodeToken(context, AsAccessorDeclaration, AsAccessorDeclaration.Keyword, Explorer, TraceLevel);
                         break;
 
                     case BlockSyntax AsBlock:
@@ -241,13 +256,21 @@
                 case DelegateDeclarationSyntax _:
                 case EventFieldDeclarationSyntax _:
                 case FieldDeclarationSyntax _:
-                case MethodDeclarationSyntax _:
+                case BaseMethodDeclarationSyntax _:
                 case PropertyDeclarationSyntax _:
                     ExpectedIndentationLevel = 2;
                     break;
 
                 case EnumMemberDeclarationSyntax _:
                     ExpectedIndentationLevel = 2;
+                    break;
+
+                case AccessorListSyntax _:
+                    ExpectedIndentationLevel = 2;
+                    break;
+
+                case AccessorDeclarationSyntax _:
+                    ExpectedIndentationLevel = 3;
                     break;
 
                 case BlockSyntax AsBlock:
@@ -259,8 +282,10 @@
                         ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsIfStatement);
                     else if (AsBlock.Parent is CatchClauseSyntax AsCatchClause && AsCatchClause.Parent is TryStatementSyntax AsTryStatement)
                         ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsTryStatement);
-                    else if (AsBlock.Parent is MethodDeclarationSyntax)
+                    else if (AsBlock.Parent is BaseMethodDeclarationSyntax)
                         ExpectedIndentationLevel = 2;
+                    else if (AsBlock.Parent is AccessorDeclarationSyntax)
+                        ExpectedIndentationLevel = 3;
                     else
                         throw new InvalidCastException();
                     break;
@@ -332,6 +357,12 @@
                 if (CurrentStatement.Parent is MemberDeclarationSyntax)
                 {
                     NestedLevel++;
+                    break;
+                }
+
+                if (CurrentStatement.Parent is AccessorDeclarationSyntax)
+                {
+                    NestedLevel += 2;
                     break;
                 }
 

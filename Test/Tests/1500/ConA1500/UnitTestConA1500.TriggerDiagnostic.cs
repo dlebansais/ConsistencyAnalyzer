@@ -770,7 +770,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclarationTooFar = @"
+        private const string PropertyDeclarationTooFar1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -780,7 +780,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclarationTooClose = @"
+        private const string PropertyDeclarationTooClose1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -790,12 +790,309 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclarationFixed = @"
+        private const string PropertyDeclarationFixed1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
     {
         public int Test { get; set; }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar2_1 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+           {
+            get;
+            set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose2_1 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+      {
+            get;
+            set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar2_2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+               get;
+            set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose2_2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+          get;
+            set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar2_3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get;
+               set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose2_3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get;
+          set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar2_4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get;
+            set;
+           }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose2_4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get;
+            set;
+      }
+    }
+}
+";
+
+        private const string PropertyDeclarationFixed2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get;
+            set;
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar3_1 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+               {
+                return 0;
+            }
+            set
+            {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose3_1 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+          {
+                return 0;
+            }
+            set
+            {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar3_2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+               }
+            set
+            {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose3_2 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+          }
+            set
+            {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar3_3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+            }
+            set
+               {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose3_3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+            }
+            set
+          {
+            }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooFar3_4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+            }
+            set
+            {
+               }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationTooClose3_4 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+            }
+            set
+            {
+          }
+        }
+    }
+}
+";
+
+        private const string PropertyDeclarationFixed3 = @"
+namespace ConsistencyAnalyzer
+{
+    public class CodeFixes
+    {
+        public int Test
+        {
+            get
+            {
+                return 0;
+            }
+            set
+            {
+            }
+        }
     }
 }
 ";
@@ -2308,8 +2605,24 @@ namespace ConsistencyAnalyzer
         DataRow(MethodDeclarationTooClose2, MethodDeclarationFixed, 7, 7),
         DataRow(MethodDeclarationTooFar3, MethodDeclarationFixed, 8, 12),
         DataRow(MethodDeclarationTooClose3, MethodDeclarationFixed, 8, 7),
-        DataRow(PropertyDeclarationTooFar, PropertyDeclarationFixed, 6, 12),
-        DataRow(PropertyDeclarationTooClose, PropertyDeclarationFixed, 6, 7),
+        DataRow(PropertyDeclarationTooFar1, PropertyDeclarationFixed1, 6, 12),
+        DataRow(PropertyDeclarationTooClose1, PropertyDeclarationFixed1, 6, 7),
+        DataRow(PropertyDeclarationTooFar2_1, PropertyDeclarationFixed2, 7, 12),
+        DataRow(PropertyDeclarationTooClose2_1, PropertyDeclarationFixed2, 7, 7),
+        DataRow(PropertyDeclarationTooFar2_2, PropertyDeclarationFixed2, 8, 16),
+        DataRow(PropertyDeclarationTooClose2_2, PropertyDeclarationFixed2, 8, 11),
+        DataRow(PropertyDeclarationTooFar2_3, PropertyDeclarationFixed2, 9, 16),
+        DataRow(PropertyDeclarationTooClose2_3, PropertyDeclarationFixed2, 9, 11),
+        DataRow(PropertyDeclarationTooFar2_4, PropertyDeclarationFixed2, 10, 12),
+        DataRow(PropertyDeclarationTooClose2_4, PropertyDeclarationFixed2, 10, 7),
+        DataRow(PropertyDeclarationTooFar3_1, PropertyDeclarationFixed3, 9, 16),
+        DataRow(PropertyDeclarationTooClose3_1, PropertyDeclarationFixed3, 9, 11),
+        DataRow(PropertyDeclarationTooFar3_2, PropertyDeclarationFixed3, 11, 16),
+        DataRow(PropertyDeclarationTooClose3_2, PropertyDeclarationFixed3, 11, 11),
+        DataRow(PropertyDeclarationTooFar3_3, PropertyDeclarationFixed3, 13, 16),
+        DataRow(PropertyDeclarationTooClose3_3, PropertyDeclarationFixed3, 13, 11),
+        DataRow(PropertyDeclarationTooFar3_4, PropertyDeclarationFixed3, 14, 16),
+        DataRow(PropertyDeclarationTooClose3_4, PropertyDeclarationFixed3, 14, 11),
         DataRow(EnumMemberDeclarationTooFar, EnumMemberDeclarationFixed, 6, 12),
         DataRow(EnumMemberDeclarationTooClose, EnumMemberDeclarationFixed, 6, 7),
         DataRow(OneForStatementTooFar1, OneForStatementFixed, 8, 16),
