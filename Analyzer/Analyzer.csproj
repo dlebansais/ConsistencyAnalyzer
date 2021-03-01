@@ -5,14 +5,14 @@
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Authors>David Le Bansais</Authors>
     <Company />
     <Product />
     <Description>A C# source code analyzer that doesn't ensure a specific code style, but rather consistency of the code style used</Description>
     <Copyright>Copyright © 2019 David Le Bansais</Copyright>
-    <AssemblyVersion>1.2.0.3</AssemblyVersion>
-    <FileVersion>1.2.0.3</FileVersion>
+    <AssemblyVersion>1.3.0.4</AssemblyVersion>
+    <FileVersion>1.3.0.4</FileVersion>
     <RepositoryUrl>https://github.com/dlebansais/ConsistencyAnalyzer</RepositoryUrl>
     <RootNamespace>ConsistencyAnalyzer</RootNamespace>
 
