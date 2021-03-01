@@ -461,7 +461,8 @@
             }
 
             string NodeIndentation = string.Empty;
-            int ExpectedIndentationLevel = AnalyzerRuleConA1500.GetExpectedIndentationLevel(ParentNode);
+            bool IsInNamespace = AnalyzerRuleConA1500.CheckIfIsInNamespace(ParentNode);
+            int ExpectedIndentationLevel = AnalyzerRuleConA1500.GetExpectedIndentationLevel(ParentNode, IsInNamespace);
 
             for (int i = 0; i < ExpectedIndentationLevel; i++)
                 NodeIndentation += IndentationString;

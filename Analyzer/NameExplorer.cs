@@ -25,6 +25,7 @@
 
             ParseCompilationUnit(CompilationUnit);
             ReduceSchemes();
+            CheckIndentation();
         }
 
         private void ReduceSchemes()
@@ -795,31 +796,119 @@
             return identifierName.Identifier.ValueText;
         }
 
-        private void CheckIndentation(SyntaxNode node)
+        private void AddFirstLevelIndentation(SyntaxNode node)
         {
-            if (IsIndentationKnown)
-                return;
-
             if (!node.HasLeadingTrivia)
                 return;
 
             SyntaxTriviaList LeadingTriviaList = node.GetLeadingTrivia();
+            GetIndentation(LeadingTriviaList, out int WhitespaceCount, out bool HasTab);
+            UpdateIndentationTable(FirstLevelIndentationTable, WhitespaceCount, HasTab);
+        }
+
+        private void AddFirstLevelIndentation(SyntaxToken token)
+        {
+            if (!token.HasLeadingTrivia)
+                return;
+
+            SyntaxTriviaList LeadingTriviaList = token.LeadingTrivia;
+            GetIndentation(LeadingTriviaList, out int WhitespaceCount, out bool HasTab);
+            UpdateIndentationTable(FirstLevelIndentationTable, WhitespaceCount, HasTab);
+        }
+
+        private void AddSecondLevelIndentation(SyntaxNode node)
+        {
+            if (!node.HasLeadingTrivia)
+                return;
+
+            SyntaxTriviaList LeadingTriviaList = node.GetLeadingTrivia();
+            GetIndentation(LeadingTriviaList, out int WhitespaceCount, out bool HasTab);
+            UpdateIndentationTable(SecondLevelIndentationTable, WhitespaceCount, HasTab);
+        }
+
+        private void AddSecondLevelIndentation(SyntaxToken token)
+        {
+            if (!token.HasLeadingTrivia)
+                return;
+
+            SyntaxTriviaList LeadingTriviaList = token.LeadingTrivia;
+            GetIndentation(LeadingTriviaList, out int WhitespaceCount, out bool HasTab);
+            UpdateIndentationTable(SecondLevelIndentationTable, WhitespaceCount, HasTab);
+        }
+
+        private void GetIndentation(SyntaxTriviaList LeadingTriviaList, out int whitespaceCount, out bool hasTab)
+        {
+            whitespaceCount = 0;
+            hasTab = false;
 
             foreach (SyntaxTrivia Trivia in LeadingTriviaList.Reverse())
                 if (Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
                 {
                     string Text = Trivia.ToString();
                     if (Text.Contains("\t"))
-                        IsIndentationUsingTab = true;
+                        hasTab = true;
                     else
-                        WhitespaceIndentation += Trivia.Span.End - Trivia.Span.Start;
+                        whitespaceCount += Trivia.Span.End - Trivia.Span.Start;
                 }
+                else if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia) || Trivia.IsKind(SyntaxKind.RegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.EndRegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.SingleLineCommentTrivia) || Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                    break;
 
-            if (IsIndentationUsingTab && WhitespaceIndentation > 0)
+            if (hasTab && whitespaceCount > 0)
             {
-                IsIndentationUsingTab = false;
-                WhitespaceIndentation = 0;
+                hasTab = false;
+                whitespaceCount = 0;
             }
+        }
+
+        private void UpdateIndentationTable(Dictionary<int, int> table, int whitespaceCount, bool hasTab)
+        {
+            if (hasTab)
+                TabIndentationCount++;
+
+            if (whitespaceCount > 0)
+            {
+                if (!table.ContainsKey(whitespaceCount))
+                    table.Add(whitespaceCount, 0);
+                table[whitespaceCount]++;
+            }
+        }
+
+        private void CheckIndentation()
+        {
+            int TotalWhitespaceIndentationCounts = 0;
+            foreach (KeyValuePair<int, int> Entry in FirstLevelIndentationTable)
+                TotalWhitespaceIndentationCounts += Entry.Value;
+            foreach (KeyValuePair<int, int> Entry in SecondLevelIndentationTable)
+                TotalWhitespaceIndentationCounts += Entry.Value;
+
+            if (TabIndentationCount + TotalWhitespaceIndentationCounts > 0)
+            {
+                if (TabIndentationCount > TotalWhitespaceIndentationCounts)
+                    IsIndentationUsingTab = true;
+                else
+                {
+                    GetMostUsedIndentation(FirstLevelIndentationTable, out int MostUsedFirstLevelIndentation, out int MostUsedFirstLevelIndentationCount);
+                    GetMostUsedIndentation(SecondLevelIndentationTable, out int MostUsedSecondLevelIndentation, out int MostUsedSecondLevelIndentationCount);
+
+                    if (MostUsedFirstLevelIndentationCount > MostUsedSecondLevelIndentationCount)
+                        WhitespaceIndentation = MostUsedFirstLevelIndentation;
+                    else
+                        WhitespaceIndentation = MostUsedSecondLevelIndentation / 2;
+                }
+            }
+        }
+
+        private static void GetMostUsedIndentation(Dictionary<int, int> table, out int mostUsedIndentation, out int mostUsedIndentationCount)
+        {
+            mostUsedIndentation = 0;
+            mostUsedIndentationCount = 0;
+
+            foreach (KeyValuePair<int, int> Entry in table)
+                if (mostUsedIndentationCount < Entry.Value)
+                {
+                    mostUsedIndentation = Entry.Key;
+                    mostUsedIndentationCount = Entry.Value;
+                }
         }
 
         /// <summary>
@@ -839,14 +928,8 @@
                     if (!UpdateWhitespaceTriviaIndentationLevel(Trivia, ref indentationLevel, traceLevel))
                         return false;
                 }
-                else if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia) || Trivia.IsKind(SyntaxKind.RegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.EndRegionDirectiveTrivia))
+                else if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia) || Trivia.IsKind(SyntaxKind.RegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.EndRegionDirectiveTrivia) || Trivia.IsKind(SyntaxKind.SingleLineCommentTrivia) || Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                     break;
-                else
-                {
-                    string Text = Trivia.ToString();
-                    if (Text.Contains("\n"))
-                        break;
-                }
 
             return true;
         }
@@ -906,6 +989,9 @@
         private Dictionary<NameCategory, NamingSchemes> ExpectedSchemeTable = new();
         private int LocalVariableConstCount;
         private int LocalVariableConstCandidateCount;
+        private Dictionary<int, int> FirstLevelIndentationTable = new();
+        private Dictionary<int, int> SecondLevelIndentationTable = new();
+        private int TabIndentationCount;
         #endregion
     }
 }

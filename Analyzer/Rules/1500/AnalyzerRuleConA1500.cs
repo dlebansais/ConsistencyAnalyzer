@@ -113,57 +113,59 @@
                 return;
             }
 
+            bool IsInNamespace = CheckIfIsInNamespace(Node);
+
             bool IsValid;
             if (Node is BlockSyntax _)
                 IsValid = true;
             else
-                AnalyzeNode(context, Node, Explorer, out IsValid, TraceLevel);
+                AnalyzeNode(context, Node, Explorer, IsInNamespace, out IsValid, TraceLevel);
 
             if (IsValid)
             {
                 switch (Node)
                 {
                     case NamespaceDeclarationSyntax AsNamespaceDeclaration:
-                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.OpenBraceToken, Explorer, TraceLevel);
-                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.CloseBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.OpenBraceToken, IsInNamespace, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsNamespaceDeclaration, AsNamespaceDeclaration.CloseBraceToken, IsInNamespace, Explorer, TraceLevel);
                         break;
 
                     case BaseTypeDeclarationSyntax AsBaseTypeDeclaration:
-                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.OpenBraceToken, Explorer, TraceLevel);
-                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.CloseBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.OpenBraceToken, IsInNamespace, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBaseTypeDeclaration, AsBaseTypeDeclaration.CloseBraceToken, IsInNamespace, Explorer, TraceLevel);
                         break;
 
                     case PropertyDeclarationSyntax AsPropertyDeclaration:
                         if (AsPropertyDeclaration.AccessorList != null)
                         {
                             AccessorListSyntax AccessorList = AsPropertyDeclaration.AccessorList;
-                            AnalyzeNodeToken(context, AccessorList, AccessorList.OpenBraceToken, Explorer, TraceLevel);
-                            AnalyzeNodeToken(context, AccessorList, AccessorList.CloseBraceToken, Explorer, TraceLevel);
+                            AnalyzeNodeToken(context, AccessorList, AccessorList.OpenBraceToken, IsInNamespace, Explorer, TraceLevel);
+                            AnalyzeNodeToken(context, AccessorList, AccessorList.CloseBraceToken, IsInNamespace, Explorer, TraceLevel);
                         }
                         break;
 
                     case AccessorDeclarationSyntax AsAccessorDeclaration:
-                        AnalyzeNodeToken(context, AsAccessorDeclaration, AsAccessorDeclaration.Keyword, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsAccessorDeclaration, AsAccessorDeclaration.Keyword, IsInNamespace, Explorer, TraceLevel);
                         break;
 
                     case BlockSyntax AsBlock:
-                        AnalyzeNodeToken(context, AsBlock, AsBlock.OpenBraceToken, Explorer, TraceLevel);
-                        AnalyzeNodeToken(context, AsBlock, AsBlock.CloseBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBlock, AsBlock.OpenBraceToken, IsInNamespace, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsBlock, AsBlock.CloseBraceToken, IsInNamespace, Explorer, TraceLevel);
                         break;
 
                     case SwitchStatementSyntax AsSwitchStatement:
-                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.OpenBraceToken, Explorer, TraceLevel);
-                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.CloseBraceToken, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.OpenBraceToken, IsInNamespace, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsSwitchStatement, AsSwitchStatement.CloseBraceToken, IsInNamespace, Explorer, TraceLevel);
                         break;
 
                     case DoStatementSyntax AsDoStatement:
-                        AnalyzeNodeToken(context, AsDoStatement, AsDoStatement.WhileKeyword, Explorer, TraceLevel);
+                        AnalyzeNodeToken(context, AsDoStatement, AsDoStatement.WhileKeyword, IsInNamespace, Explorer, TraceLevel);
                         break;
                 }
             }
         }
 
-        private void AnalyzeNode(SyntaxNodeAnalysisContext context, SyntaxNode node, NameExplorer nameExplorer, out bool isValid, TraceLevel traceLevel)
+        private void AnalyzeNode(SyntaxNodeAnalysisContext context, SyntaxNode node, NameExplorer nameExplorer, bool isInNamespace, out bool isValid, TraceLevel traceLevel)
         {
             isValid = true;
 
@@ -173,7 +175,7 @@
                 return;
             }
 
-            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node);
+            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node, isInNamespace);
 
             int ActualIndentationLevel;
 
@@ -181,6 +183,11 @@
             {
                 if (!nameExplorer.GetIndentationLevel(node.GetLeadingTrivia(), out ActualIndentationLevel, traceLevel))
                     ActualIndentationLevel = -1;
+                else
+                {
+                    if (!isInNamespace && ActualIndentationLevel > 0)
+                        ActualIndentationLevel--;
+                }
             }
             else
                 ActualIndentationLevel = 0;
@@ -197,7 +204,7 @@
             isValid = false;
         }
 
-        private void AnalyzeNodeToken(SyntaxNodeAnalysisContext context, SyntaxNode node, SyntaxToken token, NameExplorer nameExplorer, TraceLevel traceLevel)
+        private void AnalyzeNodeToken(SyntaxNodeAnalysisContext context, SyntaxNode node, SyntaxToken token, bool isInNamespace, NameExplorer nameExplorer, TraceLevel traceLevel)
         {
             if (!IsOnSeparateLine(token))
             {
@@ -205,7 +212,7 @@
                 return;
             }
 
-            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node);
+            int ExpectedIndentationLevel = GetExpectedIndentationLevel(node, isInNamespace);
 
             int ActualIndentationLevel;
 
@@ -228,10 +235,34 @@
         }
 
         /// <summary>
+        /// Checks if the node is declared within a namespace.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        public static bool CheckIfIsInNamespace(SyntaxNode node)
+        {
+            bool IsInNamespace = false;
+            SyntaxNode? CurrentNode = node;
+
+            while (CurrentNode != null)
+            {
+                if (CurrentNode is NamespaceDeclarationSyntax)
+                {
+                    IsInNamespace = true;
+                    break;
+                }
+
+                CurrentNode = CurrentNode.Parent;
+            }
+
+            return IsInNamespace;
+        }
+
+        /// <summary>
         /// Gets the expected indetation level of a node.
         /// </summary>
         /// <param name="node">The node.</param>
-        public static int GetExpectedIndentationLevel(SyntaxNode node)
+        /// <param name="isInNamespace">True if the node is within a namespace.</param>
+        public static int GetExpectedIndentationLevel(SyntaxNode node, bool isInNamespace)
         {
             int ExpectedIndentationLevel;
 
@@ -312,6 +343,9 @@
                 default:
                     throw new InvalidCastException();
             }
+
+            if (!isInNamespace && ExpectedIndentationLevel > 0)
+                ExpectedIndentationLevel--;
 
             return ExpectedIndentationLevel;
         }

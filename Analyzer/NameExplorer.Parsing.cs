@@ -59,11 +59,13 @@
         private void ParseUsingDirective(UsingDirectiveSyntax usingDirective)
         {
             if (usingDirective.Parent is NamespaceDeclarationSyntax)
-                CheckIndentation(usingDirective);
+                AddFirstLevelIndentation(usingDirective);
         }
 
         private void ParseBaseFieldDeclaration(BaseFieldDeclarationSyntax baseFieldDeclaration)
         {
+            AddSecondLevelIndentation(baseFieldDeclaration);
+
             switch (baseFieldDeclaration)
             {
                 case EventFieldDeclarationSyntax AsEventFieldDeclaration:
@@ -77,6 +79,8 @@
 
         private void ParseBaseMethodDeclaration(BaseMethodDeclarationSyntax baseMethodDeclaration)
         {
+            AddSecondLevelIndentation(baseMethodDeclaration);
+
             switch (baseMethodDeclaration)
             {
                 case ConstructorDeclarationSyntax AsConstructorDeclaration:
@@ -99,6 +103,8 @@
 
         private void ParseBasePropertyDeclaration(BasePropertyDeclarationSyntax basePropertyDeclaration)
         {
+            AddSecondLevelIndentation(basePropertyDeclaration);
+
             switch (basePropertyDeclaration)
             {
                 case EventDeclarationSyntax AsEventDeclaration:
@@ -115,8 +121,6 @@
 
         private void ParseBaseTypeDeclaration(BaseTypeDeclarationSyntax baseTypeDeclaration)
         {
-            CheckIndentation(baseTypeDeclaration);
-
             switch (baseTypeDeclaration)
             {
                 case EnumDeclarationSyntax AsEnumDeclaration:
@@ -254,6 +258,10 @@
 
         private void ParseEnumDeclaration(EnumDeclarationSyntax enumDeclaration)
         {
+            AddFirstLevelIndentation(enumDeclaration);
+            AddFirstLevelIndentation(enumDeclaration.OpenBraceToken);
+            AddFirstLevelIndentation(enumDeclaration.CloseBraceToken);
+
             foreach (EnumMemberDeclarationSyntax EnumMemberDeclaration in enumDeclaration.Members)
                 ParseEnumMemberDeclaration(EnumMemberDeclaration);
             if (enumDeclaration.BaseList != null)
@@ -263,6 +271,10 @@
 
         private void ParseClassDeclaration(ClassDeclarationSyntax classDeclaration)
         {
+            AddFirstLevelIndentation(classDeclaration);
+            AddFirstLevelIndentation(classDeclaration.OpenBraceToken);
+            AddFirstLevelIndentation(classDeclaration.CloseBraceToken);
+
             foreach (MemberDeclarationSyntax MemberDeclaration in classDeclaration.Members)
                 ParseMemberDeclaration(MemberDeclaration);
             foreach (TypeParameterConstraintClauseSyntax TypeParameterConstraintClause in classDeclaration.ConstraintClauses)
@@ -276,6 +288,10 @@
 
         private void ParseInterfaceDeclaration(InterfaceDeclarationSyntax interfaceDeclaration)
         {
+            AddFirstLevelIndentation(interfaceDeclaration);
+            AddFirstLevelIndentation(interfaceDeclaration.OpenBraceToken);
+            AddFirstLevelIndentation(interfaceDeclaration.CloseBraceToken);
+
             foreach (MemberDeclarationSyntax MemberDeclaration in interfaceDeclaration.Members)
                 ParseMemberDeclaration(MemberDeclaration);
             foreach (TypeParameterConstraintClauseSyntax TypeParameterConstraintClause in interfaceDeclaration.ConstraintClauses)
@@ -289,6 +305,10 @@
 
         private void ParseRecordDeclaration(RecordDeclarationSyntax recordDeclaration)
         {
+            AddFirstLevelIndentation(recordDeclaration);
+            AddFirstLevelIndentation(recordDeclaration.OpenBraceToken);
+            AddFirstLevelIndentation(recordDeclaration.CloseBraceToken);
+
             foreach (MemberDeclarationSyntax MemberDeclaration in recordDeclaration.Members)
                 ParseMemberDeclaration(MemberDeclaration);
             foreach (TypeParameterConstraintClauseSyntax TypeParameterConstraintClause in recordDeclaration.ConstraintClauses)
@@ -304,6 +324,10 @@
 
         private void ParseStructDeclaration(StructDeclarationSyntax structDeclaration)
         {
+            AddFirstLevelIndentation(structDeclaration);
+            AddFirstLevelIndentation(structDeclaration.OpenBraceToken);
+            AddFirstLevelIndentation(structDeclaration.CloseBraceToken);
+
             foreach (MemberDeclarationSyntax MemberDeclaration in structDeclaration.Members)
                 ParseMemberDeclaration(MemberDeclaration);
             foreach (TypeParameterConstraintClauseSyntax TypeParameterConstraintClause in structDeclaration.ConstraintClauses)
@@ -327,6 +351,8 @@
 
         private void ParseEnumMemberDeclaration(EnumMemberDeclarationSyntax enumMemberDeclaration)
         {
+            AddSecondLevelIndentation(enumMemberDeclaration);
+
             ParseIdentifier(enumMemberDeclaration.Identifier, NameCategory.EnumMember);
         }
 
@@ -359,6 +385,12 @@
 
         private void ParseBlock(BlockSyntax body)
         {
+            if (body.Parent is BaseMethodDeclarationSyntax)
+            {
+                AddSecondLevelIndentation(body.OpenBraceToken);
+                AddSecondLevelIndentation(body.CloseBraceToken);
+            }
+
             foreach (StatementSyntax Statement in body.Statements)
                 ParseStatement(Statement);
         }

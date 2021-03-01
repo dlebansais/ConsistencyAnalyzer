@@ -101,12 +101,12 @@ namespace ConsistencyAnalyzerTest
 
         [DataTestMethod]
         [
-        DataRow(OneEnumDocumented),
         DataRow(OneEnumNotDocumented),
+        DataRow(OneEnumDocumented),
         DataRow(TwoEnumsNotDocumented),
         DataRow(TwoEnumsDocumented),
+        DataRow(ThreeEnumsNotDocumented),
         DataRow(ThreeEnumsDocumented),
-        DataRow(ThreeEnumsNotDocumented)
         ]
         public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
         {
