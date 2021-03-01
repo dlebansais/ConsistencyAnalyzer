@@ -215,9 +215,11 @@
             int ExpectedIndentationLevel = GetExpectedIndentationLevel(node, isInNamespace);
 
             int ActualIndentationLevel;
+            string TokenTrivia = string.Empty;
 
             if (token.HasLeadingTrivia)
             {
+                TokenTrivia = token.LeadingTrivia.ToString();
                 if (!nameExplorer.GetIndentationLevel(token.LeadingTrivia, out ActualIndentationLevel, traceLevel))
                     ActualIndentationLevel = -1;
             }
@@ -251,7 +253,7 @@
                     break;
                 }
 
-                CurrentNode = CurrentNode.Parent;
+                CurrentNode = GetTrueParent(CurrentNode);
             }
 
             return IsInNamespace;
@@ -305,20 +307,23 @@
                     break;
 
                 case BlockSyntax AsBlock:
-                    if (AsBlock.Parent is BlockSyntax)
-                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsBlock);
-                    else if (AsBlock.Parent is StatementSyntax AsStatement)
-                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsStatement);
-                    else if (AsBlock.Parent is ElseClauseSyntax AsElseClause && AsElseClause.Parent is IfStatementSyntax AsIfStatement)
-                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsIfStatement);
-                    else if (AsBlock.Parent is CatchClauseSyntax AsCatchClause && AsCatchClause.Parent is TryStatementSyntax AsTryStatement)
-                        ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsTryStatement);
-                    else if (AsBlock.Parent is BaseMethodDeclarationSyntax)
-                        ExpectedIndentationLevel = 2;
-                    else if (AsBlock.Parent is AccessorDeclarationSyntax)
-                        ExpectedIndentationLevel = 3;
-                    else
-                        throw new InvalidCastException();
+                    switch (GetTrueParent(AsBlock))
+                    {
+                        case BlockSyntax:
+                            ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsBlock);
+                            break;
+                        case StatementSyntax AsStatement:
+                            ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(AsStatement);
+                            break;
+                        case AccessorDeclarationSyntax _:
+                            ExpectedIndentationLevel = 3;
+                            break;
+                        case BaseMethodDeclarationSyntax _:
+                            ExpectedIndentationLevel = 2;
+                            break;
+                        default:
+                            throw new InvalidCastException();
+                    }
                     break;
 
                 case StatementSyntax AsStatement:
@@ -326,17 +331,17 @@
                     break;
 
                 case ElseClauseSyntax AsElseClause:
-                    IfStatementSyntax IfStatement = (IfStatementSyntax)AsElseClause.Parent!;
+                    IfStatementSyntax IfStatement = (IfStatementSyntax)GetTrueParent(AsElseClause)!;
                     ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(IfStatement);
                     break;
 
                 case SwitchSectionSyntax AsSwitchSection:
-                    SwitchStatementSyntax SwitchStatement = (SwitchStatementSyntax)AsSwitchSection.Parent!;
+                    SwitchStatementSyntax SwitchStatement = (SwitchStatementSyntax)GetTrueParent(AsSwitchSection)!;
                     ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(SwitchStatement) + 1;
                     break;
 
                 case CatchClauseSyntax AsCatchClause:
-                    TryStatementSyntax TryStatement = (TryStatementSyntax)AsCatchClause.Parent!;
+                    TryStatementSyntax TryStatement = (TryStatementSyntax)GetTrueParent(AsCatchClause)!;
                     ExpectedIndentationLevel = GetExpectedIndentationLevelStatement(TryStatement);
                     break;
 
@@ -359,11 +364,11 @@
                 case CheckedStatementSyntax _:
                 case ForEachStatementSyntax _:
                 case ForEachVariableStatementSyntax _:
+                case IfStatementSyntax _:
                 case ContinueStatementSyntax _:
                 case DoStatementSyntax _:
                 case FixedStatementSyntax _:
                 case ForStatementSyntax _:
-                case IfStatementSyntax _:
                 case LocalDeclarationStatementSyntax _:
                 case LockStatementSyntax _:
                 case ReturnStatementSyntax _:
@@ -413,23 +418,27 @@
                     case DoStatementSyntax _:
                     case CheckedStatementSyntax _:
                     case TryStatementSyntax _:
-                    case IfStatementSyntax _:
                         CurrentStatement = CurrentStatement.Parent as StatementSyntax;
                         NestedLevel++;
                         break;
 
+                    case IfStatementSyntax _:
+                        CurrentStatement = GetTrueParent(CurrentStatement) as StatementSyntax;
+                        NestedLevel++;
+                        break;
+
                     case ElseClauseSyntax AsElseClause:
-                        CurrentStatement = (IfStatementSyntax?)AsElseClause.Parent;
+                        CurrentStatement = (IfStatementSyntax?)GetTrueParent(AsElseClause);
                         NestedLevel++;
                         break;
 
                     case CatchClauseSyntax AsCatchClause:
-                        CurrentStatement = (TryStatementSyntax?)AsCatchClause.Parent;
+                        CurrentStatement = (TryStatementSyntax?)GetTrueParent(AsCatchClause);
                         NestedLevel++;
                         break;
 
                     case SwitchSectionSyntax AsSwitchSection:
-                        CurrentStatement = (SwitchStatementSyntax?)AsSwitchSection.Parent;
+                        CurrentStatement = (SwitchStatementSyntax?)GetTrueParent(AsSwitchSection);
                         NestedLevel += 2;
                         break;
 
@@ -472,6 +481,24 @@
                 return false;
 
             return true;
+        }
+
+        private static SyntaxNode? GetTrueParent(SyntaxNode node)
+        {
+            SyntaxNode CurrentNode = node;
+
+            if (CurrentNode.Parent is CatchClauseSyntax AsCatchClauseParent)
+                CurrentNode = AsCatchClauseParent;
+            else
+            {
+                if (CurrentNode.Parent is ElseClauseSyntax AsElseClauseParent)
+                    CurrentNode = AsElseClauseParent;
+
+                while (CurrentNode.Parent is IfStatementSyntax AsIfStatement && AsIfStatement.Parent is ElseClauseSyntax AsElseClause)
+                    CurrentNode = AsElseClause;
+            }
+
+            return CurrentNode.Parent;
         }
         #endregion
     }
