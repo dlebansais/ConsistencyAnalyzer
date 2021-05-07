@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="Microsoft.NET.Sdk.Sdk.props" />
-
+<Project>
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+  
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>Vsix</RootNamespace>

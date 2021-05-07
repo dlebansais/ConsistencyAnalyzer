@@ -1,9 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CodeRefactorings;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
-
-namespace ConsistencyAnalyzer.Test
+﻿namespace ConsistencyAnalyzer.Test
 {
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CodeRefactorings;
+    using Microsoft.CodeAnalysis.CSharp.Testing;
+    using Microsoft.CodeAnalysis.Testing.Verifiers;
+
     public static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
         where TCodeRefactoring : CodeRefactoringProvider, new()
     {
@@ -13,10 +14,12 @@ namespace ConsistencyAnalyzer.Test
             {
                 SolutionTransforms.Add((solution, projectId) =>
                 {
-                    var compilationOptions = solution.GetProject(projectId).CompilationOptions;
-                    compilationOptions = compilationOptions.WithSpecificDiagnosticOptions(
-                        compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
-                    solution = solution.WithProjectCompilationOptions(projectId, compilationOptions);
+                    Project? Project = solution.GetProject(projectId);
+                    CompilationOptions? CompilationOptions = Project?.CompilationOptions;
+                    CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CompilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
+
+                    if (CompilationOptions != null)
+                        solution = solution.WithProjectCompilationOptions(projectId, CompilationOptions);
 
                     return solution;
                 });

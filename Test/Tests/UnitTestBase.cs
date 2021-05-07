@@ -5,7 +5,7 @@
 
     public class UnitTestBase
     {
-        private static TestContext testContextInstance;
+        private static TestContext testContextInstance = null!;
 
         /// <summary>
         /// Gets or sets the test context which provides
