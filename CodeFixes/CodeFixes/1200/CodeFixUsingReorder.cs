@@ -467,7 +467,7 @@
             }
         }
 
-        private class FixAll : DocumentBasedFixAllProvider
+        private class FixAll : StyleCop.Analyzers.Helpers.DocumentBasedFixAllProvider
         {
             public static FixAllProvider Instance { get; } = new FixAll();
 

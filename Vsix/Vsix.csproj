@@ -16,6 +16,8 @@
     <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <VSSDKTargetPlatformRegRootSuffix>Roslyn</VSSDKTargetPlatformRegRootSuffix>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
     <NeutralLanguage>en-US</NeutralLanguage>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -25,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.8.3038" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.9.1050" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>
