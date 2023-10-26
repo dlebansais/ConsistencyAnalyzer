@@ -10,7 +10,7 @@ branches:
 skip_commits:
   message: "*[skip ci]*"
 
-image: Visual Studio 2019
+image: Visual Studio 2022
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -18,7 +18,7 @@ init:
 
 environment:
   package_token:
-    secure: bpUW4FC8f65OAKq9z31b95q6rDsYG7R9QR39MNe7u0mmgEugA+0WOw5+Zrw5kh4Z
+    secure: PTQKv7f2BGNT8I1SUx4ErllBziAj7gs+VDcm2h3c8mJ5jtRuGognMEIPm2hPn1NI
 
 matrix:
   fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
@@ -45,6 +45,13 @@ after_build:
   - if exist nuget\%APPVEYOR_PROJECT_NAME%.nuspec nuget pack nuget\%APPVEYOR_PROJECT_NAME%.nuspec
   - '%PACKAGER_PATH% %CUSTOM_PACKAGER_OPTIONS% --debug'                         # Execute the packager: the output is nuget-debug\%APPVEYOR_PROJECT_NAME%-Debug.nuspec
   - if exist nuget-debug\%APPVEYOR_PROJECT_NAME%-Debug.nuspec nuget pack nuget-debug\%APPVEYOR_PROJECT_NAME%-Debug.nuspec
+  - ps: |-
+        $xml = [xml](Get-Content .\$env:APPVEYOR_PROJECT_NAME\$env:APPVEYOR_PROJECT_NAME.csproj)
+  - ps: $version = $xml.Project.PropertyGroup.Version
+  - ps: set version_tag v$version
+  - ps: $version_tag = $version_tag.Trim()
+  - ps: $env:VERSION_TAG = $version_tag
+  - echo Version is "%VERSION_TAG%"
 
 test: off
 
@@ -63,7 +70,7 @@ deploy:
     artifact: $(APPVEYOR_PROJECT_NAME)-Package-Debug
     username: dlebansais
     api_key:
-      secure: GOksqNi8I7Vs6dcsfosJvSa9vMaZH3zLQJjnx+ruJy6ZeLF075mifj4MdRI34E8W
+      secure: mknFmVMr6KwG8AMwKaSrDH30g+usOXvXQMqEKDES4g4X+dBDLDk3g3/x3Al3vcDl
     on:
       branch: deployment
       configuration: Debug
@@ -73,7 +80,7 @@ deploy:
     skip_symbols: true
     username: dlebansais
     api_key:
-      secure: GOksqNi8I7Vs6dcsfosJvSa9vMaZH3zLQJjnx+ruJy6ZeLF075mifj4MdRI34E8W
+      secure: mknFmVMr6KwG8AMwKaSrDH30g+usOXvXQMqEKDES4g4X+dBDLDk3g3/x3Al3vcDl
     on:
       branch: deployment
       configuration: Release
