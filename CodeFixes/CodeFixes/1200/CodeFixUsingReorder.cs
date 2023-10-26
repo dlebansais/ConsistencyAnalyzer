@@ -794,8 +794,12 @@
 
             private UsingDirectiveSyntax QualifyUsingDirective(UsingDirectiveSyntax usingDirective)
             {
+                if (usingDirective.Name is null)
+                    return usingDirective;
+
                 NameSyntax originalName = usingDirective.Name;
                 NameSyntax rewrittenName;
+
                 switch (originalName.Kind())
                 {
                     case SyntaxKind.QualifiedName:
@@ -889,12 +893,21 @@
                     return NameSyntaxHelpers.Compare(left.Alias.Name, right.Alias.Name);
                 }
 
-                return NameSyntaxHelpers.Compare(left.Name, right.Name);
+                if (left.Name is not null && right.Name is not null)
+                    return NameSyntaxHelpers.Compare(left.Name, right.Name);
+                else if (left.Name is null && right.Name is null)
+                    return 0;
+                else
+                    return right.Name is null ? 1 : -1;
             }
 
             private bool IsSeparatedStaticSystemUsing(UsingDirectiveSyntax syntax)
             {
                 if (!this.separateSystemDirectives)
+                {
+                    return false;
+                }
+                if (syntax.Name is null)
                 {
                     return false;
                 }
@@ -906,6 +919,10 @@
             {
                 if (!this.separateSystemDirectives
                     || syntax.HasNamespaceAliasQualifier())
+                {
+                    return false;
+                }
+                if (syntax.Name is null)
                 {
                     return false;
                 }

@@ -65,25 +65,44 @@
 
             string Line = $"{TraceId.Value}.  {msg}";
 
-            //System.Diagnostics.Debug.WriteLine(Line);
-            //FileTrace(Line);
+            System.Diagnostics.Debug.WriteLine(Line);
+            FileTrace(Line);
             if (TestTrace != null)
                 TestTrace(Line);
         }
 
         private static int lastTraceId;
         private static bool Started = false;
+        private static bool StoppedOnError = false;
+        private static Mutex FileMutex = new();
         private static void FileTrace(string msg)
         {
-            using (FileStream fs = new FileStream(@"C:\Applications\error.txt", Started ? FileMode.Append : FileMode.Create, FileAccess.Write))
+            if (StoppedOnError)
+                return;
+
+            FileMutex.WaitOne();
+
+            try
             {
-                using (StreamWriter sw = new StreamWriter(fs))
+                const string ErrorFolder = @"C:\ConsistencyAnalyzer";
+
+                using (FileStream fs = new FileStream(Path.Combine(ErrorFolder, "error.txt"), Started ? FileMode.Append : FileMode.Create, FileAccess.Write))
                 {
-                    sw.WriteLine(msg);
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine(msg);
+                    }
                 }
             }
-
-            Started = true;
+            catch
+            {
+                StoppedOnError = true;
+            }
+            finally
+            {
+                FileMutex.ReleaseMutex();
+                Started = true;
+            }
         }
 
         /// <summary>

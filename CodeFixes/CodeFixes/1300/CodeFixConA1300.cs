@@ -110,7 +110,11 @@
 
             IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
             NamespaceDeclarationSyntax Node = Nodes.OfType<NamespaceDeclarationSyntax>().First();
-            string[] MultiValueText = NameExplorer.GetNameText(Node.Name).Split('.');
+            string? NodeNameText = NameExplorer.GetNameText(Node.Name);
+            if (NodeNameText is null)
+                return null;
+
+            string[] MultiValueText = NodeNameText.Split('.');
 
             string NewValueText = string.Empty;
             foreach (string ValueText in MultiValueText)

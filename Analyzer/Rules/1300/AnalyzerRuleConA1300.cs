@@ -57,8 +57,15 @@
             Analyzer.Trace("AnalyzerRuleConA1300", TraceLevel);
 
             NamespaceDeclarationSyntax Node = (NamespaceDeclarationSyntax)context.Node;
-            string[] MultiValueText = NameExplorer.GetNameText(Node.Name).Split('.');
+            string? NodeNameText = NameExplorer.GetNameText(Node.Name);
 
+            if (NodeNameText is null)
+            {
+                Analyzer.Trace($"Null namespace declaration, exit", TraceLevel);
+                return;
+            }
+
+            string[] MultiValueText = NodeNameText.Split('.');
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             NameExplorer Explorer = ContextExplorer.NameExplorer;
 

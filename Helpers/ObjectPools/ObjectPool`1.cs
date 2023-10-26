@@ -41,7 +41,7 @@ namespace StyleCop.Analyzers.Helpers.ObjectPools
         private T? firstItem;
 
         internal ObjectPool(Func<T> factory)
-            : this(factory, Environment.ProcessorCount * 2)
+            : this(factory, 4) // Use Environment.ProcessorCount * 2 when the compiler allows it.
         {
         }
 

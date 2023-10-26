@@ -40,22 +40,22 @@
 
         private void ParseNamespaceDeclaration(NamespaceDeclarationSyntax namespaceDeclaration)
         {
-            string namespaceName = NameExplorer.NamespaceNameToString(namespaceDeclaration);
+            string? namespaceName = NameExplorer.NamespaceNameToString(namespaceDeclaration);
 
             foreach (UsingDirectiveSyntax UsingDirective in namespaceDeclaration.Usings)
                 RecordUsing(namespaceName, UsingDirective);
         }
 
-        private void RecordUsing(string namespaceName, UsingDirectiveSyntax usingDirective)
+        private void RecordUsing(string? namespaceName, UsingDirectiveSyntax usingDirective)
         {
             string FileName = usingDirective.SyntaxTree.FilePath;
-            string UsingName = NameExplorer.NameToString(usingDirective.Name);
+            string? UsingName = NameExplorer.NameToString(usingDirective.Name);
             string Path = $"{FileName}#{namespaceName}#{UsingName}";
 
             if (!UsingPathTable.ContainsKey(Path))
                 UsingPathTable.Add(Path, usingDirective);
 
-            if (namespaceName.Length == 0)
+            if (string.IsNullOrEmpty(namespaceName))
                 OutsideUsingCount++;
             else
                 InsideUsingCount++;
@@ -106,10 +106,10 @@
         /// Checks if a using directive is for the System namespace.
         /// </summary>
         /// <param name="usingDirective">The using directive.</param>
-        public static bool IsSystemUsing(UsingDirectiveSyntax usingDirective)
+        public static bool IsSystemUsing(UsingDirectiveSyntax? usingDirective)
         {
-            string UsingDirectiveText = NameExplorer.GetNameText(usingDirective.Name);
-            return UsingDirectiveText == "System" || UsingDirectiveText.StartsWith("System.");
+            string? UsingDirectiveText = NameExplorer.GetNameText(usingDirective?.Name);
+            return UsingDirectiveText == "System" || (UsingDirectiveText is not null && UsingDirectiveText.StartsWith("System."));
         }
 
         private Dictionary<string, UsingDirectiveSyntax> UsingPathTable = new();

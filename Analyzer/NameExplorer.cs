@@ -321,7 +321,7 @@
         /// </summary>
         /// <param name="nameSyntax">The syntax node.</param>
         /// <returns></returns>
-        public static string GetNameText(NameSyntax nameSyntax)
+        public static string? GetNameText(NameSyntax? nameSyntax)
         {
             switch (nameSyntax)
             {
@@ -334,7 +334,7 @@
                 case IdentifierNameSyntax AsIdentifierName:
                     return AsIdentifierName.Identifier.ValueText;
                 default:
-                    return null!;
+                    return null;
             }
         }
 
@@ -730,7 +730,7 @@
         /// Gets the string corresponding to <paramref name="namespaceDeclaration"/>.
         /// </summary>
         /// <param name="namespaceDeclaration">The namespace.</param>
-        public static string NamespaceNameToString(NamespaceDeclarationSyntax namespaceDeclaration)
+        public static string? NamespaceNameToString(NamespaceDeclarationSyntax namespaceDeclaration)
         {
             return NameToString(namespaceDeclaration.Name);
         }
@@ -739,7 +739,7 @@
         /// Gets the string corresponding to <paramref name="name"/>.
         /// </summary>
         /// <param name="name">The name.</param>
-        public static string NameToString(NameSyntax name)
+        public static string? NameToString(NameSyntax? name)
         {
             switch (name)
             {
@@ -750,7 +750,7 @@
                 case SimpleNameSyntax AsSimpleName:
                     return SimpleNameToString(AsSimpleName);
                 default:
-                    return null!;
+                    return null;
             }
         }
 

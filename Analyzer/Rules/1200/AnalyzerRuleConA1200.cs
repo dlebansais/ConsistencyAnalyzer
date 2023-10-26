@@ -62,7 +62,16 @@
             Analyzer.Trace("AnalyzerRuleConA1200", TraceLevel);
 
             UsingDirectiveSyntax Node = (UsingDirectiveSyntax)context.Node;
-            string[] MultiValueText = NameExplorer.GetNameText(Node.Name).Split('.');
+            string? NodeNameText = NameExplorer.GetNameText(Node.Name);
+            string? NodeNameString = NameExplorer.NameToString(Node.Name);
+
+            if (NodeNameText is null || NodeNameString is null)
+            {
+                Analyzer.Trace($"Null namespace name, exit", TraceLevel);
+                return;
+            }
+
+            string[] MultiValueText = NodeNameText.Split('.');
 
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             UsingExplorer Explorer = ContextExplorer.UsingExplorer;
@@ -89,7 +98,7 @@
             }
 
             string Expected = IsOutsideUsingExpected.Value ? "outside" : "inside";
-            string ValueText = NameExplorer.NameToString(Node.Name);
+            string ValueText = NodeNameString;
             ResetContext();
 
             Analyzer.Trace($"Using directive at the wrong place, must be {Expected} namespace", TraceLevel);

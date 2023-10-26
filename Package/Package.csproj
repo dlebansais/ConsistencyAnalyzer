@@ -9,14 +9,14 @@
 
   <PropertyGroup>
     <PackageId>ConsistencyAnalyzer</PackageId>
-    <PackageVersion>1.3.1</PackageVersion>
+    <PackageVersion>1.3.2</PackageVersion>
     <Authors>David Le Bansais</Authors>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/dlebansais/ConsistencyAnalyzer</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>ConsistencyAnalyzer</Description>
-    <Copyright>Copyright © 2019 David Le Bansais</Copyright>
+    <Copyright>Copyright © 2023 David Le Bansais</Copyright>
     <PackageTags>ConsistencyAnalyzer, analyzers</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
