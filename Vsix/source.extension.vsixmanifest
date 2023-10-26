@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="a9d0de48-692a-4972-9d65-3c55a67a5df4" Version="1.0" Language="en-US" Publisher="DLB"/>
+    <Identity Id="a9d0de48-692a-4972-9d65-3c55a67a5df4" Version="1.1" Language="en-US" Publisher="DLB"/>
     <DisplayName>ConsistencyAnalyzer</DisplayName>
     <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
   </Metadata>
