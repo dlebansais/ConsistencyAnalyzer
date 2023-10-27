@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,48 +57,58 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1708", TraceLevel);
 
-            RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
-
-            SyntaxToken CurrentToken = Node.HashToken;
-            int BlockLevel = 0;
-            int NestedRegionLevel = 1;
-
-            for (;;)
+            try
             {
-                CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
+                RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
 
-                if (CurrentToken.Parent is RegionDirectiveTriviaSyntax AsRegionDirective)
+                SyntaxToken CurrentToken = Node.HashToken;
+                int BlockLevel = 0;
+                int NestedRegionLevel = 1;
+
+                for (;;)
                 {
-                    if (AsRegionDirective.HashToken == CurrentToken)
-                        NestedRegionLevel++;
-                }
-                else if (CurrentToken.Parent is EndRegionDirectiveTriviaSyntax AsEndRegionDirective)
-                {
-                    if (AsEndRegionDirective.HashToken == CurrentToken)
+                    CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
+
+                    if (CurrentToken.Parent is RegionDirectiveTriviaSyntax AsRegionDirective)
                     {
-                        NestedRegionLevel--;
-                        if (NestedRegionLevel == 0)
-                            break;
+                        if (AsRegionDirective.HashToken == CurrentToken)
+                            NestedRegionLevel++;
                     }
+                    else if (CurrentToken.Parent is EndRegionDirectiveTriviaSyntax AsEndRegionDirective)
+                    {
+                        if (AsEndRegionDirective.HashToken == CurrentToken)
+                        {
+                            NestedRegionLevel--;
+                            if (NestedRegionLevel == 0)
+                                break;
+                        }
+                    }
+
+                    if (CurrentToken.ValueText == "{")
+                        BlockLevel++;
+                    else if (CurrentToken.ValueText == "}")
+                        BlockLevel--;
                 }
 
-                if (CurrentToken.ValueText == "{")
-                    BlockLevel++;
-                else if (CurrentToken.ValueText == "}")
-                    BlockLevel--;
-            }
+                // Report separate block level
+                if (BlockLevel == 0)
+                {
+                    Analyzer.Trace("Same block level, exit", TraceLevel);
+                    return;
+                }
 
-            // Report separate block level
-            if (BlockLevel == 0)
+                string RegionText = RegionExplorer.GetRegionText(Node);
+
+                Analyzer.Trace($"Region {RegionText} has its end in a different block level", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText));
+            }
+            catch (Exception e)
             {
-                Analyzer.Trace("Same block level, exit", TraceLevel);
-                return;
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
-
-            string RegionText = RegionExplorer.GetRegionText(Node);
-
-            Analyzer.Trace($"Region {RegionText} has its end in a different block level", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText));
         }
         #endregion
     }

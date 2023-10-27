@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,39 +57,49 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1602", TraceLevel);
 
-            EnumMemberDeclarationSyntax Node = (EnumMemberDeclarationSyntax)context.Node;
-
-            EnumDeclarationSyntax? Parent = Node.Parent as EnumDeclarationSyntax;
-            if (Parent == null)
-                return;
-
-            bool IsDocumented = XmlCommentHelper.HasDocumentation(Node);
-            List<EnumMemberDeclarationSyntax> OtherEnumList = new List<EnumMemberDeclarationSyntax>(Parent.Members);
-
-            Analyzer.Trace($"{Node.Identifier}: {IsDocumented}", TraceLevel);
-
-            bool IsDocumentedDifferently = false;
-            foreach (EnumMemberDeclarationSyntax OtherEnum in OtherEnumList)
+            try
             {
-                if (OtherEnum == Node)
-                    continue;
+                EnumMemberDeclarationSyntax Node = (EnumMemberDeclarationSyntax)context.Node;
 
-                bool IsOtherDocumented = XmlCommentHelper.HasDocumentation(OtherEnum);
+                EnumDeclarationSyntax? Parent = Node.Parent as EnumDeclarationSyntax;
+                if (Parent == null)
+                    return;
 
-                Analyzer.Trace($"{Node.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", TraceLevel);
+                bool IsDocumented = XmlCommentHelper.HasDocumentation(Node);
+                List<EnumMemberDeclarationSyntax> OtherEnumList = new List<EnumMemberDeclarationSyntax>(Parent.Members);
 
-                if (IsOtherDocumented != IsDocumented)
+                Analyzer.Trace($"{Node.Identifier}: {IsDocumented}", TraceLevel);
+
+                bool IsDocumentedDifferently = false;
+                foreach (EnumMemberDeclarationSyntax OtherEnum in OtherEnumList)
                 {
-                    IsDocumentedDifferently = true;
-                    break;
+                    if (OtherEnum == Node)
+                        continue;
+
+                    bool IsOtherDocumented = XmlCommentHelper.HasDocumentation(OtherEnum);
+
+                    Analyzer.Trace($"{Node.Identifier}: {IsDocumented}, {OtherEnum.Identifier}: {IsOtherDocumented}", TraceLevel);
+
+                    if (IsOtherDocumented != IsDocumented)
+                    {
+                        IsDocumentedDifferently = true;
+                        break;
+                    }
+                }
+
+                // Report for undocumented enums, so they can be fixed by adding doc.
+                if (IsDocumentedDifferently && !IsDocumented)
+                {
+                    string EnumName = Node.Identifier.ValueText;
+                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), EnumName));
                 }
             }
-
-            // Report for undocumented enums, so they can be fixed by adding doc.
-            if (IsDocumentedDifferently && !IsDocumented)
+            catch (Exception e)
             {
-                string EnumName = Node.Identifier.ValueText;
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), EnumName));
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
         }
         #endregion

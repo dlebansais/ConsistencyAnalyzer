@@ -67,11 +67,21 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace($"AnalyzerRuleConA1702 ({Node})", TraceLevel);
 
-            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: true, TraceLevel, out string ExpectedRegionText, out string MemberText))
-                return;
+            try
+            {
+                if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: true, TraceLevel, out string ExpectedRegionText, out string MemberText))
+                    return;
 
-            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
+                Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
+            }
         }
         #endregion
     }

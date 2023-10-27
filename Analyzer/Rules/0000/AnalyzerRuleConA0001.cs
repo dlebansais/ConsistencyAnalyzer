@@ -1,5 +1,6 @@
 ﻿namespace ConsistencyAnalyzer
 {
+    using System;
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.CodeAnalysis;
@@ -120,24 +121,34 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA0001", TraceLevel);
 
-            LocalDeclarationStatementSyntax Node = (LocalDeclarationStatementSyntax)context.Node;
-
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            NameExplorer Explorer = ContextExplorer.NameExplorer;
-
-            if (!Explorer.IsLocalVariableConstnessExpected)
-                return;
-
-            // make sure the declaration isn't already const.
-            bool IsConst = Node.Modifiers.Any(SyntaxKind.ConstKeyword);
-            if (!IsConst)
+            try
             {
-                bool CanBeConst = AnalyzeConstness(context, Node);
-                if (CanBeConst)
+                LocalDeclarationStatementSyntax Node = (LocalDeclarationStatementSyntax)context.Node;
+
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                NameExplorer Explorer = ContextExplorer.NameExplorer;
+
+                if (!Explorer.IsLocalVariableConstnessExpected)
+                    return;
+
+                // make sure the declaration isn't already const.
+                bool IsConst = Node.Modifiers.Any(SyntaxKind.ConstKeyword);
+                if (!IsConst)
                 {
-                    foreach (var variable in Node.Declaration.Variables)
-                        context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
+                    bool CanBeConst = AnalyzeConstness(context, Node);
+                    if (CanBeConst)
+                    {
+                        foreach (var variable in Node.Declaration.Variables)
+                            context.ReportDiagnostic(Diagnostic.Create(Descriptor, context.Node.GetLocation(), variable.Identifier.ValueText));
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
         }
         #endregion

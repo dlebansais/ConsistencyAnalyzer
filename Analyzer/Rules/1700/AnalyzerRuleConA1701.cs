@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,28 +57,38 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1701", TraceLevel);
 
-            RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
-
-            if (!GetOwnerClass(Node, out ClassDeclarationSyntax ClassDeclaration))
+            try
             {
-                Analyzer.Trace("Region outside class, exit", TraceLevel);
-                return;
+                RegionDirectiveTriviaSyntax Node = (RegionDirectiveTriviaSyntax)context.Node;
+
+                if (!GetOwnerClass(Node, out ClassDeclarationSyntax ClassDeclaration))
+                {
+                    Analyzer.Trace("Region outside class, exit", TraceLevel);
+                    return;
+                }
+
+                RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(ClassDeclaration, Node);
+
+                // Report nested regions.
+                if (RegionOwner == null)
+                {
+                    Analyzer.Trace("Region not nested, exit", TraceLevel);
+                    return;
+                }
+
+                string RegionText = RegionExplorer.GetRegionText(Node);
+                string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
+
+                Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText, RegionOwnerText));
             }
-
-            RegionDirectiveTriviaSyntax? RegionOwner = GetRegionDirectiveOwner(ClassDeclaration, Node);
-
-            // Report nested regions.
-            if (RegionOwner == null)
+            catch (Exception e)
             {
-                Analyzer.Trace("Region not nested, exit", TraceLevel);
-                return;
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
-
-            string RegionText = RegionExplorer.GetRegionText(Node);
-            string RegionOwnerText = RegionExplorer.GetRegionText(RegionOwner);
-
-            Analyzer.Trace($"Region {RegionText} is inside {RegionOwnerText}", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), RegionText, RegionOwnerText));
         }
 
         private bool GetOwnerClass(RegionDirectiveTriviaSyntax node, out ClassDeclarationSyntax classDeclaration)

@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -61,69 +62,79 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1203", TraceLevel);
 
-            UsingDirectiveSyntax Node = (UsingDirectiveSyntax)context.Node;
-
-            if (UsingExplorer.IsSystemUsing(Node))
+            try
             {
-                Analyzer.Trace($"Using directive for the System namespace, exit", TraceLevel);
-                return;
-            }
+                UsingDirectiveSyntax Node = (UsingDirectiveSyntax)context.Node;
 
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            UsingExplorer Explorer = ContextExplorer.UsingExplorer;
-
-            bool? IsSystemUsingFirstExpected = Explorer.IsSystemUsingFirstExpected;
-
-            if (IsSystemUsingFirstExpected == null)
-            {
-                Analyzer.Trace($"Using directive order for System undecided, exit", TraceLevel);
-                return;
-            }
-
-            if (IsSystemUsingFirstExpected.Value == false)
-            {
-                Analyzer.Trace($"Using directive order is just alphabetical, exit", TraceLevel);
-                return;
-            }
-
-            SyntaxList<UsingDirectiveSyntax> Usings;
-            switch (Node.Parent)
-            {
-                case CompilationUnitSyntax AsCompilationUnit:
-                    Usings = AsCompilationUnit.Usings;
-                    break;
-                case NamespaceDeclarationSyntax AsNamespaceDeclaration:
-                    Usings = AsNamespaceDeclaration.Usings;
-                    break;
-                default:
-                    Analyzer.Trace($"Unsupported using directive parent, exit", TraceLevel);
-                    return;
-            }
-
-            int NodeIndex = Usings.IndexOf(Node);
-            if (NodeIndex < 0)
-            {
-                Analyzer.Trace($"Inconsistent syntax, exit", TraceLevel);
-                return;
-            }
-
-            bool IsAppearingBeforeLastSystem = false;
-
-            for (int i = NodeIndex + 1; i < Usings.Count; i++)
-                if (UsingExplorer.IsSystemUsing(Usings[i]))
+                if (UsingExplorer.IsSystemUsing(Node))
                 {
-                    IsAppearingBeforeLastSystem = true;
-                    break;
+                    Analyzer.Trace($"Using directive for the System namespace, exit", TraceLevel);
+                    return;
                 }
 
-            if (!IsAppearingBeforeLastSystem)
-            {
-                Analyzer.Trace($"Using directive at the right place, exit", TraceLevel);
-                return;
-            }
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                UsingExplorer Explorer = ContextExplorer.UsingExplorer;
 
-            Analyzer.Trace($"Using directive at the wrong place, must be after directives for the System namespace", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation()));
+                bool? IsSystemUsingFirstExpected = Explorer.IsSystemUsingFirstExpected;
+
+                if (IsSystemUsingFirstExpected == null)
+                {
+                    Analyzer.Trace($"Using directive order for System undecided, exit", TraceLevel);
+                    return;
+                }
+
+                if (IsSystemUsingFirstExpected.Value == false)
+                {
+                    Analyzer.Trace($"Using directive order is just alphabetical, exit", TraceLevel);
+                    return;
+                }
+
+                SyntaxList<UsingDirectiveSyntax> Usings;
+                switch (Node.Parent)
+                {
+                    case CompilationUnitSyntax AsCompilationUnit:
+                        Usings = AsCompilationUnit.Usings;
+                        break;
+                    case NamespaceDeclarationSyntax AsNamespaceDeclaration:
+                        Usings = AsNamespaceDeclaration.Usings;
+                        break;
+                    default:
+                        Analyzer.Trace($"Unsupported using directive parent, exit", TraceLevel);
+                        return;
+                }
+
+                int NodeIndex = Usings.IndexOf(Node);
+                if (NodeIndex < 0)
+                {
+                    Analyzer.Trace($"Inconsistent syntax, exit", TraceLevel);
+                    return;
+                }
+
+                bool IsAppearingBeforeLastSystem = false;
+
+                for (int i = NodeIndex + 1; i < Usings.Count; i++)
+                    if (UsingExplorer.IsSystemUsing(Usings[i]))
+                    {
+                        IsAppearingBeforeLastSystem = true;
+                        break;
+                    }
+
+                if (!IsAppearingBeforeLastSystem)
+                {
+                    Analyzer.Trace($"Using directive at the right place, exit", TraceLevel);
+                    return;
+                }
+
+                Analyzer.Trace($"Using directive at the wrong place, must be after directives for the System namespace", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation()));
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
+            }
         }
         #endregion
     }

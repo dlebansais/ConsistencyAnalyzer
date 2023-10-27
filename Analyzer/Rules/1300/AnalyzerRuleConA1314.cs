@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,37 +57,47 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1314", TraceLevel);
 
-            VariableDeclaratorSyntax Node = (VariableDeclaratorSyntax)context.Node;
-            string ValueText = Node.Identifier.ValueText;
-
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            NameExplorer Explorer = ContextExplorer.NameExplorer;
-
-            NameCategory NameCategory = NameCategory.Neutral;
-
-            switch (Node.Parent)
+            try
             {
-                case VariableDeclarationSyntax AsVariableDeclaration:
-                    switch (AsVariableDeclaration.Parent)
-                    {
-                        case LocalDeclarationStatementSyntax _:
-                            NameCategory = NameCategory.LocalVariable;
-                            break;
-                    }
-                    break;
-            }
+                VariableDeclaratorSyntax Node = (VariableDeclaratorSyntax)context.Node;
+                string ValueText = Node.Identifier.ValueText;
 
-            if (NameCategory == NameCategory.Neutral)
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                NameExplorer Explorer = ContextExplorer.NameExplorer;
+
+                NameCategory NameCategory = NameCategory.Neutral;
+
+                switch (Node.Parent)
+                {
+                    case VariableDeclarationSyntax AsVariableDeclaration:
+                        switch (AsVariableDeclaration.Parent)
+                        {
+                            case LocalDeclarationStatementSyntax _:
+                                NameCategory = NameCategory.LocalVariable;
+                                break;
+                        }
+                        break;
+                }
+
+                if (NameCategory == NameCategory.Neutral)
+                {
+                    Analyzer.Trace("Not a known declaration, exit", TraceLevel);
+                    return;
+                }
+
+                if (!Explorer.IsNameMismatch(ValueText, NameCategory, out NamingSchemes ExpectedSheme, TraceLevel))
+                    return;
+
+                Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+            }
+            catch (Exception e)
             {
-                Analyzer.Trace("Not a known declaration, exit", TraceLevel);
-                return;
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
-
-            if (!Explorer.IsNameMismatch(ValueText, NameCategory, out NamingSchemes ExpectedSheme, TraceLevel))
-                return;
-
-            Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
         }
         #endregion
     }

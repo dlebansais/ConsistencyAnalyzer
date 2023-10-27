@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -61,48 +62,58 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1200", TraceLevel);
 
-            UsingDirectiveSyntax Node = (UsingDirectiveSyntax)context.Node;
-            string? NodeNameText = NameExplorer.GetNameText(Node.Name);
-            string? NodeNameString = NameExplorer.NameToString(Node.Name);
-
-            if (NodeNameText is null || NodeNameString is null)
+            try
             {
-                Analyzer.Trace($"Null namespace name, exit", TraceLevel);
-                return;
+                UsingDirectiveSyntax Node = (UsingDirectiveSyntax)context.Node;
+                string? NodeNameText = NameExplorer.GetNameText(Node.Name);
+                string? NodeNameString = NameExplorer.NameToString(Node.Name);
+
+                if (NodeNameText is null || NodeNameString is null)
+                {
+                    Analyzer.Trace($"Null namespace name, exit", TraceLevel);
+                    return;
+                }
+
+                string[] MultiValueText = NodeNameText.Split('.');
+
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                UsingExplorer Explorer = ContextExplorer.UsingExplorer;
+
+                bool IsOutsideUsing = Node.Parent is not NamespaceDeclarationSyntax;
+                IsOutsideUsingExpected = Explorer.IsOutsideUsingExpected;
+
+                if (IsOutsideUsingExpected == null)
+                {
+                    Analyzer.Trace($"Using directive order undecided or not applicable, exit", TraceLevel);
+                    return;
+                }
+
+                if (IsOutsideUsingExpected.Value == false)
+                {
+                    Analyzer.Trace($"handled by ConA1201, exit", TraceLevel);
+                    return;
+                }
+
+                if (IsOutsideUsing == IsOutsideUsingExpected.Value)
+                {
+                    Analyzer.Trace($"Using directive at the right place, exit", TraceLevel);
+                    return;
+                }
+
+                string Expected = IsOutsideUsingExpected.Value ? "outside" : "inside";
+                string ValueText = NodeNameString;
+                ResetContext();
+
+                Analyzer.Trace($"Using directive at the wrong place, must be {Expected} namespace", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
             }
-
-            string[] MultiValueText = NodeNameText.Split('.');
-
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            UsingExplorer Explorer = ContextExplorer.UsingExplorer;
-
-            bool IsOutsideUsing = Node.Parent is not NamespaceDeclarationSyntax;
-            IsOutsideUsingExpected = Explorer.IsOutsideUsingExpected;
-
-            if (IsOutsideUsingExpected == null)
+            catch (Exception e)
             {
-                Analyzer.Trace($"Using directive order undecided or not applicable, exit", TraceLevel);
-                return;
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
-
-            if (IsOutsideUsingExpected.Value == false)
-            {
-                Analyzer.Trace($"handled by ConA1201, exit", TraceLevel);
-                return;
-            }
-
-            if (IsOutsideUsing == IsOutsideUsingExpected.Value)
-            {
-                Analyzer.Trace($"Using directive at the right place, exit", TraceLevel);
-                return;
-            }
-
-            string Expected = IsOutsideUsingExpected.Value ? "outside" : "inside";
-            string ValueText = NodeNameString;
-            ResetContext();
-
-            Analyzer.Trace($"Using directive at the wrong place, must be {Expected} namespace", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
         }
         #endregion
     }

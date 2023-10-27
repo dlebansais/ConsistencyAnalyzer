@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,17 +57,27 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1304", TraceLevel);
 
-            EnumDeclarationSyntax Node = (EnumDeclarationSyntax)context.Node;
-            string ValueText = Node.Identifier.ValueText;
+            try
+            {
+                EnumDeclarationSyntax Node = (EnumDeclarationSyntax)context.Node;
+                string ValueText = Node.Identifier.ValueText;
 
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            NameExplorer Explorer = ContextExplorer.NameExplorer;
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                NameExplorer Explorer = ContextExplorer.NameExplorer;
 
-            if (!Explorer.IsNameMismatch(ValueText, NameCategory.Enum, out NamingSchemes ExpectedSheme, TraceLevel))
-                return;
+                if (!Explorer.IsNameMismatch(ValueText, NameCategory.Enum, out NamingSchemes ExpectedSheme, TraceLevel))
+                    return;
 
-            Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+                Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
+            }
         }
         #endregion
     }

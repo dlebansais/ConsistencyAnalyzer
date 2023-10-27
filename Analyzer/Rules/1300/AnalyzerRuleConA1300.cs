@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -56,25 +57,35 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1300", TraceLevel);
 
-            NamespaceDeclarationSyntax Node = (NamespaceDeclarationSyntax)context.Node;
-            string? NodeNameText = NameExplorer.GetNameText(Node.Name);
-
-            if (NodeNameText is null)
+            try
             {
-                Analyzer.Trace($"Null namespace declaration, exit", TraceLevel);
-                return;
-            }
+                NamespaceDeclarationSyntax Node = (NamespaceDeclarationSyntax)context.Node;
+                string? NodeNameText = NameExplorer.GetNameText(Node.Name);
 
-            string[] MultiValueText = NodeNameText.Split('.');
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            NameExplorer Explorer = ContextExplorer.NameExplorer;
-
-            foreach (string ValueText in MultiValueText)
-                if (Explorer.IsNameMismatch(ValueText, NameCategory.Namespace, out NamingSchemes ExpectedSheme, TraceLevel))
+                if (NodeNameText is null)
                 {
-                    Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
-                    context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+                    Analyzer.Trace($"Null namespace declaration, exit", TraceLevel);
+                    return;
                 }
+
+                string[] MultiValueText = NodeNameText.Split('.');
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                NameExplorer Explorer = ContextExplorer.NameExplorer;
+
+                foreach (string ValueText in MultiValueText)
+                    if (Explorer.IsNameMismatch(ValueText, NameCategory.Namespace, out NamingSchemes ExpectedSheme, TraceLevel))
+                    {
+                        Analyzer.Trace($"Name {ValueText} is not consistent with the expected {ExpectedSheme} scheme", TraceLevel);
+                        context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), ValueText));
+                    }
+            }
+            catch (Exception e)
+            {
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
+            }
         }
         #endregion
     }

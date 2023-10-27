@@ -5,6 +5,7 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.CodeAnalysis.Diagnostics;
     using StyleCop.Analyzers.Helpers;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -67,89 +68,99 @@
             TraceLevel TraceLevel = TraceLevel.Info;
             Analyzer.Trace("AnalyzerRuleConA1202", TraceLevel);
 
-            MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
-            ClassDeclarationSyntax? ParentClass = Node.Parent as ClassDeclarationSyntax;
-
-            if (ParentClass == null)
+            try
             {
-                Analyzer.Trace($"No parent class, exit", TraceLevel);
-                return;
-            }
+                MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
+                ClassDeclarationSyntax? ParentClass = Node.Parent as ClassDeclarationSyntax;
 
-            string MemberTypeString;
-            string MemberName;
-
-            switch (Node)
-            {
-                case ConstructorDeclarationSyntax AsConstructorDeclaration:
-                    MemberTypeString = "Constructor";
-                    MemberName = $"'{AsConstructorDeclaration.Identifier.ValueText}'";
-                    break;
-
-                case PropertyDeclarationSyntax AsPropertyDeclaration:
-                    MemberTypeString = "Property";
-                    MemberName = $"'{AsPropertyDeclaration.Identifier.ValueText}'";
-                    break;
-
-                case FieldDeclarationSyntax AsFieldDeclaration:
-                    if (AsFieldDeclaration.Declaration.Variables.Count == 0)
-                    {
-                        Analyzer.Trace($"No field names, exit", TraceLevel);
-                        return;
-                    }
-                    if (AsFieldDeclaration.Declaration.Variables.Count == 1)
-                    {
-                        MemberTypeString = "Field";
-                        MemberName = $"'{AsFieldDeclaration.Declaration.Variables[0].Identifier.ValueText}'";
-                    }
-                    else
-                    {
-                        MemberTypeString = "Fields";
-                        MemberName = string.Empty;
-
-                        for (int i = 0; i < AsFieldDeclaration.Declaration.Variables.Count; i++)
-                        {
-                            VariableDeclaratorSyntax VariableDeclarator = AsFieldDeclaration.Declaration.Variables[i];
-
-                            if (MemberName.Length > 0)
-                                if (i + 1 < AsFieldDeclaration.Declaration.Variables.Count)
-                                    MemberName += ", ";
-                                else
-                                    MemberName += " and ";
-
-                            MemberName += $"'{VariableDeclarator.Identifier.ValueText}'";
-                        }
-                    }
-                    break;
-
-                case MethodDeclarationSyntax AsMethodDeclaration:
-                    MemberTypeString = "Method";
-                    MemberName = $"'{AsMethodDeclaration.Identifier.ValueText}'";
-                    break;
-                default:
-                    Analyzer.Trace($"Unsupported element type, exit", TraceLevel);
+                if (ParentClass == null)
+                {
+                    Analyzer.Trace($"No parent class, exit", TraceLevel);
                     return;
+                }
+
+                string MemberTypeString;
+                string MemberName;
+
+                switch (Node)
+                {
+                    case ConstructorDeclarationSyntax AsConstructorDeclaration:
+                        MemberTypeString = "Constructor";
+                        MemberName = $"'{AsConstructorDeclaration.Identifier.ValueText}'";
+                        break;
+
+                    case PropertyDeclarationSyntax AsPropertyDeclaration:
+                        MemberTypeString = "Property";
+                        MemberName = $"'{AsPropertyDeclaration.Identifier.ValueText}'";
+                        break;
+
+                    case FieldDeclarationSyntax AsFieldDeclaration:
+                        if (AsFieldDeclaration.Declaration.Variables.Count == 0)
+                        {
+                            Analyzer.Trace($"No field names, exit", TraceLevel);
+                            return;
+                        }
+                        if (AsFieldDeclaration.Declaration.Variables.Count == 1)
+                        {
+                            MemberTypeString = "Field";
+                            MemberName = $"'{AsFieldDeclaration.Declaration.Variables[0].Identifier.ValueText}'";
+                        }
+                        else
+                        {
+                            MemberTypeString = "Fields";
+                            MemberName = string.Empty;
+
+                            for (int i = 0; i < AsFieldDeclaration.Declaration.Variables.Count; i++)
+                            {
+                                VariableDeclaratorSyntax VariableDeclarator = AsFieldDeclaration.Declaration.Variables[i];
+
+                                if (MemberName.Length > 0)
+                                    if (i + 1 < AsFieldDeclaration.Declaration.Variables.Count)
+                                        MemberName += ", ";
+                                    else
+                                        MemberName += " and ";
+
+                                MemberName += $"'{VariableDeclarator.Identifier.ValueText}'";
+                            }
+                        }
+                        break;
+
+                    case MethodDeclarationSyntax AsMethodDeclaration:
+                        MemberTypeString = "Method";
+                        MemberName = $"'{AsMethodDeclaration.Identifier.ValueText}'";
+                        break;
+                    default:
+                        Analyzer.Trace($"Unsupported element type, exit", TraceLevel);
+                        return;
+                }
+
+                ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
+                ClassExplorer Explorer = ContextExplorer.ClassExplorer;
+
+                if (!Explorer.IsAllClassMemberFullyOrdered())
+                {
+                    Analyzer.Trace($"No full order, exit", TraceLevel);
+                    return;
+                }
+
+                if (!Explorer.IsClassMemberOutOfOrder(ParentClass, Node))
+                {
+                    Analyzer.Trace($"Properly ordered vs members before, exit", TraceLevel);
+                    return;
+                }
+
+                string ParentClassName = ParentClass.Identifier.ValueText;
+
+                Analyzer.Trace($"Member at the wrong place", TraceLevel);
+                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberTypeString, MemberName, ParentClassName));
             }
-
-            ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            ClassExplorer Explorer = ContextExplorer.ClassExplorer;
-
-            if (!Explorer.IsAllClassMemberFullyOrdered())
+            catch (Exception e)
             {
-                Analyzer.Trace($"No full order, exit", TraceLevel);
-                return;
+                Analyzer.Trace(e.Message, TraceLevel.Critical);
+                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+                throw e;
             }
-
-            if (!Explorer.IsClassMemberOutOfOrder(ParentClass, Node))
-            {
-                Analyzer.Trace($"Properly ordered vs members before, exit", TraceLevel);
-                return;
-            }
-
-            string ParentClassName = ParentClass.Identifier.ValueText;
-
-            Analyzer.Trace($"Member at the wrong place", TraceLevel);
-            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberTypeString, MemberName, ParentClassName));
         }
         #endregion
     }
