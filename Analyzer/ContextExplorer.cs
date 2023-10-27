@@ -55,7 +55,7 @@ public class ContextExplorer
 
     private static int[] InternalLock = new int[0];
     private static Dictionary<SyntaxNodeAnalysisContext, ContextExplorer> ExplorerTable = new Dictionary<SyntaxNodeAnalysisContext, ContextExplorer>();
-    private Dictionary<ClassDeclarationSyntax, RegionExplorer> RegionExplorerTable = new Dictionary<ClassDeclarationSyntax, RegionExplorer>();
+    private Dictionary<TypeDeclarationSyntax, RegionExplorer> RegionExplorerTable = new Dictionary<TypeDeclarationSyntax, RegionExplorer>();
     #endregion
 
     #region Properties
@@ -89,11 +89,11 @@ public class ContextExplorer
     /// <summary>
     /// Gets the region explorer for a class.
     /// </summary>
-    /// <param name="classDeclaration"></param>
+    /// <param name="typeDeclaration"></param>
     /// <returns></returns>
-    public RegionExplorer GetRegionExplorer(ClassDeclarationSyntax classDeclaration)
+    public RegionExplorer GetRegionExplorer(TypeDeclarationSyntax typeDeclaration)
     {
-        return RegionExplorerTable[classDeclaration];
+        return RegionExplorerTable[typeDeclaration];
     }
     #endregion
 }

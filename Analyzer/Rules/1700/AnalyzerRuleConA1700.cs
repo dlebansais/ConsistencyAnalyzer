@@ -64,23 +64,26 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
 
             IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
             CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
+
+            GlobalState<bool?> ProgramHasMembersOutsideRegion;
             ClassSynchronizer Synchronizer;
 
-            lock (ProgramHasMembersOutsideRegionTable)
+            lock (TableLock)
             {
-                if (!ProgramHasMembersOutsideRegionTable.ContainsKey(Root))
+                if (!ClassInspectedTable.ContainsKey(Root))
                 {
-                    ProgramHasMembersOutsideRegionTable.Add(Root, new GlobalState<bool?>());
+                    ProgramHasMembersOutsideRegion = new GlobalState<bool?>();
                     Synchronizer = new ClassSynchronizer(context, TraceLevel);
-                    ClassInspectedTable.Add(Root, Synchronizer);
+                    ClassInspectedTable.Add(Root, new CompilationUnitState(ProgramHasMembersOutsideRegion, Synchronizer));
 
-                    Analyzer.Trace($"Total added: {ProgramHasMembersOutsideRegionTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
+                    Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
                 }
                 else
-                    Synchronizer = ClassInspectedTable[Root];
+                {
+                    ProgramHasMembersOutsideRegion = ClassInspectedTable[Root].ProgramHasMembersOutsideRegion;
+                    Synchronizer = ClassInspectedTable[Root].Synchronizer;
+                }
             }
-
-            GlobalState<bool?> ProgramHasMembersOutsideRegion = ProgramHasMembersOutsideRegionTable[Root];
 
             if (RegionExplorer.HasRegion)
                 ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
@@ -119,7 +122,11 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         }
     }
 
-    private Dictionary<CompilationUnitSyntax, GlobalState<bool?>> ProgramHasMembersOutsideRegionTable = new Dictionary<CompilationUnitSyntax, GlobalState<bool?>>();
-    private Dictionary<CompilationUnitSyntax, ClassSynchronizer> ClassInspectedTable = new Dictionary<CompilationUnitSyntax, ClassSynchronizer>();
+    private record CompilationUnitState(GlobalState<bool?> ProgramHasMembersOutsideRegion, ClassSynchronizer Synchronizer)
+    {
+    }
+
+    private Dictionary<CompilationUnitSyntax, CompilationUnitState> ClassInspectedTable = new();
+    private readonly object TableLock = new();
     #endregion
 }

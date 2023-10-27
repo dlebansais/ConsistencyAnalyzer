@@ -98,7 +98,7 @@ public class RegionExplorer
         expectedRegionText = string.Empty;
         memberText = string.Empty;
 
-        ClassDeclarationSyntax ClassDeclaration = (ClassDeclarationSyntax)memberDeclaration.Parent!;
+        TypeDeclarationSyntax TypeDeclaration = (TypeDeclarationSyntax)memberDeclaration.Parent!;
         ContextExplorer ContextExplorer = ContextExplorer.Get(context, traceLevel);
         RegionModes GlobalRegionMode = ContextExplorer.GlobalRegionMode;
 
@@ -119,7 +119,7 @@ public class RegionExplorer
             return false;
         }
 
-        RegionExplorer Explorer = ContextExplorer.GetRegionExplorer(ClassDeclaration);
+        RegionExplorer Explorer = ContextExplorer.GetRegionExplorer(TypeDeclaration);
 
         if (!Explorer.RegionsByAccelLevel.ContainsKey(expectedAccessLevel))
         {
