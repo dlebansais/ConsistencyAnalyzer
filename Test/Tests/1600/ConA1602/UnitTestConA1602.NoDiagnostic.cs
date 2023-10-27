@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1602
-    {
-        private const string OneEnumNotDocumented = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1602
+{
+    private const string OneEnumNotDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -17,7 +17,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneEnumDocumented = @"
+    private const string OneEnumDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -31,7 +31,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string TwoEnumsNotDocumented = @"
+    private const string TwoEnumsNotDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -43,7 +43,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string TwoEnumsDocumented = @"
+    private const string TwoEnumsDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -62,7 +62,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ThreeEnumsNotDocumented = @"
+    private const string ThreeEnumsNotDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -75,7 +75,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ThreeEnumsDocumented = @"
+    private const string ThreeEnumsDocumented = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -99,19 +99,18 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        [DataTestMethod]
-        [
-        DataRow(OneEnumNotDocumented),
-        DataRow(OneEnumDocumented),
-        DataRow(TwoEnumsNotDocumented),
-        DataRow(TwoEnumsDocumented),
-        DataRow(ThreeEnumsNotDocumented),
-        DataRow(ThreeEnumsDocumented),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneEnumNotDocumented),
+    DataRow(OneEnumDocumented),
+    DataRow(TwoEnumsNotDocumented),
+    DataRow(TwoEnumsDocumented),
+    DataRow(ThreeEnumsNotDocumented),
+    DataRow(ThreeEnumsDocumented),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

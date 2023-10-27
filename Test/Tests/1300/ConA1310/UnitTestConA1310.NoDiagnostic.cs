@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1310
-    {
-        private const string OneProperty = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1310
+{
+    private const string OneProperty = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -16,7 +16,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoPropertys = @"
+    private const string TwoPropertys = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -27,7 +27,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemetwowordsOk1 = @"
+    private const string PropertySchemetwowordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -39,7 +39,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemeTWOWORDSOk1 = @"
+    private const string PropertySchemeTWOWORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -51,7 +51,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemetwoWordsOk1 = @"
+    private const string PropertySchemetwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -63,7 +63,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemeTwoWordsOk1 = @"
+    private const string PropertySchemeTwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -75,7 +75,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemetwo_wordsOk1 = @"
+    private const string PropertySchemetwo_wordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -87,7 +87,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemeTWO_WORDSOk1 = @"
+    private const string PropertySchemeTWO_WORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -99,7 +99,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertySchemetwo_WordsOk1 = @"
+    private const string PropertySchemetwo_WordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -111,22 +111,21 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        [DataTestMethod]
-        [
-        DataRow(OneProperty),
-        DataRow(TwoPropertys),
-        DataRow(PropertySchemetwowordsOk1),
-        DataRow(PropertySchemeTWOWORDSOk1),
-        DataRow(PropertySchemetwoWordsOk1),
-        DataRow(PropertySchemeTwoWordsOk1),
-        DataRow(PropertySchemetwo_wordsOk1),
-        DataRow(PropertySchemeTWO_WORDSOk1),
-        DataRow(PropertySchemetwo_WordsOk1),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneProperty),
+    DataRow(TwoPropertys),
+    DataRow(PropertySchemetwowordsOk1),
+    DataRow(PropertySchemeTWOWORDSOk1),
+    DataRow(PropertySchemetwoWordsOk1),
+    DataRow(PropertySchemeTwoWordsOk1),
+    DataRow(PropertySchemetwo_wordsOk1),
+    DataRow(PropertySchemeTWO_WORDSOk1),
+    DataRow(PropertySchemetwo_WordsOk1),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

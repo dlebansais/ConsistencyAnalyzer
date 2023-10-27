@@ -1,14 +1,14 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Testing;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA0001
-    {
-        private const string LocalIntCouldBeConstant = @"
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA0001
+{
+    private const string LocalIntCouldBeConstant = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -29,7 +29,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string LocalIntCouldBeConstantFixed = @"
+    private const string LocalIntCouldBeConstantFixed = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -50,7 +50,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ConstantIsString = @"
+    private const string ConstantIsString = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -70,7 +70,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ConstantIsStringFixed = @"
+    private const string ConstantIsStringFixed = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -90,7 +90,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string DeclarationUsesVar = @"
+    private const string DeclarationUsesVar = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -110,7 +110,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string DeclarationUsesVarFixedHasType = @"
+    private const string DeclarationUsesVarFixedHasType = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -130,7 +130,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string StringDeclarationUsesVar = @"
+    private const string StringDeclarationUsesVar = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -149,7 +149,7 @@ namespace ConsistencyAnalyzerTest
         }
     }
 }";
-        private const string StringDeclarationUsesVarFixedHasType = @"
+    private const string StringDeclarationUsesVarFixedHasType = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -169,35 +169,34 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        [DataTestMethod]
-        [
-        DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13, "n"),
-        DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13, "s"),
-        DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13, "v"),
-        DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13, "v")
-        ]
-        public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column, string variableName)
-        {
-            UnifyCarriageReturn(ref test);
-            UnifyCarriageReturn(ref fixTest);
+    [DataTestMethod]
+    [
+    DataRow(LocalIntCouldBeConstant, LocalIntCouldBeConstantFixed, 10, 13, "n"),
+    DataRow(ConstantIsString, ConstantIsStringFixed, 10, 13, "s"),
+    DataRow(DeclarationUsesVar, DeclarationUsesVarFixedHasType, 10, 13, "v"),
+    DataRow(StringDeclarationUsesVar, StringDeclarationUsesVarFixedHasType, 10, 13, "v")
+    ]
+    public void WhenDiagnosticIsRaisedFixUpdatesCode(string test, string fixTest, int line, int column, string variableName)
+    {
+        UnifyCarriageReturn(ref test);
+        UnifyCarriageReturn(ref fixTest);
 
-            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
-            string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
+        string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1000MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
+        string FormatedMessage = string.Format(AnalyzerMessageFormat, variableName);
 
-            var descriptor = new DiagnosticDescriptor(
-                AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA0001)),
-                "title",
-                FormatedMessage,
-                "description",
-                DiagnosticSeverity.Warning,
-                true
-                );
+        var descriptor = new DiagnosticDescriptor(
+            AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA0001)),
+            "title",
+            FormatedMessage,
+            "description",
+            DiagnosticSeverity.Warning,
+            true
+            );
 
-            var expected = new DiagnosticResult(descriptor);
-            expected = expected.WithLocation("/0/Test0.cs", line, column);
+        var expected = new DiagnosticResult(descriptor);
+        expected = expected.WithLocation("/0/Test0.cs", line, column);
 
-            Task result = VerifyCS.VerifyCodeFixAsync(test, expected, fixTest);
-            result.Wait();
-        }
+        Task result = VerifyCS.VerifyCodeFixAsync(test, expected, fixTest);
+        result.Wait();
     }
 }

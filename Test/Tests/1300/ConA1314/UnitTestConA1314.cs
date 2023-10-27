@@ -1,17 +1,16 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    [TestClass]
-    public partial class UnitTestConA1314 : UnitTestBase
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+[TestClass]
+public partial class UnitTestConA1314 : UnitTestBase
+{
+    [DataTestMethod]
+    public void NoDiagnosticOnEmptyCode()
     {
-        [DataTestMethod]
-        public void NoDiagnosticOnEmptyCode()
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync("");
-            result.Wait();
-        }
+        Task result = VerifyCS.VerifyAnalyzerAsync("");
+        result.Wait();
     }
 }

@@ -1,80 +1,78 @@
-﻿namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer;
+
+using System;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+using StyleCop.Analyzers.Helpers;
+
+/// <summary>
+/// Represents a rule of the analyzer.
+/// </summary>
+public class AnalyzerRuleConA1704 : SingleSyntaxAnalyzerRule
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Diagnostics;
-    using StyleCop.Analyzers.Helpers;
-    using System;
-    using System.Collections.Generic;
+    #region Properties
+    /// <summary>
+    /// Gets the rule id.
+    /// </summary>
+    public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1704));
 
     /// <summary>
-    /// Represents a rule of the analyzer.
+    /// Gets the kind of syntax this rule analyzes.
     /// </summary>
-    public class AnalyzerRuleConA1704 : SingleSyntaxAnalyzerRule
+    public override SyntaxKind RuleSyntaxKind { get; } = SyntaxKind.ConstructorDeclaration;
+    #endregion
+
+    #region Ancestor Interface
+    /// <summary>
+    /// Gets the rule title.
+    /// </summary>
+    protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Title), Resources.ResourceManager, typeof(Resources));
+
+    /// <summary>
+    /// Gets the rule message format.
+    /// </summary>
+    protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1704MessageFormat), Resources.ResourceManager, typeof(Resources));
+
+    /// <summary>
+    /// Gets the rule description.
+    /// </summary>
+    protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Description), Resources.ResourceManager, typeof(Resources));
+
+    /// <summary>
+    /// Gets the rule category.
+    /// </summary>
+    protected override string Category { get; } = "Usage";
+    #endregion
+
+    #region Client Interface
+    /// <summary>
+    /// Analyzes a source code node.
+    /// </summary>
+    /// <param name="context">The source code.</param>
+    public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        #region Properties
-        /// <summary>
-        /// Gets the rule id.
-        /// </summary>
-        public override string Id { get; } = ToRuleId(nameof(AnalyzerRuleConA1704));
+        TraceLevel TraceLevel = TraceLevel.Info;
+        Analyzer.Trace("AnalyzerRuleConA1704", TraceLevel);
 
-        /// <summary>
-        /// Gets the kind of syntax this rule analyzes.
-        /// </summary>
-        public override SyntaxKind RuleSyntaxKind { get; } = SyntaxKind.ConstructorDeclaration;
-        #endregion
-
-        #region Ancestor Interface
-        /// <summary>
-        /// Gets the rule title.
-        /// </summary>
-        protected override LocalizableString Title { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Title), Resources.ResourceManager, typeof(Resources));
-
-        /// <summary>
-        /// Gets the rule message format.
-        /// </summary>
-        protected override LocalizableString MessageFormat { get; } = new LocalizableResourceString(nameof(Resources.ConA1704MessageFormat), Resources.ResourceManager, typeof(Resources));
-
-        /// <summary>
-        /// Gets the rule description.
-        /// </summary>
-        protected override LocalizableString Description { get; } = new LocalizableResourceString(nameof(Resources.ConA1704Description), Resources.ResourceManager, typeof(Resources));
-
-        /// <summary>
-        /// Gets the rule category.
-        /// </summary>
-        protected override string Category { get; } = "Usage";
-        #endregion
-
-        #region Client Interface
-        /// <summary>
-        /// Analyzes a source code node.
-        /// </summary>
-        /// <param name="context">The source code.</param>
-        public override void AnalyzeNode(SyntaxNodeAnalysisContext context)
+        try
         {
-            TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("AnalyzerRuleConA1704", TraceLevel);
+            MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
 
-            try
-            {
-                MemberDeclarationSyntax Node = (MemberDeclarationSyntax)context.Node;
+            if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: false, TraceLevel, out string ExpectedRegionText, out string MemberText))
+                return;
 
-                if (!RegionExplorer.IsRegionMismatch(context, Node, AccessLevel.Public, isSimpleAccessibilityCheck: false, TraceLevel, out string ExpectedRegionText, out string MemberText))
-                    return;
-
-                Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);
-                context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
-            }
-            catch (Exception e)
-            {
-                Analyzer.Trace(e.Message, TraceLevel.Critical);
-                Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
-
-                throw e;
-            }
+            Analyzer.Trace($"Member {MemberText} should be inside {ExpectedRegionText}", TraceLevel);
+            context.ReportDiagnostic(Diagnostic.Create(Descriptor, Node.GetLocation(), MemberText, ExpectedRegionText));
         }
-        #endregion
+        catch (Exception e)
+        {
+            Analyzer.Trace(e.Message, TraceLevel.Critical);
+            Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+
+            throw e;
+        }
     }
+    #endregion
 }

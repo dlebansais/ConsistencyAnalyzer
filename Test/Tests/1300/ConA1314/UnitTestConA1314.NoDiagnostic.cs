@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1314
-    {
-        private const string OneLocalVariable = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1314
+{
+    private const string OneLocalVariable = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -16,7 +16,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoLocalVariables = @"
+    private const string TwoLocalVariables = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -26,7 +26,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemetwowordsOk1 = @"
+    private const string LocalVariableSchemetwowordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -36,7 +36,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemeTWOWORDSOk1 = @"
+    private const string LocalVariableSchemeTWOWORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -46,7 +46,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemetwoWordsOk1 = @"
+    private const string LocalVariableSchemetwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -56,7 +56,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemeTwoWordsOk1 = @"
+    private const string LocalVariableSchemeTwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -66,7 +66,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemetwo_wordsOk1 = @"
+    private const string LocalVariableSchemetwo_wordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -76,7 +76,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemeTWO_WORDSOk1 = @"
+    private const string LocalVariableSchemeTWO_WORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -86,7 +86,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalVariableSchemetwo_WordsOk1 = @"
+    private const string LocalVariableSchemetwo_WordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -96,22 +96,21 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        [DataTestMethod]
-        [
-        DataRow(OneLocalVariable),
-        DataRow(TwoLocalVariables),
-        DataRow(LocalVariableSchemetwowordsOk1),
-        DataRow(LocalVariableSchemeTWOWORDSOk1),
-        DataRow(LocalVariableSchemetwoWordsOk1),
-        DataRow(LocalVariableSchemeTwoWordsOk1),
-        DataRow(LocalVariableSchemetwo_wordsOk1),
-        DataRow(LocalVariableSchemeTWO_WORDSOk1),
-        DataRow(LocalVariableSchemetwo_WordsOk1),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneLocalVariable),
+    DataRow(TwoLocalVariables),
+    DataRow(LocalVariableSchemetwowordsOk1),
+    DataRow(LocalVariableSchemeTWOWORDSOk1),
+    DataRow(LocalVariableSchemetwoWordsOk1),
+    DataRow(LocalVariableSchemeTwoWordsOk1),
+    DataRow(LocalVariableSchemetwo_wordsOk1),
+    DataRow(LocalVariableSchemeTWO_WORDSOk1),
+    DataRow(LocalVariableSchemetwo_WordsOk1),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

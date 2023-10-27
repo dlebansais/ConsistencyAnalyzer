@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA0001
-    {
-        private const string VariableAssigned = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA0001
+{
+    private const string VariableAssigned = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -27,7 +27,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string AlreadyConst = @"
+    private const string AlreadyConst = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -48,7 +48,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string NoInitializer = @"
+    private const string NoInitializer = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -70,7 +70,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string InitializerNotConstant = @"
+    private const string InitializerNotConstant = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -91,7 +91,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string MultipleInitializers = @"
+    private const string MultipleInitializers = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -112,7 +112,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ReferenceTypeIsntString = @"
+    private const string ReferenceTypeIsntString = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -132,21 +132,21 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        [DataTestMethod]
-        [DataRow(""),
-         DataRow(VariableAssigned),
-         DataRow(AlreadyConst),
-         DataRow(NoInitializer),
-         DataRow(InitializerNotConstant),
-         DataRow(MultipleInitializers),
-         DataRow(ReferenceTypeIsntString)]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [DataRow(""),
+     DataRow(VariableAssigned),
+     DataRow(AlreadyConst),
+     DataRow(NoInitializer),
+     DataRow(InitializerNotConstant),
+     DataRow(MultipleInitializers),
+     DataRow(ReferenceTypeIsntString)]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
+    }
 
-        private const string LocalIntCouldBeConstantNoConstness = @"
+    private const string LocalIntCouldBeConstantNoConstness = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -161,14 +161,13 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        [DataTestMethod]
-        [
-         DataRow(LocalIntCouldBeConstantNoConstness),
-        ]
-        public void WhenConstnessIsUndecidedNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+     DataRow(LocalIntCouldBeConstantNoConstness),
+    ]
+    public void WhenConstnessIsUndecidedNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

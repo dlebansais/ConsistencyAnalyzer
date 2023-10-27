@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1701
-    {
-        private const string OneClassNoRegion = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1701
+{
+    private const string OneClassNoRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -16,7 +16,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string OneClassFullRegion = @"
+    private const string OneClassFullRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -28,7 +28,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string TwoClassesNoRegion = @"
+    private const string TwoClassesNoRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest1
@@ -42,7 +42,7 @@ namespace ConsistencyAnalyzerTest1
     }
 }";
 
-        private const string TwoClassesFullRegion = @"
+    private const string TwoClassesFullRegion = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -60,7 +60,7 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        private const string ThreeClassesManyRegions = @"
+    private const string ThreeClassesManyRegions = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -92,17 +92,16 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 
-        [DataTestMethod]
-        [
-        DataRow(OneClassNoRegion),
-        DataRow(OneClassFullRegion),
-        DataRow(TwoClassesNoRegion),
-        DataRow(TwoClassesFullRegion)
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneClassNoRegion),
+    DataRow(OneClassFullRegion),
+    DataRow(TwoClassesNoRegion),
+    DataRow(TwoClassesFullRegion)
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

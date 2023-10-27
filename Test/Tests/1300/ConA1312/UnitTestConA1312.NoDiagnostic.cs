@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1312
-    {
-        private const string OneParameter = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1312
+{
+    private const string OneParameter = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -16,7 +16,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoParameters = @"
+    private const string TwoParameters = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -26,7 +26,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemetwowordsOk1 = @"
+    private const string ParameterSchemetwowordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -36,7 +36,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemeTWOWORDSOk1 = @"
+    private const string ParameterSchemeTWOWORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -46,7 +46,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemetwoWordsOk1 = @"
+    private const string ParameterSchemetwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -56,7 +56,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemeTwoWordsOk1 = @"
+    private const string ParameterSchemeTwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -66,7 +66,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemetwo_wordsOk1 = @"
+    private const string ParameterSchemetwo_wordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -76,7 +76,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemeTWO_WORDSOk1 = @"
+    private const string ParameterSchemeTWO_WORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -86,7 +86,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ParameterSchemetwo_WordsOk1 = @"
+    private const string ParameterSchemetwo_WordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -96,22 +96,21 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        [DataTestMethod]
-        [
-        DataRow(OneParameter),
-        DataRow(TwoParameters),
-        DataRow(ParameterSchemetwowordsOk1),
-        DataRow(ParameterSchemeTWOWORDSOk1),
-        DataRow(ParameterSchemetwoWordsOk1),
-        DataRow(ParameterSchemeTwoWordsOk1),
-        DataRow(ParameterSchemetwo_wordsOk1),
-        DataRow(ParameterSchemeTWO_WORDSOk1),
-        DataRow(ParameterSchemetwo_WordsOk1),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneParameter),
+    DataRow(TwoParameters),
+    DataRow(ParameterSchemetwowordsOk1),
+    DataRow(ParameterSchemeTWOWORDSOk1),
+    DataRow(ParameterSchemetwoWordsOk1),
+    DataRow(ParameterSchemeTwoWordsOk1),
+    DataRow(ParameterSchemetwo_wordsOk1),
+    DataRow(ParameterSchemeTWO_WORDSOk1),
+    DataRow(ParameterSchemetwo_WordsOk1),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

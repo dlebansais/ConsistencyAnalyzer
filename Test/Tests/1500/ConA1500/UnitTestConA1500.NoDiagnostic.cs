@@ -1,23 +1,23 @@
-﻿namespace ConsistencyAnalyzer.Test
+﻿namespace ConsistencyAnalyzer.Test;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1500
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
 
-    public partial class UnitTestConA1500
-    {
-
-        private const string Namespace1 = @"
+    private const string Namespace1 = @"
 namespace ConsistencyAnalyzer { }
 ";
 
-        private const string Namespace2 = @"
+    private const string Namespace2 = @"
 namespace ConsistencyAnalyzer
 {
 }
 ";
 
-        private const string UsingOutside = @"
+    private const string UsingOutside = @"
 using System;
 
 namespace ConsistencyAnalyzer
@@ -25,21 +25,21 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UsingInside = @"
+    private const string UsingInside = @"
 namespace ConsistencyAnalyzer
 {
     using System;
 }
 ";
 
-        private const string EnumDeclaration1 = @"
+    private const string EnumDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public enum CodeFixes { }
 }
 ";
 
-        private const string EnumDeclaration2 = @"
+    private const string EnumDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public enum CodeFixes
@@ -48,14 +48,14 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ClassDeclaration1 = @"
+    private const string ClassDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes { }
 }
 ";
 
-        private const string ClassDeclaration2 = @"
+    private const string ClassDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -64,14 +64,14 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string StructDeclaration1 = @"
+    private const string StructDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public struct CodeFixes { }
 }
 ";
 
-        private const string StructDeclaration2 = @"
+    private const string StructDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public struct CodeFixes
@@ -80,14 +80,14 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string RecordDeclaration1 = @"
+    private const string RecordDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public record CodeFixes { }
 }
 ";
 
-        private const string RecordDeclaration2 = @"
+    private const string RecordDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public record CodeFixes
@@ -96,14 +96,14 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string InterfaceDeclaration1 = @"
+    private const string InterfaceDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public interface ICodeFixes { }
 }
 ";
 
-        private const string InterfaceDeclaration2 = @"
+    private const string InterfaceDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public interface ICodeFixes
@@ -112,7 +112,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DelegateDeclaration = @"
+    private const string DelegateDeclaration = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -122,7 +122,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventDeclaration = @"
+    private const string EventDeclaration = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -132,7 +132,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FieldDeclaration = @"
+    private const string FieldDeclaration = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -142,7 +142,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string MethodDeclaration1 = @"
+    private const string MethodDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -152,7 +152,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string MethodDeclaration2 = @"
+    private const string MethodDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -164,7 +164,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclaration1 = @"
+    private const string PropertyDeclaration1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -174,7 +174,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclaration2 = @"
+    private const string PropertyDeclaration2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -188,7 +188,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclaration3 = @"
+    private const string PropertyDeclaration3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -202,7 +202,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string PropertyDeclaration4 = @"
+    private const string PropertyDeclaration4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -221,7 +221,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EnumMemberDeclaration = @"
+    private const string EnumMemberDeclaration = @"
 namespace ConsistencyAnalyzer
 {
     public enum CodeFixes
@@ -231,7 +231,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForStatement = @"
+    private const string ForStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -244,7 +244,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForBreakContinueStatement1 = @"
+    private const string ForBreakContinueStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -261,7 +261,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForBreakContinueStatement2 = @"
+    private const string ForBreakContinueStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -280,7 +280,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForBreakContinueStatement3 = @"
+    private const string ForBreakContinueStatement3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -299,7 +299,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForBreakContinueStatement4 = @"
+    private const string ForBreakContinueStatement4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -317,7 +317,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string CheckedStatement1 = @"
+    private const string CheckedStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -330,7 +330,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string CheckedStatement2 = @"
+    private const string CheckedStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -345,7 +345,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForEachStatement1 = @"
+    private const string ForEachStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -358,7 +358,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ForEachStatement2 = @"
+    private const string ForEachStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -373,7 +373,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatement1 = @"
+    private const string DoStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -386,7 +386,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatement2 = @"
+    private const string DoStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -400,7 +400,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatement3 = @"
+    private const string DoStatement3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -415,7 +415,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string DoStatement4 = @"
+    private const string DoStatement4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -431,7 +431,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FixedStatement1 = @"
+    private const string FixedStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -451,7 +451,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string FixedStatement2 = @"
+    private const string FixedStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -473,7 +473,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement1 = @"
+    private const string IfElseStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -486,7 +486,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement2 = @"
+    private const string IfElseStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -501,7 +501,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement3 = @"
+    private const string IfElseStatement3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -515,7 +515,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement4 = @"
+    private const string IfElseStatement4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -531,7 +531,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement5 = @"
+    private const string IfElseStatement5 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -549,7 +549,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string IfElseStatement6 = @"
+    private const string IfElseStatement6 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -573,7 +573,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LocalDeclarationStatement = @"
+    private const string LocalDeclarationStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -586,7 +586,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LockStatement1 = @"
+    private const string LockStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -600,7 +600,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string LockStatement2 = @"
+    private const string LockStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -616,7 +616,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ReturnStatement = @"
+    private const string ReturnStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -629,7 +629,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatement1 = @"
+    private const string SwitchBreakStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -642,7 +642,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatement2 = @"
+    private const string SwitchBreakStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -657,7 +657,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatement3 = @"
+    private const string SwitchBreakStatement3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -674,7 +674,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string SwitchBreakStatement4 = @"
+    private const string SwitchBreakStatement4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -693,7 +693,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ThrowStatement = @"
+    private const string ThrowStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -706,7 +706,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatement1 = @"
+    private const string TryCatchStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -719,7 +719,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatement2 = @"
+    private const string TryCatchStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -735,7 +735,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatement3 = @"
+    private const string TryCatchStatement3 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -752,7 +752,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatement4 = @"
+    private const string TryCatchStatement4 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -770,7 +770,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TryCatchStatement5 = @"
+    private const string TryCatchStatement5 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -790,7 +790,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UnsafeStatement1 = @"
+    private const string UnsafeStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -805,7 +805,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UnsafeStatement2 = @"
+    private const string UnsafeStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -818,7 +818,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UsingStatement1 = @"
+    private const string UsingStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -833,7 +833,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string UsingStatement2 = @"
+    private const string UsingStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -846,7 +846,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string WhileStatement1 = @"
+    private const string WhileStatement1 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -859,7 +859,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string WhileStatement2 = @"
+    private const string WhileStatement2 = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -874,7 +874,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string YieldBreakStatement = @"
+    private const string YieldBreakStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -890,7 +890,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string YieldReturnStatement = @"
+    private const string YieldReturnStatement = @"
 namespace ConsistencyAnalyzer
 {
     public class CodeFixes
@@ -906,7 +906,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string test = @"
+    private const string test = @"
 namespace Packager
 {
     using System;
@@ -1241,80 +1241,79 @@ namespace Packager
     }
 }
 ";
-        [DataTestMethod]
-        [
-        DataRow(Namespace1),
-        DataRow(Namespace2),
-        DataRow(UsingOutside),
-        DataRow(UsingInside),
-        DataRow(EnumDeclaration1),
-        DataRow(EnumDeclaration2),
-        DataRow(ClassDeclaration1),
-        DataRow(ClassDeclaration2),
-        DataRow(StructDeclaration1),
-        DataRow(StructDeclaration2),
-        DataRow(RecordDeclaration1),
-        DataRow(RecordDeclaration2),
-        DataRow(InterfaceDeclaration1),
-        DataRow(InterfaceDeclaration2),
-        DataRow(DelegateDeclaration),
-        DataRow(EventDeclaration),
-        DataRow(FieldDeclaration),
-        DataRow(MethodDeclaration1),
-        DataRow(MethodDeclaration2),
-        DataRow(PropertyDeclaration1),
-        DataRow(PropertyDeclaration2),
-        DataRow(PropertyDeclaration3),
-        DataRow(PropertyDeclaration4),
-        DataRow(EnumMemberDeclaration),
-        DataRow(ForStatement),
-        DataRow(ForBreakContinueStatement1),
-        DataRow(ForBreakContinueStatement2),
-        DataRow(ForBreakContinueStatement3),
-        DataRow(ForBreakContinueStatement4),
-        DataRow(CheckedStatement1),
-        DataRow(CheckedStatement2),
-        DataRow(ForEachStatement1),
-        DataRow(ForEachStatement2),
-        DataRow(DoStatement1),
-        DataRow(DoStatement2),
-        DataRow(DoStatement3),
-        DataRow(DoStatement4),
-        DataRow(FixedStatement1),
-        DataRow(FixedStatement2),
-        DataRow(IfElseStatement1),
-        DataRow(IfElseStatement2),
-        DataRow(IfElseStatement3),
-        DataRow(IfElseStatement4),
-        DataRow(IfElseStatement5),
-        DataRow(IfElseStatement6),
-        DataRow(LocalDeclarationStatement),
-        DataRow(LockStatement1),
-        DataRow(LockStatement2),
-        DataRow(ReturnStatement),
-        DataRow(SwitchBreakStatement1),
-        DataRow(SwitchBreakStatement2),
-        DataRow(SwitchBreakStatement3),
-        DataRow(SwitchBreakStatement4),
-        DataRow(ThrowStatement),
-        DataRow(TryCatchStatement1),
-        DataRow(TryCatchStatement2),
-        DataRow(TryCatchStatement3),
-        DataRow(TryCatchStatement4),
-        DataRow(TryCatchStatement5),
-        DataRow(UnsafeStatement1),
-        DataRow(UnsafeStatement2),
-        DataRow(UsingStatement1),
-        DataRow(UsingStatement2),
-        DataRow(WhileStatement1),
-        DataRow(WhileStatement2),
-        DataRow(YieldBreakStatement),
-        DataRow(YieldReturnStatement),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(Namespace1),
+    DataRow(Namespace2),
+    DataRow(UsingOutside),
+    DataRow(UsingInside),
+    DataRow(EnumDeclaration1),
+    DataRow(EnumDeclaration2),
+    DataRow(ClassDeclaration1),
+    DataRow(ClassDeclaration2),
+    DataRow(StructDeclaration1),
+    DataRow(StructDeclaration2),
+    DataRow(RecordDeclaration1),
+    DataRow(RecordDeclaration2),
+    DataRow(InterfaceDeclaration1),
+    DataRow(InterfaceDeclaration2),
+    DataRow(DelegateDeclaration),
+    DataRow(EventDeclaration),
+    DataRow(FieldDeclaration),
+    DataRow(MethodDeclaration1),
+    DataRow(MethodDeclaration2),
+    DataRow(PropertyDeclaration1),
+    DataRow(PropertyDeclaration2),
+    DataRow(PropertyDeclaration3),
+    DataRow(PropertyDeclaration4),
+    DataRow(EnumMemberDeclaration),
+    DataRow(ForStatement),
+    DataRow(ForBreakContinueStatement1),
+    DataRow(ForBreakContinueStatement2),
+    DataRow(ForBreakContinueStatement3),
+    DataRow(ForBreakContinueStatement4),
+    DataRow(CheckedStatement1),
+    DataRow(CheckedStatement2),
+    DataRow(ForEachStatement1),
+    DataRow(ForEachStatement2),
+    DataRow(DoStatement1),
+    DataRow(DoStatement2),
+    DataRow(DoStatement3),
+    DataRow(DoStatement4),
+    DataRow(FixedStatement1),
+    DataRow(FixedStatement2),
+    DataRow(IfElseStatement1),
+    DataRow(IfElseStatement2),
+    DataRow(IfElseStatement3),
+    DataRow(IfElseStatement4),
+    DataRow(IfElseStatement5),
+    DataRow(IfElseStatement6),
+    DataRow(LocalDeclarationStatement),
+    DataRow(LockStatement1),
+    DataRow(LockStatement2),
+    DataRow(ReturnStatement),
+    DataRow(SwitchBreakStatement1),
+    DataRow(SwitchBreakStatement2),
+    DataRow(SwitchBreakStatement3),
+    DataRow(SwitchBreakStatement4),
+    DataRow(ThrowStatement),
+    DataRow(TryCatchStatement1),
+    DataRow(TryCatchStatement2),
+    DataRow(TryCatchStatement3),
+    DataRow(TryCatchStatement4),
+    DataRow(TryCatchStatement5),
+    DataRow(UnsafeStatement1),
+    DataRow(UnsafeStatement2),
+    DataRow(UsingStatement1),
+    DataRow(UsingStatement2),
+    DataRow(WhileStatement1),
+    DataRow(WhileStatement2),
+    DataRow(YieldBreakStatement),
+    DataRow(YieldReturnStatement),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

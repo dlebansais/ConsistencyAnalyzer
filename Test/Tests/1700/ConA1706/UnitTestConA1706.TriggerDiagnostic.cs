@@ -1,14 +1,14 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Testing;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1706
-    {
-        private const string OneClassTwoRegionsMethod = @"
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1706
+{
+    private const string OneClassTwoRegionsMethod = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
@@ -39,60 +39,59 @@ namespace ConsistencyAnalyzerTest
     }
 }";
 /*
-        private const string OneClassTwoRegionsProperty = @"
+    private const string OneClassTwoRegionsProperty = @"
 using System;
 
 namespace ConsistencyAnalyzerTest
 {
-    public class Test
-    {
+public class Test
+{
 #region Init1
-        public int Test1 { get; set; }
+    public int Test1 { get; set; }
 #endregion
 
 #region Init2
-        public int Test2 { get; set; }
+    public int Test2 { get; set; }
 #endregion
-    }
+}
 
-    public class EnableInterfaceCategoryFull1
-    {
+public class EnableInterfaceCategoryFull1
+{
 #region Init
-        public EnableInterfaceCategoryFull1() {}
+    public EnableInterfaceCategoryFull1() {}
 #endregion
-    }
+}
 
-    public class EnableInterfaceCategoryFull2
-    {
+public class EnableInterfaceCategoryFull2
+{
 #region Init
-        public EnableInterfaceCategoryFull2() {}
+    public EnableInterfaceCategoryFull2() {}
 #endregion
-    }
+}
 }";
 */
-        [DataTestMethod]
-        [
-        DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
-        ]
-        public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
-        {
-            string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1706MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
-            string FormatedMessage = string.Format(AnalyzerMessageFormat, memberName, regionName);
+    [DataTestMethod]
+    [
+    DataRow(OneClassTwoRegionsMethod, 13, 9, "Test2", "Init1"),
+    ]
+    public void WhenTestCodeInvalidDiagnosticIsRaised(string test, int line, int column, string memberName, string regionName)
+    {
+        string AnalyzerMessageFormat = new LocalizableResourceString(nameof(Resources.ConA1706MessageFormat), Resources.ResourceManager, typeof(Resources)).ToString();
+        string FormatedMessage = string.Format(AnalyzerMessageFormat, memberName, regionName);
 
-            var descriptor = new DiagnosticDescriptor(
-                AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1706)),
-                "title",
-                FormatedMessage,
-                "description",
-                DiagnosticSeverity.Warning,
-                true
-                );
+        var descriptor = new DiagnosticDescriptor(
+            AnalyzerRule.ToRuleId(nameof(AnalyzerRuleConA1706)),
+            "title",
+            FormatedMessage,
+            "description",
+            DiagnosticSeverity.Warning,
+            true
+            );
 
-            var expected = new DiagnosticResult(descriptor);
-            expected = expected.WithLocation("/0/Test0.cs", line, column);
+        var expected = new DiagnosticResult(descriptor);
+        expected = expected.WithLocation("/0/Test0.cs", line, column);
 
-            Task result = VerifyCS.VerifyAnalyzerAsync(test, expected);
-            result.Wait();
-        }
+        Task result = VerifyCS.VerifyAnalyzerAsync(test, expected);
+        result.Wait();
     }
 }

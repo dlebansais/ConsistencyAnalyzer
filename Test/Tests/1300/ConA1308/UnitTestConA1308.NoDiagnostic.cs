@@ -1,12 +1,12 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1308
-    {
-        private const string OneEvent = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1308
+{
+    private const string OneEvent = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -16,7 +16,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoEvents = @"
+    private const string TwoEvents = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -27,7 +27,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemetwowordsOk1 = @"
+    private const string EventSchemetwowordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -39,7 +39,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemeTWOWORDSOk1 = @"
+    private const string EventSchemeTWOWORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -51,7 +51,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemetwoWordsOk1 = @"
+    private const string EventSchemetwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -63,7 +63,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemeTwoWordsOk1 = @"
+    private const string EventSchemeTwoWordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -75,7 +75,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemetwo_wordsOk1 = @"
+    private const string EventSchemetwo_wordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -87,7 +87,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemeTWO_WORDSOk1 = @"
+    private const string EventSchemeTWO_WORDSOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -99,7 +99,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string EventSchemetwo_WordsOk1 = @"
+    private const string EventSchemetwo_WordsOk1 = @"
 namespace ConsistencyAnalyzer
 {
     class Test
@@ -111,22 +111,21 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        [DataTestMethod]
-        [
-        DataRow(OneEvent),
-        DataRow(TwoEvents),
-        DataRow(EventSchemetwowordsOk1),
-        DataRow(EventSchemeTWOWORDSOk1),
-        DataRow(EventSchemetwoWordsOk1),
-        DataRow(EventSchemeTwoWordsOk1),
-        DataRow(EventSchemetwo_wordsOk1),
-        DataRow(EventSchemeTWO_WORDSOk1),
-        DataRow(EventSchemetwo_WordsOk1),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(OneEvent),
+    DataRow(TwoEvents),
+    DataRow(EventSchemetwowordsOk1),
+    DataRow(EventSchemeTWOWORDSOk1),
+    DataRow(EventSchemetwoWordsOk1),
+    DataRow(EventSchemeTwoWordsOk1),
+    DataRow(EventSchemetwo_wordsOk1),
+    DataRow(EventSchemeTWO_WORDSOk1),
+    DataRow(EventSchemetwo_WordsOk1),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

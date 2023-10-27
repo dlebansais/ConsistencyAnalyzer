@@ -1,28 +1,27 @@
-﻿namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer;
+
+/// <summary>
+/// Types of members of a class.
+/// </summary>
+public enum MemberTypes
 {
     /// <summary>
-    /// Types of members of a class.
+    /// Class constructor.
     /// </summary>
-    public enum MemberTypes
-    {
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        Contructor,
+    Contructor,
 
-        /// <summary>
-        /// Class property.
-        /// </summary>
-        Property,
+    /// <summary>
+    /// Class property.
+    /// </summary>
+    Property,
 
-        /// <summary>
-        /// Class field.
-        /// </summary>
-        Field,
+    /// <summary>
+    /// Class field.
+    /// </summary>
+    Field,
 
-        /// <summary>
-        /// Class method.
-        /// </summary>
-        Method,
-    }
+    /// <summary>
+    /// Class method.
+    /// </summary>
+    Method,
 }

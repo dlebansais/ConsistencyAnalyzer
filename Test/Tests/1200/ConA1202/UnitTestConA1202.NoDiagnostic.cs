@@ -1,18 +1,18 @@
-﻿namespace ConsistencyAnalyzer.Test
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Threading.Tasks;
-    using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+﻿namespace ConsistencyAnalyzer.Test;
 
-    public partial class UnitTestConA1202
-    {
-        private const string NoClass = @"
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using VerifyCS = CSharpCodeFixVerifier<Analyzer, Provider>;
+
+public partial class UnitTestConA1202
+{
+    private const string NoClass = @"
 namespace ConsistencyAnalyzer
 {
 }
 ";
 
-        private const string OneClass = @"
+    private const string OneClass = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -21,7 +21,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoClasses = @"
+    private const string TwoClasses = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -34,7 +34,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoClassesOrdered = @"
+    private const string TwoClassesOrdered = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -51,7 +51,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string TwoClassesUnordered = @"
+    private const string TwoClassesUnordered = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -68,7 +68,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ThreeClasses = @"
+    private const string ThreeClasses = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -85,7 +85,7 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        private const string ThreeClassesOrdered = @"
+    private const string ThreeClassesOrdered = @"
 namespace ConsistencyAnalyzer
 {
     public class Test1
@@ -108,19 +108,18 @@ namespace ConsistencyAnalyzer
 }
 ";
 
-        [DataTestMethod]
-        [
-        DataRow(NoClass),
-        DataRow(OneClass),
-        DataRow(TwoClasses),
-        DataRow(TwoClassesOrdered),
-        DataRow(TwoClassesUnordered),
-        DataRow(ThreeClasses),
-        ]
-        public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
-        {
-            Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
-            result.Wait();
-        }
+    [DataTestMethod]
+    [
+    DataRow(NoClass),
+    DataRow(OneClass),
+    DataRow(TwoClasses),
+    DataRow(TwoClassesOrdered),
+    DataRow(TwoClassesUnordered),
+    DataRow(ThreeClasses),
+    ]
+    public void WhenTestCodeIsValidNoDiagnosticIsTriggered(string testCode)
+    {
+        Task result = VerifyCS.VerifyAnalyzerAsync(testCode);
+        result.Wait();
     }
 }

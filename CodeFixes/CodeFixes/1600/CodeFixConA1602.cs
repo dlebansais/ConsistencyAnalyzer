@@ -1,101 +1,99 @@
-﻿namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Text;
+using StyleCop.Analyzers.Helpers;
+
+/// <summary>
+/// Represents a code fix for a rule of the analyzer.
+/// </summary>
+public class CodeFixConA1602 : CodeFix
 {
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.CodeActions;
-    using Microsoft.CodeAnalysis.CSharp;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using Microsoft.CodeAnalysis.Formatting;
-    using Microsoft.CodeAnalysis.Simplification;
-    using Microsoft.CodeAnalysis.Text;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Linq;
-    using Microsoft.CodeAnalysis.CodeFixes;
-    using StyleCop.Analyzers.Helpers;
+    /// <summary>
+    /// Creates an instance of the <see cref="CodeFix"/> class.
+    /// </summary>
+    /// <param name="rule">The associated rule.</param>
+    public CodeFixConA1602(AnalyzerRule rule)
+        : base(rule)
+    {
+    }
+
+    private async Task<Document> AsyncHandler(Document document, EnumMemberDeclarationSyntax syntaxNode, CancellationToken cancellationToken)
+    {
+        TraceLevel TraceLevel = TraceLevel.Info;
+        Analyzer.Trace("CodeFixConA1602", TraceLevel);
+
+        SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+        if (root == null)
+            return document;
+
+        EnumDeclarationSyntax? Parent = syntaxNode.Parent as EnumDeclarationSyntax;
+        if (Parent == null)
+            return document;
+
+        DocumentationCommentTriviaSyntax? existingDocumentationComment = syntaxNode.GetDocumentationCommentTriviaSyntax();
+        if (existingDocumentationComment != null)
+        {
+            return document;
+        }
+
+        SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
+        int insertionIndex = leadingTrivia.Count;
+        while (insertionIndex > 0 && !leadingTrivia[insertionIndex - 1].HasBuiltinEndLine())
+        {
+            insertionIndex--;
+        }
+
+        string newLineText = document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp);
+
+        var documentationComment = XmlSyntaxFactory.DocumentationComment(newLineText, XmlSyntaxFactory.MultiLineElement(XmlCommentHelper.SummaryXmlTag, newLineText, XmlSyntaxFactory.List(XmlSyntaxFactory.Text(XmlSyntaxFactory.TextNewLine("TODO: Insert documentation here.", false)))));
+        SyntaxTrivia docTrivia = SyntaxFactory.Trivia(documentationComment);
+
+        SyntaxTriviaList newLeadingTrivia = leadingTrivia.Insert(insertionIndex, docTrivia);
+
+        if (Parent.Members.IndexOf(syntaxNode) > 0)
+        {
+            SyntaxTrivia newLineTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, newLineText);
+            newLeadingTrivia = newLeadingTrivia.Insert(insertionIndex, newLineTrivia);
+        }
+
+        SyntaxNode newElement = syntaxNode.WithLeadingTrivia(newLeadingTrivia);
+        Document Result =  document.WithSyntaxRoot(root.ReplaceNode(syntaxNode, newElement));
+
+        Analyzer.Trace("Fixed", TraceLevel);
+
+        return Result;
+    }
 
     /// <summary>
-    /// Represents a code fix for a rule of the analyzer.
+    /// Creates the action to perform to fix a document.
     /// </summary>
-    public class CodeFixConA1602 : CodeFix
+    /// <returns></returns>
+    public override CodeAction? CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan)
     {
-        /// <summary>
-        /// Creates an instance of the <see cref="CodeFix"/> class.
-        /// </summary>
-        /// <param name="rule">The associated rule.</param>
-        public CodeFixConA1602(AnalyzerRule rule)
-            : base(rule)
-        {
-        }
+        if (root == null)
+            return null;
 
-        private async Task<Document> AsyncHandler(Document document, EnumMemberDeclarationSyntax syntaxNode, CancellationToken cancellationToken)
-        {
-            TraceLevel TraceLevel = TraceLevel.Info;
-            Analyzer.Trace("CodeFixConA1602", TraceLevel);
+        SyntaxToken DiagnosticToken = root.FindToken(diagnosticSpan.Start);
+        if (DiagnosticToken.Parent == null)
+            return null;
 
-            SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            if (root == null)
-                return document;
+        IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
+        EnumMemberDeclarationSyntax Node = Nodes.OfType<EnumMemberDeclarationSyntax>().First();
 
-            EnumDeclarationSyntax? Parent = syntaxNode.Parent as EnumDeclarationSyntax;
-            if (Parent == null)
-                return document;
+        var Action = CodeAction.Create(title: CodeFixResources.ConA1602FixTitle,
+                createChangedDocument: c => AsyncHandler(context.Document, Node, c),
+                equivalenceKey: nameof(CodeFixResources.ConA1602FixTitle));
 
-            DocumentationCommentTriviaSyntax? existingDocumentationComment = syntaxNode.GetDocumentationCommentTriviaSyntax();
-            if (existingDocumentationComment != null)
-            {
-                return document;
-            }
-
-            SyntaxTriviaList leadingTrivia = syntaxNode.GetLeadingTrivia();
-            int insertionIndex = leadingTrivia.Count;
-            while (insertionIndex > 0 && !leadingTrivia[insertionIndex - 1].HasBuiltinEndLine())
-            {
-                insertionIndex--;
-            }
-
-            string newLineText = document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp);
-
-            var documentationComment = XmlSyntaxFactory.DocumentationComment(newLineText, XmlSyntaxFactory.MultiLineElement(XmlCommentHelper.SummaryXmlTag, newLineText, XmlSyntaxFactory.List(XmlSyntaxFactory.Text(XmlSyntaxFactory.TextNewLine("TODO: Insert documentation here.", false)))));
-            SyntaxTrivia docTrivia = SyntaxFactory.Trivia(documentationComment);
-
-            SyntaxTriviaList newLeadingTrivia = leadingTrivia.Insert(insertionIndex, docTrivia);
-
-            if (Parent.Members.IndexOf(syntaxNode) > 0)
-            {
-                SyntaxTrivia newLineTrivia = SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, newLineText);
-                newLeadingTrivia = newLeadingTrivia.Insert(insertionIndex, newLineTrivia);
-            }
-
-            SyntaxNode newElement = syntaxNode.WithLeadingTrivia(newLeadingTrivia);
-            Document Result =  document.WithSyntaxRoot(root.ReplaceNode(syntaxNode, newElement));
-
-            Analyzer.Trace("Fixed", TraceLevel);
-
-            return Result;
-        }
-
-        /// <summary>
-        /// Creates the action to perform to fix a document.
-        /// </summary>
-        /// <returns></returns>
-        public override CodeAction? CreateDocumentHandler(CodeFixContext context, SyntaxNode root, TextSpan diagnosticSpan)
-        {
-            if (root == null)
-                return null;
-
-            SyntaxToken DiagnosticToken = root.FindToken(diagnosticSpan.Start);
-            if (DiagnosticToken.Parent == null)
-                return null;
-
-            IEnumerable<SyntaxNode> Nodes = DiagnosticToken.Parent.AncestorsAndSelf();
-            EnumMemberDeclarationSyntax Node = Nodes.OfType<EnumMemberDeclarationSyntax>().First();
-
-            var Action = CodeAction.Create(title: CodeFixResources.ConA1602FixTitle,
-                    createChangedDocument: c => AsyncHandler(context.Document, Node, c),
-                    equivalenceKey: nameof(CodeFixResources.ConA1602FixTitle));
-
-            return Action;
-        }
+        return Action;
     }
 }

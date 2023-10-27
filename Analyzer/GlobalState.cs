@@ -1,39 +1,38 @@
-﻿namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer;
+
+/// <summary>
+/// Represents a state global to a program.
+/// </summary>
+/// <typeparam name="TState">The state type.</typeparam>
+public class GlobalState<TState>
 {
     /// <summary>
-    /// Represents a state global to a program.
+    /// Gets the current state.
     /// </summary>
-    /// <typeparam name="TState">The state type.</typeparam>
-    public class GlobalState<TState>
+    public TState? CurrentState { get; private set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether there are different states.
+    /// </summary>
+    public bool IsDifferent { get; private set; }
+
+    /// <summary>
+    /// Updates the state with a value.
+    /// </summary>
+    /// <param name="newState">The new state.</param>
+    public void Update(TState newState)
     {
-        /// <summary>
-        /// Gets the current state.
-        /// </summary>
-        public TState? CurrentState { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether there are different states.
-        /// </summary>
-        public bool IsDifferent { get; private set; }
-
-        /// <summary>
-        /// Updates the state with a value.
-        /// </summary>
-        /// <param name="newState">The new state.</param>
-        public void Update(TState newState)
+        lock (InternalLock)
         {
-            lock (InternalLock)
+            if (CurrentState == null)
+                CurrentState = newState;
+            else if (!IsDifferent)
             {
-                if (CurrentState == null)
-                    CurrentState = newState;
-                else if (!IsDifferent)
-                {
-                    if (!CurrentState.Equals(newState))
-                        IsDifferent = true;
-                }
+                if (!CurrentState.Equals(newState))
+                    IsDifferent = true;
             }
         }
-
-        private int[] InternalLock = new int[0];
     }
+
+    private int[] InternalLock = new int[0];
 }

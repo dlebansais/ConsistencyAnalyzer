@@ -1,23 +1,22 @@
-﻿namespace ConsistencyAnalyzer
+﻿namespace ConsistencyAnalyzer;
+
+/// <summary>
+/// Levels of traces.
+/// </summary>
+public enum TraceLevel
 {
     /// <summary>
-    /// Levels of traces.
+    /// Critical trace level.
     /// </summary>
-    public enum TraceLevel
-    {
-        /// <summary>
-        /// Critical trace level.
-        /// </summary>
-        Critical,
+    Critical,
 
-        /// <summary>
-        /// Debug trace level.
-        /// </summary>
-        Debug,
+    /// <summary>
+    /// Debug trace level.
+    /// </summary>
+    Debug,
 
-        /// <summary>
-        /// Information trace level.
-        /// </summary>
-        Info,
-    }
+    /// <summary>
+    /// Information trace level.
+    /// </summary>
+    Info,
 }
