@@ -57,6 +57,8 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         TraceLevel TraceLevel = TraceLevel.Debug;
         Analyzer.Trace("AnalyzerRuleConA1700", TraceLevel);
 
+        string Trace = "Starting traces\r\n";
+
         try
         {
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
@@ -70,20 +72,33 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
 
             lock (TableLock)
             {
+                object? NullableRoot = Root;
+                string KeyList = $"Root: {NullableRoot?.GetType()?.FullName}({NullableRoot?.GetHashCode()})\r\n";
+                foreach (KeyValuePair<CompilationUnitSyntax, CompilationUnitState> Entry in ClassInspectedTable)
+                    KeyList += $"{Entry.Key.GetType().FullName}({Entry.Key.GetHashCode()}) {Entry.Value.GetType().FullName}({Entry.Value.GetHashCode()})\r\n";
+
+                Trace += KeyList;
+
                 if (!ClassInspectedTable.ContainsKey(Root))
                 {
                     ProgramHasMembersOutsideRegion = new GlobalState<bool?>();
                     Synchronizer = new ClassSynchronizer(context, TraceLevel);
                     ClassInspectedTable.Add(Root, new CompilationUnitState(ProgramHasMembersOutsideRegion, Synchronizer));
 
-                    Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
+                    Trace += $"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes";
                 }
                 else
                 {
-                    ProgramHasMembersOutsideRegion = ClassInspectedTable[Root].ProgramHasMembersOutsideRegion;
-                    Synchronizer = ClassInspectedTable[Root].Synchronizer;
+                    Trace += "Key already exist!\r\n";
+                    var State = ClassInspectedTable[Root];
+                    Trace += "Table read!";
+
+                    ProgramHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
+                    Synchronizer = State.Synchronizer;
                 }
             }
+
+            Analyzer.Trace(Trace, TraceLevel);
 
             if (RegionExplorer.HasRegion)
                 ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
@@ -116,6 +131,7 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         catch (Exception e)
         {
             Analyzer.Trace(e.Message, TraceLevel.Critical);
+            Analyzer.Trace(Trace, TraceLevel);
             Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
 
             throw e;
