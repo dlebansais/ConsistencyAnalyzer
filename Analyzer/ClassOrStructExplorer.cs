@@ -37,8 +37,8 @@ public class ClassOrStructExplorer
         {
             switch (Member)
             {
-                case NamespaceDeclarationSyntax AsNamespaceDeclaration:
-                    AddClassOrStructMembers(AsNamespaceDeclaration.Members, classOrStructDeclarationList);
+                case BaseNamespaceDeclarationSyntax AsBaseNamespaceDeclarationSyntax:
+                    AddClassOrStructMembers(AsBaseNamespaceDeclarationSyntax.Members, classOrStructDeclarationList);
                     break;
                 case ClassDeclarationSyntax AsClassDeclaration:
                     classOrStructDeclarationList.Add(AsClassDeclaration);
