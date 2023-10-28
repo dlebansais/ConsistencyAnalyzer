@@ -66,7 +66,6 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
             if (Namespace is not null)
             {
                 string NamespaceString = Namespace.Name.ToString();
-                Analyzer.Trace($"Namespace is: {NamespaceString}", TraceLevel);
 
                 if (NamespaceString == "System" ||
                     NamespaceString.StartsWith("System.") ||
