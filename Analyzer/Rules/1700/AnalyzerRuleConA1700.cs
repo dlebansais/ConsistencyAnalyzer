@@ -57,53 +57,77 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         TraceLevel TraceLevel = TraceLevel.Debug;
         Analyzer.Trace("AnalyzerRuleConA1700", TraceLevel);
 
-        string Trace = "Starting traces\r\n";
-
         try
         {
+            Analyzer.Trace("Traces 01", TraceLevel);
+
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
+
+            Analyzer.Trace("Traces 02", TraceLevel);
+
             RegionExplorer RegionExplorer = ContextExplorer.Get(context, TraceLevel).GetRegionExplorer(Node);
 
+            Analyzer.Trace("Traces 03", TraceLevel);
+
             IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
+
+            Analyzer.Trace("Traces 04", TraceLevel);
+
             CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
+
+            Analyzer.Trace("Traces 05", TraceLevel);
 
             GlobalState<bool?> ProgramHasMembersOutsideRegion;
             ClassSynchronizer Synchronizer;
 
+            Analyzer.Trace("Traces 06", TraceLevel);
+
             lock (TableLock)
             {
-                object? NullableRoot = Root;
-                string KeyList = $"Root: {NullableRoot?.GetType()?.FullName}({NullableRoot?.GetHashCode()})\r\n";
-                foreach (KeyValuePair<CompilationUnitSyntax, CompilationUnitState> Entry in ClassInspectedTable)
-                    KeyList += $"{Entry.Key.GetType().FullName}({Entry.Key.GetHashCode()}) {Entry.Value.GetType().FullName}({Entry.Value.GetHashCode()})\r\n";
+                Analyzer.Trace("Traces 07", TraceLevel);
 
-                Trace += KeyList;
+                object? NullableRoot = Root;
+                string KeyList = $"Root: {NullableRoot?.GetType()?.FullName}({NullableRoot?.GetHashCode()})";
+                foreach (KeyValuePair<CompilationUnitSyntax, CompilationUnitState> Entry in ClassInspectedTable)
+                    KeyList += $"\r\n{Entry.Key.GetType().FullName}({Entry.Key.GetHashCode()}) {Entry.Value.GetType().FullName}({Entry.Value.GetHashCode()})";
+
+                Analyzer.Trace(KeyList, TraceLevel);
 
                 if (!ClassInspectedTable.ContainsKey(Root))
                 {
+                    Analyzer.Trace("Traces 08", TraceLevel);
+
                     ProgramHasMembersOutsideRegion = new GlobalState<bool?>();
                     Synchronizer = new ClassSynchronizer(context, TraceLevel);
                     ClassInspectedTable.Add(Root, new CompilationUnitState(ProgramHasMembersOutsideRegion, Synchronizer));
 
-                    Trace += $"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes";
+                    Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
                 }
                 else
                 {
-                    Trace += "Key already exist!\r\n";
+                    Analyzer.Trace("Traces 09", TraceLevel);
+
                     var State = ClassInspectedTable[Root];
-                    Trace += "Table read!";
+
+                    Analyzer.Trace("Traces 10", TraceLevel);
 
                     ProgramHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
                     Synchronizer = State.Synchronizer;
+
+                    Analyzer.Trace("Traces 11", TraceLevel);
                 }
             }
 
-            Analyzer.Trace(Trace, TraceLevel);
+            Analyzer.Trace("Traces 12", TraceLevel);
 
             if (RegionExplorer.HasRegion)
                 ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
 
+            Analyzer.Trace("Traces 13", TraceLevel);
+
             Synchronizer.WaitAll(TraceLevel);
+
+            Analyzer.Trace("Traces 14", TraceLevel);
 
             if (!RegionExplorer.HasRegion)
             {
@@ -130,9 +154,7 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         }
         catch (Exception e)
         {
-            Analyzer.Trace(e.Message, TraceLevel.Critical);
-            Analyzer.Trace(Trace, TraceLevel);
-            Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+            Analyzer.Trace($"{e.Message}\n{e.StackTrace}", TraceLevel.Critical);
 
             throw e;
         }
