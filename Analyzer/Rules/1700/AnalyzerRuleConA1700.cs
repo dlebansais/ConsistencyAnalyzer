@@ -60,9 +60,23 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         try
         {
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
+            IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
+
+            BaseNamespaceDeclarationSyntax? Namespace = Nodes.OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+            if (Namespace is not null)
+            {
+                string NamespaceString = Namespace.ToString();
+                Analyzer.Trace($"Namespace is: {NamespaceString}", TraceLevel);
+
+                if (NamespaceString.StartsWith("System") || NamespaceString.StartsWith("Microsoft"))
+                {
+                    Analyzer.Trace("System node, exit", TraceLevel);
+                    return;
+                }
+            }
+
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             RegionExplorer RegionExplorer = ContextExplorer.GetRegionExplorer(Node);
-            IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
             CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
 
             GlobalState<bool?> ProgramHasMembersOutsideRegion;

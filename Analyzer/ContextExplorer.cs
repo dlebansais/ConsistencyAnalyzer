@@ -95,7 +95,7 @@ public class ContextExplorer
     /// <returns></returns>
     public RegionExplorer GetRegionExplorer(TypeDeclarationSyntax typeDeclaration)
     {
-        Analyzer.Trace($"Accessing member: {typeDeclaration.Identifier}", TraceLevel.Critical);
+        Analyzer.Trace($"Accessing type: {typeDeclaration.Identifier}", TraceLevel.Critical);
 
         return RegionExplorerTable[typeDeclaration];
     }
