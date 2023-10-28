@@ -43,6 +43,8 @@ public class ContextExplorer
         List<TypeDeclarationSyntax> ClassOrStructList = ClassOrStructExplorer.GetClassOrStructList();
         foreach (TypeDeclarationSyntax ClassOrStructDeclaration in ClassOrStructList)
         {
+            Analyzer.Trace($"Adding member: {ClassOrStructDeclaration.Identifier}", traceLevel);
+
             List<MemberDeclarationSyntax> MemberList = ClassOrStructExplorer.GetMemberList(ClassOrStructDeclaration);
             RegionExplorerTable.Add(ClassOrStructDeclaration, new RegionExplorer(context, ClassOrStructDeclaration, MemberList, traceLevel));
         }
@@ -93,6 +95,8 @@ public class ContextExplorer
     /// <returns></returns>
     public RegionExplorer GetRegionExplorer(TypeDeclarationSyntax typeDeclaration)
     {
+        Analyzer.Trace($"Accessing member: {typeDeclaration.Identifier}", TraceLevel.Critical);
+
         return RegionExplorerTable[typeDeclaration];
     }
     #endregion

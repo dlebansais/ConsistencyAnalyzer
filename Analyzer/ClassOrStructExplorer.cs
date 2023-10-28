@@ -87,7 +87,7 @@ public class ClassOrStructExplorer
             }
         }
 
-        Analyzer.Trace($"Class {classOrStructDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
+        Analyzer.Trace($"Class/Struct {classOrStructDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
     }
 
     /// <summary>
