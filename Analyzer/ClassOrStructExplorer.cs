@@ -6,42 +6,45 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
-/// Represents an object that provides info about classes.
+/// Represents an object that provides info about classes and structs.
 /// </summary>
-public class ClassExplorer
+public class ClassOrStructExplorer
 {
     #region Init
     /// <summary>
-    /// Creates a ClassExplorer.
+    /// Creates a ClassOrStructExplorer.
     /// </summary>
     /// <param name="compilationUnit">The source code.</param>
     /// <param name="context">A context for source code analysis.</param>
     /// <param name="traceLevel">The trace level.</param>
-    public ClassExplorer(CompilationUnitSyntax compilationUnit, SyntaxNodeAnalysisContext? context, TraceLevel traceLevel)
+    public ClassOrStructExplorer(CompilationUnitSyntax compilationUnit, SyntaxNodeAnalysisContext? context, TraceLevel traceLevel)
     {
         CompilationUnit = compilationUnit;
         Context = context;
 
-        List<ClassDeclarationSyntax> ClassDeclarationList = new List<ClassDeclarationSyntax>();
-        AddClassMembers(CompilationUnit.Members, ClassDeclarationList);
+        List<TypeDeclarationSyntax> ClassOrStructDeclarationList = new();
+        AddClassOrStructMembers(CompilationUnit.Members, ClassOrStructDeclarationList);
 
-        foreach (ClassDeclarationSyntax ClassDeclaration in ClassDeclarationList)
-            AddClass(ClassDeclaration, traceLevel);
+        foreach (TypeDeclarationSyntax ClassOrStructDeclaration in ClassOrStructDeclarationList)
+            AddClassOrStruct(ClassOrStructDeclaration, traceLevel);
 
         CheckMemberTypeFullyOrdered();
     }
 
-    private void AddClassMembers(SyntaxList<MemberDeclarationSyntax> members, List<ClassDeclarationSyntax> classDeclarationList)
+    private void AddClassOrStructMembers(SyntaxList<MemberDeclarationSyntax> members, List<TypeDeclarationSyntax> classOrStructDeclarationList)
     {
         foreach (MemberDeclarationSyntax Member in members)
         {
             switch (Member)
             {
                 case NamespaceDeclarationSyntax AsNamespaceDeclaration:
-                    AddClassMembers(AsNamespaceDeclaration.Members, classDeclarationList);
+                    AddClassOrStructMembers(AsNamespaceDeclaration.Members, classOrStructDeclarationList);
                     break;
                 case ClassDeclarationSyntax AsClassDeclaration:
-                    classDeclarationList.Add(AsClassDeclaration);
+                    classOrStructDeclarationList.Add(AsClassDeclaration);
+                    break;
+                case StructDeclarationSyntax AsStructDeclaration:
+                    classOrStructDeclarationList.Add(AsStructDeclaration);
                     break;
             }
         }
@@ -58,60 +61,59 @@ public class ClassExplorer
     #endregion
 
     #region Client Interface
-    private void AddClass(ClassDeclarationSyntax classDeclaration, TraceLevel traceLevel)
+    private void AddClassOrStruct(TypeDeclarationSyntax classOrStructDeclaration, TraceLevel traceLevel)
     {
         List<MemberDeclarationSyntax> MemberList;
 
         MemberList = new List<MemberDeclarationSyntax>();
-        ClassToMemberTable.Add(classDeclaration, MemberList);
+        ClassOrStructToMemberTable.Add(classOrStructDeclaration, MemberList);
 
-        SyntaxToken CurrentToken = classDeclaration.OpenBraceToken;
+        SyntaxToken CurrentToken = classOrStructDeclaration.OpenBraceToken;
 
         for (; ; )
         {
             CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
 
-            if (CurrentToken == classDeclaration.CloseBraceToken)
+            if (CurrentToken == classOrStructDeclaration.CloseBraceToken)
                 break;
 
             if (CurrentToken.Parent is MemberDeclarationSyntax AsMemberDeclaration)
             {
-                if (!MemberToClassTable.ContainsKey(AsMemberDeclaration))
+                if (!MemberToClassOrStructTable.ContainsKey(AsMemberDeclaration))
                 {
-                    MemberToClassTable.Add(AsMemberDeclaration, classDeclaration);
+                    MemberToClassOrStructTable.Add(AsMemberDeclaration, classOrStructDeclaration);
                     MemberList.Add(AsMemberDeclaration);
                 }
             }
         }
 
-        Analyzer.Trace($"Class {classDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
+        Analyzer.Trace($"Class {classOrStructDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
     }
 
     /// <summary>
-    /// Gets the list of classes.
+    /// Gets the list of classes and structs.
     /// </summary>
-    public List<ClassDeclarationSyntax> GetClassList()
+    public List<TypeDeclarationSyntax> GetClassOrStructList()
     {
-        return new List<ClassDeclarationSyntax>(ClassToMemberTable.Keys);
+        return new List<TypeDeclarationSyntax>(ClassOrStructToMemberTable.Keys);
     }
 
     /// <summary>
-    /// Gets members of a class.
+    /// Gets members of a class or struct.
     /// </summary>
-    /// <param name="classDeclaration"></param>
-    /// <returns></returns>
-    public List<MemberDeclarationSyntax> GetMemberList(ClassDeclarationSyntax classDeclaration)
+    /// <param name="classOrStructDeclaration">The class or struct with members.</param>
+    public List<MemberDeclarationSyntax> GetMemberList(TypeDeclarationSyntax classOrStructDeclaration)
     {
-        return ClassToMemberTable[classDeclaration];
+        return ClassOrStructToMemberTable[classOrStructDeclaration];
     }
 
     /// <summary>
-    /// Gets the class owning a member.
+    /// Gets the class or struct owning a member.
     /// </summary>
     /// <param name="memberDeclaration">The member.</param>
-    public ClassDeclarationSyntax GetMemberOwner(MemberDeclarationSyntax memberDeclaration)
+    public TypeDeclarationSyntax GetMemberOwner(MemberDeclarationSyntax memberDeclaration)
     {
-        return MemberToClassTable[memberDeclaration];
+        return MemberToClassOrStructTable[memberDeclaration];
     }
 
     /// <summary>
@@ -137,7 +139,7 @@ public class ClassExplorer
     }
 
     /// <summary>
-    /// Checks if all class members are almost always after and before other types of members.
+    /// Checks if all class or struct members are almost always after and before other types of members.
     /// </summary>
     public bool IsAllClassMemberFullyOrdered()
     {
@@ -145,13 +147,13 @@ public class ClassExplorer
     }
 
     /// <summary>
-    /// Checks if all class members are almost always after and before other types of members.
+    /// Checks if all class or struct members are almost always after and before other types of members.
     /// </summary>
     private void CheckMemberTypeFullyOrdered()
     {
         int UnorderedClassCount = 0;
 
-        foreach (KeyValuePair<ClassDeclarationSyntax, List<MemberDeclarationSyntax>> Entry in ClassToMemberTable)
+        foreach (KeyValuePair<TypeDeclarationSyntax, List<MemberDeclarationSyntax>> Entry in ClassOrStructToMemberTable)
         {
             List<MemberDeclarationSyntax> MemberList = Entry.Value;
 
@@ -249,11 +251,11 @@ public class ClassExplorer
     }
 
     /// <summary>
-    /// Checks if a class member is after and before other types of members.
+    /// Checks if a class or struct member is after and before other types of members.
     /// </summary>
-    /// <param name="classDeclaration">The class hosting <paramref name="memberDeclaration"/>.</param>
+    /// <param name="classOrStructDeclaration">The class or struct hosting <paramref name="memberDeclaration"/>.</param>
     /// <param name="memberDeclaration">The member node.</param>
-    public bool IsClassMemberOutOfOrder(ClassDeclarationSyntax classDeclaration, MemberDeclarationSyntax memberDeclaration)
+    public bool IsClassMemberOutOfOrder(TypeDeclarationSyntax classOrStructDeclaration, MemberDeclarationSyntax memberDeclaration)
     {
         MemberTypes MemberType = GetMemberType(memberDeclaration);
 
@@ -264,7 +266,7 @@ public class ClassExplorer
             else
                 ExcludedMemberTypeBefore.Add(Item);
 
-        List<MemberDeclarationSyntax> MemberList = ClassToMemberTable[classDeclaration];
+        List<MemberDeclarationSyntax> MemberList = ClassOrStructToMemberTable[classOrStructDeclaration];
         int MemberIndex = MemberList.IndexOf(memberDeclaration);
 
         for (int Index = MemberIndex; Index < MemberList.Count; Index++)
@@ -279,8 +281,8 @@ public class ClassExplorer
         return false;
     }
 
-    private Dictionary<ClassDeclarationSyntax, List<MemberDeclarationSyntax>> ClassToMemberTable { get; } = new();
-    private Dictionary<MemberDeclarationSyntax, ClassDeclarationSyntax> MemberToClassTable { get; } = new();
+    private Dictionary<TypeDeclarationSyntax, List<MemberDeclarationSyntax>> ClassOrStructToMemberTable { get; } = new();
+    private Dictionary<MemberDeclarationSyntax, TypeDeclarationSyntax> MemberToClassOrStructTable { get; } = new();
     private Dictionary<int, int> MemberTypeFullyOrderedCountTable { get; } = new();
     private Dictionary<int, List<MemberTypes>> MemberTypeFullyOrderedListTable { get; } = new();
     private List<MemberTypes> FullyOrderedMemberTypeList = new ();

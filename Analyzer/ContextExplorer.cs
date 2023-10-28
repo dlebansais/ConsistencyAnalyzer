@@ -36,15 +36,15 @@ public class ContextExplorer
         Context = context;
 
         CompilationUnitSyntax CompilationUnit = (CompilationUnitSyntax)context.SemanticModel.SyntaxTree.GetRoot();
-        ClassExplorer = new ClassExplorer(CompilationUnit, context, traceLevel);
+        ClassOrStructExplorer = new ClassOrStructExplorer(CompilationUnit, context, traceLevel);
         NameExplorer = new NameExplorer(CompilationUnit, context, traceLevel);
         UsingExplorer = new UsingExplorer(CompilationUnit, context, traceLevel);
 
-        List<ClassDeclarationSyntax> ClassList = ClassExplorer.GetClassList();
-        foreach (ClassDeclarationSyntax ClassDeclaration in ClassList)
+        List<TypeDeclarationSyntax> ClassOrStructList = ClassOrStructExplorer.GetClassOrStructList();
+        foreach (TypeDeclarationSyntax ClassOrStructDeclaration in ClassOrStructList)
         {
-            List<MemberDeclarationSyntax> MemberList = ClassExplorer.GetMemberList(ClassDeclaration);
-            RegionExplorerTable.Add(ClassDeclaration, new RegionExplorer(context, ClassDeclaration, MemberList, traceLevel));
+            List<MemberDeclarationSyntax> MemberList = ClassOrStructExplorer.GetMemberList(ClassOrStructDeclaration);
+            RegionExplorerTable.Add(ClassOrStructDeclaration, new RegionExplorer(context, ClassOrStructDeclaration, MemberList, traceLevel));
         }
 
         List<RegionExplorer> RegionExplorerList = new List<RegionExplorer>(RegionExplorerTable.Values);
@@ -53,7 +53,7 @@ public class ContextExplorer
         Analyzer.Trace($"Global Region Mode: {GlobalRegionMode}", traceLevel);
     }
 
-    private static int[] InternalLock = new int[0];
+    private static object InternalLock = new();
     private static Dictionary<SyntaxNodeAnalysisContext, ContextExplorer> ExplorerTable = new Dictionary<SyntaxNodeAnalysisContext, ContextExplorer>();
     private Dictionary<TypeDeclarationSyntax, RegionExplorer> RegionExplorerTable = new Dictionary<TypeDeclarationSyntax, RegionExplorer>();
     #endregion
@@ -65,9 +65,9 @@ public class ContextExplorer
     public SyntaxNodeAnalysisContext Context { get; init; }
 
     /// <summary>
-    /// Gets the class explorer.
+    /// Gets the class or struct explorer.
     /// </summary>
-    public ClassExplorer ClassExplorer { get; init; }
+    public ClassOrStructExplorer ClassOrStructExplorer { get; init; }
 
     /// <summary>
     /// Gets the name explorer.
@@ -87,7 +87,7 @@ public class ContextExplorer
 
     #region Client Interface
     /// <summary>
-    /// Gets the region explorer for a class.
+    /// Gets the region explorer for a class or struct.
     /// </summary>
     /// <param name="typeDeclaration"></param>
     /// <returns></returns>

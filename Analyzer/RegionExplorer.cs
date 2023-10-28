@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using StyleCop.Analyzers.Helpers;
 using System.Collections.Generic;
-using System.Threading;
 
 /// <summary>
 /// Represents an object that provides info about regions.
@@ -17,13 +16,13 @@ public class RegionExplorer
     /// Creates an instance of RegionExplorer.
     /// </summary>
     /// <param name="context">The source code.</param>
-    /// <param name="classDeclaration">The class with regions.</param>
-    /// <param name="memberList">The list of class members.</param>
+    /// <param name="classOrStructDeclaration">The class or struct with regions.</param>
+    /// <param name="memberList">The list of class or struct members.</param>
     /// <param name="traceLevel">The trace level.</param>
-    public RegionExplorer(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, List<MemberDeclarationSyntax> memberList, TraceLevel traceLevel)
+    public RegionExplorer(SyntaxNodeAnalysisContext context, TypeDeclarationSyntax classOrStructDeclaration, List<MemberDeclarationSyntax> memberList, TraceLevel traceLevel)
     {
         Context = context;
-        ClassDeclaration = classDeclaration;
+        ClassOrStructDeclaration = classOrStructDeclaration;
         MemberList = memberList;
 
         Explore(traceLevel);
@@ -37,22 +36,22 @@ public class RegionExplorer
     public SyntaxNodeAnalysisContext Context { get; init; }
 
     /// <summary>
-    /// Gets the class with regions.
+    /// Gets the class or struct with regions.
     /// </summary>
-    public ClassDeclarationSyntax ClassDeclaration { get; init; }
+    public TypeDeclarationSyntax ClassOrStructDeclaration { get; init; }
 
     /// <summary>
-    /// Gets the list of class members.
+    /// Gets the list of class or struct members.
     /// </summary>
     public List<MemberDeclarationSyntax> MemberList { get; init; }
 
     /// <summary>
-    /// Gets a value indicating whether the class has regions.
+    /// Gets a value indicating whether the class or struct has regions.
     /// </summary>
     public bool HasRegion { get; private set; }
 
     /// <summary>
-    /// Gets a value indicating whether the class has regions.
+    /// Gets a value indicating whether the class or struct has regions.
     /// </summary>
     public bool HasMembersOutsideRegion { get; private set; }
 
@@ -180,16 +179,16 @@ public class RegionExplorer
             return false;
 
         MemberDeclarationSyntax FirstMember1 = MemberList1[0];
-        MemberTypes FirstMemberType1 = ClassExplorer.GetMemberType(FirstMember1);
+        MemberTypes FirstMemberType1 = ClassOrStructExplorer.GetMemberType(FirstMember1);
         MemberDeclarationSyntax FirstMember2 = MemberList2[0];
-        MemberTypes FirstMemberType2 = ClassExplorer.GetMemberType(FirstMember2);
+        MemberTypes FirstMemberType2 = ClassOrStructExplorer.GetMemberType(FirstMember2);
 
         foreach (MemberDeclarationSyntax Member1 in MemberList1)
-            if (ClassExplorer.GetMemberType(Member1) != FirstMemberType2)
+            if (ClassOrStructExplorer.GetMemberType(Member1) != FirstMemberType2)
                 return false;
 
         foreach (MemberDeclarationSyntax Member2 in MemberList2)
-            if (ClassExplorer.GetMemberType(Member2) != FirstMemberType1)
+            if (ClassOrStructExplorer.GetMemberType(Member2) != FirstMemberType1)
                 return false;
 
         return true;
@@ -237,7 +236,7 @@ public class RegionExplorer
     #region Implementation
     private void Explore(TraceLevel traceLevel)
     {
-        SyntaxToken CurrentToken = ClassDeclaration.OpenBraceToken;
+        SyntaxToken CurrentToken = ClassOrStructDeclaration.OpenBraceToken;
         int RegionNestedLevel = 0;
         RegionDirectiveTriviaSyntax? LastRegionDirective = null;
 
@@ -245,7 +244,7 @@ public class RegionExplorer
         {
             CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
 
-            if (CurrentToken == ClassDeclaration.CloseBraceToken)
+            if (CurrentToken == ClassOrStructDeclaration.CloseBraceToken)
                 break;
 
             if (CurrentToken.Parent is RegionDirectiveTriviaSyntax AsRegionDirective)
@@ -286,12 +285,12 @@ public class RegionExplorer
             if (RegionMemberList.Count > 0)
             {
                 AccessLevel FirstMemberAccessLevel = AccessLevelHelper.GetAccessLevel(RegionMemberList[0].Modifiers);
-                MemberTypes FirstMemberType = ClassExplorer.GetMemberType(RegionMemberList[0]);
+                MemberTypes FirstMemberType = ClassOrStructExplorer.GetMemberType(RegionMemberList[0]);
 
                 foreach (MemberDeclarationSyntax Member in RegionMemberList)
                 {
                     HasAccessLevelDifference |= FirstMemberAccessLevel != AccessLevelHelper.GetAccessLevel(Member.Modifiers);
-                    HasTypeDifference |= FirstMemberType != ClassExplorer.GetMemberType(Member);
+                    HasTypeDifference |= FirstMemberType != ClassOrStructExplorer.GetMemberType(Member);
                 }
             }
         }
@@ -305,7 +304,7 @@ public class RegionExplorer
         else
             ThisRegionMode = RegionModes.AccessibilityFull;
 
-        Analyzer.Trace($"Class {ClassDeclaration.Identifier} region mode is {ThisRegionMode}", traceLevel);
+        Analyzer.Trace($"Class {ClassOrStructDeclaration.Identifier} region mode is {ThisRegionMode}", traceLevel);
     }
 
     private void MemberClassification(MemberDeclarationSyntax memberDeclaration, RegionDirectiveTriviaSyntax memberRegion)

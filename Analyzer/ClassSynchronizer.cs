@@ -16,8 +16,8 @@ public class ClassSynchronizer
     /// <param name="traceLevel">The trace level.</param>
     public ClassSynchronizer(SyntaxNodeAnalysisContext context, TraceLevel traceLevel)
     {
-        ClassExplorer ClassExplorer = ContextExplorer.Get(context, traceLevel).ClassExplorer;
-        ClassCount = ClassExplorer.GetClassList().Count;
+        ClassOrStructExplorer ClassExplorer = ContextExplorer.Get(context, traceLevel).ClassOrStructExplorer;
+        ClassCount = ClassExplorer.GetClassOrStructList().Count;
         CallCount = 0;
         AllCalledEvent = new ManualResetEvent(false);
     }

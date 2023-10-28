@@ -128,8 +128,7 @@ public class AnalyzerRuleConA1203 : SingleSyntaxAnalyzerRule
         }
         catch (Exception e)
         {
-            Analyzer.Trace(e.Message, TraceLevel.Critical);
-            Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+            Analyzer.Trace($"{e.Message}\n{e.StackTrace}", TraceLevel.Critical);
 
             throw e;
         }

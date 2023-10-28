@@ -90,7 +90,8 @@ public class Analyzer : DiagnosticAnalyzer
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
-                    sw.WriteLine(msg);
+                    string LineWithCR = msg + "\n";
+                    sw.Write(LineWithCR);
                 }
             }
         }

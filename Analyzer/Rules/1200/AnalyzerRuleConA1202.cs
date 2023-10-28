@@ -134,7 +134,7 @@ public class AnalyzerRuleConA1202 : MultipleSyntaxAnalyzerRule
             }
 
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            ClassExplorer Explorer = ContextExplorer.ClassExplorer;
+            ClassOrStructExplorer Explorer = ContextExplorer.ClassOrStructExplorer;
 
             if (!Explorer.IsAllClassMemberFullyOrdered())
             {
@@ -155,8 +155,7 @@ public class AnalyzerRuleConA1202 : MultipleSyntaxAnalyzerRule
         }
         catch (Exception e)
         {
-            Analyzer.Trace(e.Message, TraceLevel.Critical);
-            Analyzer.Trace(e.StackTrace, TraceLevel.Critical);
+            Analyzer.Trace($"{e.Message}\n{e.StackTrace}", TraceLevel.Critical);
 
             throw e;
         }
