@@ -65,10 +65,13 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
             BaseNamespaceDeclarationSyntax? Namespace = Nodes.OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
             if (Namespace is not null)
             {
-                string NamespaceString = Namespace.ToString();
+                string NamespaceString = Namespace.Name.ToString();
                 Analyzer.Trace($"Namespace is: {NamespaceString}", TraceLevel);
 
-                if (NamespaceString.StartsWith("System") || NamespaceString.StartsWith("Microsoft"))
+                if (NamespaceString == "System" ||
+                    NamespaceString.StartsWith("System.") ||
+                    NamespaceString == "Microsoft" ||
+                    NamespaceString.StartsWith("Microsoft."))
                 {
                     Analyzer.Trace("System node, exit", TraceLevel);
                     return;
