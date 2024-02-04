@@ -428,6 +428,7 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
                 case DoStatementSyntax _:
                 case CheckedStatementSyntax _:
                 case TryStatementSyntax _:
+                case WhileStatementSyntax _:
                     CurrentStatement = Parent as StatementSyntax;
                     NestedLevel++;
                     break;
