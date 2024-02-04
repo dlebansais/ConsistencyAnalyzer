@@ -401,22 +401,24 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
 
         while (CurrentStatement != null)
         {
-            if (CurrentStatement.Parent is MemberDeclarationSyntax)
+            SyntaxNode? Parent = CurrentStatement.Parent;
+
+            if (Parent is MemberDeclarationSyntax)
             {
                 NestedLevel++;
                 break;
             }
 
-            if (CurrentStatement.Parent is AccessorDeclarationSyntax)
+            if (Parent is AccessorDeclarationSyntax)
             {
                 NestedLevel += 2;
                 break;
             }
 
-            switch (CurrentStatement.Parent)
+            switch (Parent)
             {
                 case BlockSyntax _:
-                    CurrentStatement = CurrentStatement.Parent as StatementSyntax;
+                    CurrentStatement = Parent as StatementSyntax;
                     if (CurrentStatement?.Parent is BlockSyntax)
                         NestedLevel++;
                     break;
@@ -426,7 +428,7 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
                 case DoStatementSyntax _:
                 case CheckedStatementSyntax _:
                 case TryStatementSyntax _:
-                    CurrentStatement = CurrentStatement.Parent as StatementSyntax;
+                    CurrentStatement = Parent as StatementSyntax;
                     NestedLevel++;
                     break;
 
@@ -450,8 +452,11 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
                     NestedLevel += 2;
                     break;
 
+                case null:
+                    throw new InvalidCastException("Statement parent is null");
+
                 default:
-                    throw new InvalidCastException();
+                    throw new InvalidCastException($"Unknown Parent Type: {Parent?.GetType()}");
             }
         }
 
