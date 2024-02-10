@@ -390,7 +390,7 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
                 return 2 + GetBlockLevel(node);
 
             default:
-                throw new InvalidCastException();
+                throw new InvalidCastException($"Unknown Node Type: {node.GetType()}");
         }
     }
 
@@ -429,6 +429,7 @@ public class AnalyzerRuleConA1500 : MultipleSyntaxAnalyzerRule
                 case CheckedStatementSyntax _:
                 case TryStatementSyntax _:
                 case WhileStatementSyntax _:
+                case UsingStatementSyntax _:
                     CurrentStatement = Parent as StatementSyntax;
                     NestedLevel++;
                     break;
