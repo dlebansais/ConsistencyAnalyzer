@@ -86,19 +86,18 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
 
             lock (TableLock)
             {
-                if (!ClassInspectedTable.ContainsKey(Root))
+                if (ClassInspectedTable.TryGetValue(Root, out CompilationUnitState State))
+                {
+                    ProgramHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
+                    Synchronizer = State.Synchronizer;
+                }
+                else
                 {
                     ProgramHasMembersOutsideRegion = new GlobalState<bool?>();
                     Synchronizer = new ClassSynchronizer(context, TraceLevel);
                     ClassInspectedTable.Add(Root, new CompilationUnitState(ProgramHasMembersOutsideRegion, Synchronizer));
 
                     Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
-                }
-                else
-                {
-                    var State = ClassInspectedTable[Root];
-                    ProgramHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
-                    Synchronizer = State.Synchronizer;
                 }
             }
 
