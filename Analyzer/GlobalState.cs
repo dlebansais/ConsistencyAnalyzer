@@ -34,5 +34,5 @@ public class GlobalState<TState>
         }
     }
 
-    private int[] InternalLock = new int[0];
+    private object InternalLock = new();
 }

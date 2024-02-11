@@ -70,24 +70,40 @@ public class ClassOrStructExplorer
 
         SyntaxToken CurrentToken = classOrStructDeclaration.OpenBraceToken;
 
-        for (; ; )
+        while (AddNextMember(classOrStructDeclaration, MemberList, ref CurrentToken))
+            ;
+
+        Analyzer.Trace($"Class/Struct {classOrStructDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
+
+        foreach (MemberDeclarationSyntax Member in MemberList)
+            if (Member is TypeDeclarationSyntax TypeDeclaration)
+                AddNestedClassOrStruct(TypeDeclaration, traceLevel);
+    }
+
+    private bool AddNextMember(TypeDeclarationSyntax classOrStructDeclaration, List<MemberDeclarationSyntax> memberList, ref SyntaxToken currentToken)
+    {
+        currentToken = currentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
+
+        if (currentToken == classOrStructDeclaration.CloseBraceToken)
+            return false;
+
+        if (currentToken.Parent is MemberDeclarationSyntax AsMemberDeclaration)
         {
-            CurrentToken = CurrentToken.GetNextToken(includeZeroWidth: false, includeSkipped: false, includeDirectives: true, includeDocumentationComments: false);
-
-            if (CurrentToken == classOrStructDeclaration.CloseBraceToken)
-                break;
-
-            if (CurrentToken.Parent is MemberDeclarationSyntax AsMemberDeclaration)
+            if (!MemberToClassOrStructTable.ContainsKey(AsMemberDeclaration))
             {
-                if (!MemberToClassOrStructTable.ContainsKey(AsMemberDeclaration))
-                {
-                    MemberToClassOrStructTable.Add(AsMemberDeclaration, classOrStructDeclaration);
-                    MemberList.Add(AsMemberDeclaration);
-                }
+                MemberToClassOrStructTable.Add(AsMemberDeclaration, classOrStructDeclaration);
+                memberList.Add(AsMemberDeclaration);
             }
         }
 
-        Analyzer.Trace($"Class/Struct {classOrStructDeclaration.Identifier} has {MemberList.Count} members", traceLevel);
+        return true;
+    }
+
+    private void AddNestedClassOrStruct(TypeDeclarationSyntax nestedClassOrStructDeclaration, TraceLevel traceLevel)
+    {
+        Analyzer.Trace($"Adding nested class {nestedClassOrStructDeclaration.Identifier}", traceLevel);
+
+        AddClassOrStruct(nestedClassOrStructDeclaration, traceLevel);
     }
 
     /// <summary>

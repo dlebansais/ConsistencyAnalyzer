@@ -60,30 +60,21 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         try
         {
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
-            Analyzer.Trace("1", TraceLevel);
             IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
-            Analyzer.Trace("2", TraceLevel);
 
             if (IsSystemMicrosoftNamespace(Nodes, TraceLevel))
                 return;
-            Analyzer.Trace("3", TraceLevel);
 
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
-            Analyzer.Trace("4", TraceLevel);
             RegionExplorer RegionExplorer = ContextExplorer.GetRegionExplorer(Node);
-            Analyzer.Trace("5", TraceLevel);
             CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
-            Analyzer.Trace("6", TraceLevel);
 
             SetOrAddState(context, Root, TraceLevel, out GlobalState<bool?> ProgramHasMembersOutsideRegion, out ClassSynchronizer Synchronizer);
-            Analyzer.Trace("7", TraceLevel);
 
             if (RegionExplorer.HasRegion)
                 ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
-            Analyzer.Trace("8", TraceLevel);
 
             Synchronizer.WaitAll(TraceLevel);
-            Analyzer.Trace("9", TraceLevel);
 
             if (!RegionExplorer.HasRegion)
             {
@@ -110,7 +101,6 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
         }
         catch (Exception e)
         {
-            Analyzer.Trace("10", TraceLevel);
             Analyzer.Trace($"{e.Message}\n{e.StackTrace}", TraceLevel.Critical);
 
             throw e;
