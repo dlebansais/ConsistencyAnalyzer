@@ -62,44 +62,14 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
             ClassDeclarationSyntax Node = (ClassDeclarationSyntax)context.Node;
             IEnumerable<SyntaxNode> Nodes = Node.AncestorsAndSelf();
 
-            BaseNamespaceDeclarationSyntax? Namespace = Nodes.OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
-            if (Namespace is not null)
-            {
-                string NamespaceString = Namespace.Name.ToString();
-
-                if (NamespaceString == "System" ||
-                    NamespaceString.StartsWith("System.") ||
-                    NamespaceString == "Microsoft" ||
-                    NamespaceString.StartsWith("Microsoft."))
-                {
-                    Analyzer.Trace("System node, exit", TraceLevel);
-                    return;
-                }
-            }
+            if (IsSystemMicrosoftNamespace(Nodes, TraceLevel))
+                return;
 
             ContextExplorer ContextExplorer = ContextExplorer.Get(context, TraceLevel);
             RegionExplorer RegionExplorer = ContextExplorer.GetRegionExplorer(Node);
             CompilationUnitSyntax Root = Nodes.OfType<CompilationUnitSyntax>().First();
 
-            GlobalState<bool?> ProgramHasMembersOutsideRegion;
-            ClassSynchronizer Synchronizer;
-
-            lock (TableLock)
-            {
-                if (ClassInspectedTable.TryGetValue(Root, out CompilationUnitState State))
-                {
-                    ProgramHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
-                    Synchronizer = State.Synchronizer;
-                }
-                else
-                {
-                    ProgramHasMembersOutsideRegion = new GlobalState<bool?>();
-                    Synchronizer = new ClassSynchronizer(context, TraceLevel);
-                    ClassInspectedTable.Add(Root, new CompilationUnitState(ProgramHasMembersOutsideRegion, Synchronizer));
-
-                    Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {Synchronizer.ClassCount} classes", TraceLevel);
-                }
-            }
+            SetOrAddState(context, Root, TraceLevel, out GlobalState<bool?> ProgramHasMembersOutsideRegion, out ClassSynchronizer Synchronizer);
 
             if (RegionExplorer.HasRegion)
                 ProgramHasMembersOutsideRegion.Update(RegionExplorer.HasMembersOutsideRegion);
@@ -134,6 +104,46 @@ public class AnalyzerRuleConA1700 : SingleSyntaxAnalyzerRule
             Analyzer.Trace($"{e.Message}\n{e.StackTrace}", TraceLevel.Critical);
 
             throw e;
+        }
+    }
+
+    private bool IsSystemMicrosoftNamespace(IEnumerable<SyntaxNode> nodes, TraceLevel traceLevel)
+    {
+        BaseNamespaceDeclarationSyntax? Namespace = nodes.OfType<BaseNamespaceDeclarationSyntax>().FirstOrDefault();
+        if (Namespace is not null)
+        {
+            string NamespaceString = Namespace.Name.ToString();
+
+            if (NamespaceString == "System" ||
+                NamespaceString.StartsWith("System.") ||
+                NamespaceString == "Microsoft" ||
+                NamespaceString.StartsWith("Microsoft."))
+            {
+                Analyzer.Trace("System node, exit", traceLevel);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void SetOrAddState(SyntaxNodeAnalysisContext context, CompilationUnitSyntax root, TraceLevel traceLevel, out GlobalState<bool?> programHasMembersOutsideRegion, out ClassSynchronizer synchronizer)
+    {
+        lock (TableLock)
+        {
+            if (ClassInspectedTable.TryGetValue(root, out CompilationUnitState State))
+            {
+                programHasMembersOutsideRegion = State.ProgramHasMembersOutsideRegion;
+                synchronizer = State.Synchronizer;
+            }
+            else
+            {
+                programHasMembersOutsideRegion = new GlobalState<bool?>();
+                synchronizer = new ClassSynchronizer(context, traceLevel);
+                ClassInspectedTable.Add(root, new CompilationUnitState(programHasMembersOutsideRegion, synchronizer));
+
+                Analyzer.Trace($"Total added: {ClassInspectedTable.Count} context, {synchronizer.ClassCount} classes", traceLevel);
+            }
         }
     }
 
