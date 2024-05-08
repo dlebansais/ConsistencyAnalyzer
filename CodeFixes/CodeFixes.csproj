@@ -1,120 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>11</LangVersion>
-    <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.3.22</Version>
-    <Authors>David Le Bansais</Authors>
-    <Company />
-    <Product />
-    <Description>A C# source code analyzer that doesn't ensure a specific code style, but rather consistency of the code style used</Description>
-    <Copyright>Copyright © 2023 David Le Bansais</Copyright>
-    <AssemblyVersion>1.3.22.15</AssemblyVersion>
-    <FileVersion>1.3.22.15</FileVersion>
-    <RepositoryUrl>https://github.com/dlebansais/ConsistencyAnalyzer</RepositoryUrl>
-    <IsPackable>false</IsPackable>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <RootNamespace>ConsistencyAnalyzer</RootNamespace>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>11</LangVersion>
+        <Nullable>enable</Nullable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Version>1.3.22</Version>
+        <Authors>David Le Bansais</Authors>
+        <Company />
+        <Product />
+        <Description>A C# source code analyzer that doesn't ensure a specific code style, but rather consistency of the code style used</Description>
+        <Copyright>Copyright © 2023 David Le Bansais</Copyright>
+        <AssemblyVersion>1.3.22.15</AssemblyVersion>
+        <FileVersion>1.3.22.15</FileVersion>
+        <RepositoryUrl>https://github.com/dlebansais/ConsistencyAnalyzer</RepositoryUrl>
+        <IsPackable>false</IsPackable>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <RootNamespace>ConsistencyAnalyzer</RootNamespace>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="..\Helpers\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\Helpers\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
-    <PackageReference Include="PolySharp" Version="1.13.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
+        <PackageReference Include="PolySharp" Version="1.13.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Analyzer\Analyzer.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Analyzer\Analyzer.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="CodeFixes\1200\CodeFixConA1203.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1200\CodeFixUsingReorder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1200\CodeFixConA1201.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1200\CodeFixConA1200.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1314.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1313.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1312.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1311.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1310.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1309.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1308.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1307.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1306.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1305.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1304.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1303.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1302.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1301.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1300\CodeFixConA1300.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1500\CodeFixConA1500.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1700\CodeFixConA1701.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\1600\CodeFixConA1602.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixes\0000\CodeFixConA0001.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="CodeFixResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="CodeFixResources.resx" />
-    <EmbeddedResource Update="CodeFixResources.fr.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="CodeFixResources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="CodeFixResources.Designer.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="CodeFixResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="CodeFixResources.resx" />
+        <EmbeddedResource Update="CodeFixResources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="CodeFixResources.Designer.cs" />
+        <Compile Update="CodeFixResources.fr.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="CodeFixResources.fr.resx" />
+        <EmbeddedResource Update="CodeFixResources.fr.resx" Generator="ResXFileCodeGenerator" LastGenOutput="CodeFixResources.fr.Designer.cs" />
+    </ItemGroup>
 
 </Project>

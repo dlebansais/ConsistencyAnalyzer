@@ -39,125 +39,16 @@
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
         <PackageReference Include="PolySharp" Version="1.13.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="NameExplorer.Parsing.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="NameExplorer.cs">
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
-        <Compile Update="Rules\1200\AnalyzerRuleConA1203.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1200\AnalyzerRuleConA1202.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1200\AnalyzerRuleConA1201.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1200\AnalyzerRuleConA1200.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1314.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1313.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1312.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1311.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1310.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1309.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1308.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1307.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1306.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1305.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1304.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1303.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1302.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1301.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1300\AnalyzerRuleConA1300.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1500\AnalyzerRuleConA1500.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1708.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1707.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1706.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1705.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1704.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1703.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="UsingExplorer.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\MultipleSyntaxAnalyzerRule.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\SingleSyntaxAnalyzerRule.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\AnalyzerRule.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1702.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1701.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1700\AnalyzerRuleConA1700.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Rules\1600\AnalyzerRuleConA1602.cs">
-            <SubType>Code</SubType>
-        </Compile>
-        <EmbeddedResource Update="Resources.fr.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-        </EmbeddedResource>
         <EmbeddedResource Update="Resources.resx" Generator="PublicResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+        <Compile Update="Resources.fr.Designercs" DesignTime="True" AutoGen="True" DependentUpon="Resources.fr.resx" />
+        <EmbeddedResource Update="Resources.fr.resx" Generator="PublicResXFileCodeGenerator" LastGenOutput="Resources.fr.Designer.cs" />
     </ItemGroup>
 
     <ItemGroup>
